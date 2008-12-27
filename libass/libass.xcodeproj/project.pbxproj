@@ -1,0 +1,323 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DA89E4320EAE5EE300CC8DFF /* libfontconfig.1.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F120EACF415008EA596 /* libfontconfig.1.3.0.dylib */; };
+		DA89E4330EAE5EE300CC8DFF /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */; };
+		DAD69B340EFFD3170057E544 /* name_connolly_david_pgs_Render.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD69B330EFFD3170057E544 /* name_connolly_david_pgs_Render.h */; };
+		DAEF21C20EAB9E11005CE370 /* ass.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21A80EAB9E11005CE370 /* ass.c */; };
+		DAEF21C30EAB9E11005CE370 /* ass.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21A90EAB9E11005CE370 /* ass.h */; };
+		DAEF21C40EAB9E11005CE370 /* ass_bitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */; };
+		DAEF21C50EAB9E11005CE370 /* ass_bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */; };
+		DAEF21C60EAB9E11005CE370 /* ass_cache.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21AC0EAB9E11005CE370 /* ass_cache.c */; };
+		DAEF21C70EAB9E11005CE370 /* ass_cache.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21AD0EAB9E11005CE370 /* ass_cache.h */; };
+		DAEF21C80EAB9E11005CE370 /* ass_font.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21AE0EAB9E11005CE370 /* ass_font.c */; };
+		DAEF21C90EAB9E11005CE370 /* ass_font.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21AF0EAB9E11005CE370 /* ass_font.h */; };
+		DAEF21CA0EAB9E11005CE370 /* ass_fontconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */; };
+		DAEF21CB0EAB9E11005CE370 /* ass_fontconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */; };
+		DAEF21CC0EAB9E11005CE370 /* ass_library.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B20EAB9E11005CE370 /* ass_library.c */; };
+		DAEF21CD0EAB9E11005CE370 /* ass_library.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B30EAB9E11005CE370 /* ass_library.h */; };
+		DAEF21CE0EAB9E11005CE370 /* ass_render.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B40EAB9E11005CE370 /* ass_render.c */; };
+		DAEF21CF0EAB9E11005CE370 /* ass_types.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B50EAB9E11005CE370 /* ass_types.h */; };
+		DAEF21D00EAB9E11005CE370 /* ass_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B60EAB9E11005CE370 /* ass_utils.c */; };
+		DAEF21D10EAB9E11005CE370 /* ass_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B70EAB9E11005CE370 /* ass_utils.h */; };
+		DAEF21D20EAB9E11005CE370 /* help_mp.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B80EAB9E11005CE370 /* help_mp.h */; };
+		DAEF21D30EAB9E11005CE370 /* mputils.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21BC0EAB9E11005CE370 /* mputils.c */; };
+		DAEF21D40EAB9E11005CE370 /* mputils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21BD0EAB9E11005CE370 /* mputils.h */; };
+		DAEF21FD0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21FB0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D2AAC0630554660B00DB518D /* libass.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libass.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
+		DAB47F120EACF415008EA596 /* libfontconfig.1.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.1.3.0.dylib; path = /usr/X11/lib/libfontconfig.1.3.0.dylib; sourceTree = "<absolute>"; };
+		DAD69B330EFFD3170057E544 /* name_connolly_david_pgs_Render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = name_connolly_david_pgs_Render.h; sourceTree = "<group>"; };
+		DAEF21A80EAB9E11005CE370 /* ass.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass.c; sourceTree = "<group>"; };
+		DAEF21A90EAB9E11005CE370 /* ass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass.h; sourceTree = "<group>"; };
+		DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_bitmap.c; sourceTree = "<group>"; };
+		DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_bitmap.h; sourceTree = "<group>"; };
+		DAEF21AC0EAB9E11005CE370 /* ass_cache.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_cache.c; sourceTree = "<group>"; };
+		DAEF21AD0EAB9E11005CE370 /* ass_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_cache.h; sourceTree = "<group>"; };
+		DAEF21AE0EAB9E11005CE370 /* ass_font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_font.c; sourceTree = "<group>"; };
+		DAEF21AF0EAB9E11005CE370 /* ass_font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_font.h; sourceTree = "<group>"; };
+		DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_fontconfig.c; sourceTree = "<group>"; };
+		DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_fontconfig.h; sourceTree = "<group>"; };
+		DAEF21B20EAB9E11005CE370 /* ass_library.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_library.c; sourceTree = "<group>"; };
+		DAEF21B30EAB9E11005CE370 /* ass_library.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_library.h; sourceTree = "<group>"; };
+		DAEF21B40EAB9E11005CE370 /* ass_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_render.c; sourceTree = "<group>"; };
+		DAEF21B50EAB9E11005CE370 /* ass_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_types.h; sourceTree = "<group>"; };
+		DAEF21B60EAB9E11005CE370 /* ass_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_utils.c; sourceTree = "<group>"; };
+		DAEF21B70EAB9E11005CE370 /* ass_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_utils.h; sourceTree = "<group>"; };
+		DAEF21B80EAB9E11005CE370 /* help_mp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = help_mp.h; sourceTree = "<group>"; };
+		DAEF21BC0EAB9E11005CE370 /* mputils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mputils.c; sourceTree = "<group>"; };
+		DAEF21BD0EAB9E11005CE370 /* mputils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mputils.h; sourceTree = "<group>"; };
+		DAEF21FB0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = name_connolly_david_pgs_Render.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289988505E68E00004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA89E4320EAE5EE300CC8DFF /* libfontconfig.1.3.0.dylib in Frameworks */,
+				DA89E4330EAE5EE300CC8DFF /* libfreetype.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* ass */ = {
+			isa = PBXGroup;
+			children = (
+				DAF6CC510EACD50D007F004E /* Headers */,
+				DAEF21F00EAB9F28005CE370 /* References */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = ass;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DAEF21A80EAB9E11005CE370 /* ass.c */,
+				DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */,
+				DAEF21AC0EAB9E11005CE370 /* ass_cache.c */,
+				DAEF21AE0EAB9E11005CE370 /* ass_font.c */,
+				DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */,
+				DAEF21B20EAB9E11005CE370 /* ass_library.c */,
+				DAEF21B40EAB9E11005CE370 /* ass_render.c */,
+				DAEF21B60EAB9E11005CE370 /* ass_utils.c */,
+				DAEF21BC0EAB9E11005CE370 /* mputils.c */,
+				DAEF21FB0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC0630554660B00DB518D /* libass.jnilib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DAEF21F00EAB9F28005CE370 /* References */ = {
+			isa = PBXGroup;
+			children = (
+				DAB47F120EACF415008EA596 /* libfontconfig.1.3.0.dylib */,
+				DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */,
+			);
+			name = References;
+			sourceTree = "<group>";
+		};
+		DAF6CC510EACD50D007F004E /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				DAEF21A90EAB9E11005CE370 /* ass.h */,
+				DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */,
+				DAEF21AD0EAB9E11005CE370 /* ass_cache.h */,
+				DAEF21AF0EAB9E11005CE370 /* ass_font.h */,
+				DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */,
+				DAEF21B30EAB9E11005CE370 /* ass_library.h */,
+				DAEF21B50EAB9E11005CE370 /* ass_types.h */,
+				DAEF21B70EAB9E11005CE370 /* ass_utils.h */,
+				DAEF21B80EAB9E11005CE370 /* help_mp.h */,
+				DAEF21BD0EAB9E11005CE370 /* mputils.h */,
+				DAD69B330EFFD3170057E544 /* name_connolly_david_pgs_Render.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC0600554660B00DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAEF21C30EAB9E11005CE370 /* ass.h in Headers */,
+				DAEF21C50EAB9E11005CE370 /* ass_bitmap.h in Headers */,
+				DAEF21C70EAB9E11005CE370 /* ass_cache.h in Headers */,
+				DAEF21C90EAB9E11005CE370 /* ass_font.h in Headers */,
+				DAEF21CB0EAB9E11005CE370 /* ass_fontconfig.h in Headers */,
+				DAEF21CD0EAB9E11005CE370 /* ass_library.h in Headers */,
+				DAEF21CF0EAB9E11005CE370 /* ass_types.h in Headers */,
+				DAEF21D10EAB9E11005CE370 /* ass_utils.h in Headers */,
+				DAEF21D20EAB9E11005CE370 /* help_mp.h in Headers */,
+				DAEF21D40EAB9E11005CE370 /* mputils.h in Headers */,
+				DAD69B340EFFD3170057E544 /* name_connolly_david_pgs_Render.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC0620554660B00DB518D /* libass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB914A08733D8E0010E9CD /* Build configuration list for PBXNativeTarget "libass" */;
+			buildPhases = (
+				D2AAC0600554660B00DB518D /* Headers */,
+				D2AAC0610554660B00DB518D /* Sources */,
+				D289988505E68E00004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libass;
+			productName = ass;
+			productReference = D2AAC0630554660B00DB518D /* libass.jnilib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "libass" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* ass */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC0620554660B00DB518D /* libass */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC0610554660B00DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAEF21C20EAB9E11005CE370 /* ass.c in Sources */,
+				DAEF21C40EAB9E11005CE370 /* ass_bitmap.c in Sources */,
+				DAEF21C60EAB9E11005CE370 /* ass_cache.c in Sources */,
+				DAEF21C80EAB9E11005CE370 /* ass_font.c in Sources */,
+				DAEF21CA0EAB9E11005CE370 /* ass_fontconfig.c in Sources */,
+				DAEF21CC0EAB9E11005CE370 /* ass_library.c in Sources */,
+				DAEF21CE0EAB9E11005CE370 /* ass_render.c in Sources */,
+				DAEF21D00EAB9E11005CE370 /* ass_utils.c in Sources */,
+				DAEF21D30EAB9E11005CE370 /* mputils.c in Sources */,
+				DAEF21FD0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB914B08733D8E0010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_EXTENSION = jnilib;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"/System/Library/Frameworks/JavaVM.framework/Headers/**",
+					"/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SDKROOT)/usr/X11/lib\"",
+					/usr/X11/lib,
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = libass;
+			};
+			name = Debug;
+		};
+		1DEB914C08733D8E0010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_EXTENSION = jnilib;
+				EXECUTABLE_PREFIX = "";
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					"/System/Library/Frameworks/JavaVM.framework/Headers/**",
+					"/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SDKROOT)/usr/X11/lib\"",
+					/usr/X11/lib,
+				);
+				PRODUCT_NAME = libass;
+			};
+			name = Release;
+		};
+		1DEB914F08733D8E0010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		1DEB915008733D8E0010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB914A08733D8E0010E9CD /* Build configuration list for PBXNativeTarget "libass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB914B08733D8E0010E9CD /* Debug */,
+				1DEB914C08733D8E0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "libass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB914F08733D8E0010E9CD /* Debug */,
+				1DEB915008733D8E0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
