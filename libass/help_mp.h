@@ -32,7 +32,7 @@
 #define MSGTR_LIBASS_FcConfigAppFontAddDirFailed "[ass] FcConfigAppFontAddDir failed\n"
 #define MSGTR_LIBASS_FontconfigDisabledDefaultFontWillBeUsed "[ass] Fontconfig disabled, only default font will be used.\n"
 #define MSGTR_LIBASS_FunctionCallFailed "[ass] %s failed\n"
-#define MSGTR_LIBASS_NeitherPlayResXNorPlayResYDefined "[ass] Neither PlayResX nor PlayResY defined. Assuming 384x288.\n"
+#define MSGTR_LIBASS_NeitherPlayResXNorPlayResYDefined "[ass] Neither PlayResX nor PlayResY defined. Assuming 1920x1080.\n"
 #define MSGTR_LIBASS_PlayResYUndefinedSettingY "[ass] PlayResY undefined, setting %d.\n"
 #define MSGTR_LIBASS_PlayResXUndefinedSettingX "[ass] PlayResX undefined, setting %d.\n"
 #define MSGTR_LIBASS_FT_Init_FreeTypeFailed "[ass] FT_Init_FreeType failed.\n"

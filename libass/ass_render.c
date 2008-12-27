@@ -209,8 +209,8 @@ static void ass_lazy_track_init(void)
 		return;
 	if (!track->PlayResX && !track->PlayResY) {
 		mp_msg(MSGT_ASS, MSGL_WARN, MSGTR_LIBASS_NeitherPlayResXNorPlayResYDefined);
-		track->PlayResX = 384;
-		track->PlayResY = 288;
+		track->PlayResX = 1920;
+		track->PlayResY = 1080;
 	} else {
 		double orig_aspect = (global_settings->aspect * frame_context.height * frame_context.orig_width) /
 			frame_context.orig_height / frame_context.width;
