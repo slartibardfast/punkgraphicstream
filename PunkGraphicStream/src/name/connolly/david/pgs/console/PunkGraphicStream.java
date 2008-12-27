@@ -38,6 +38,9 @@ public class PunkGraphicStream {
 		final ArrayList<SubtitleEvent> events;
 		final PendingRenderLock lock = new PendingRenderLock();
 		final String inputFilename;
+		
+		System.setProperty("java.awt.headless", "true"); 
+		
 		String outputFilename = "default.sup";
 		FrameRate fps = FrameRate.FILM;
 		BufferedImage image;
