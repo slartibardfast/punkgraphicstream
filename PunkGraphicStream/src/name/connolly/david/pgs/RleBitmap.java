@@ -114,6 +114,9 @@ public class RleBitmap {
 		}
 	}
 
+	/**
+	 * Format discussed on http://forum.doom9.org/showthread.php?t=124105
+	 */
 	private void writeRleCommand(final ByteArrayOutputStream rle,
 			final int count, final int position, final int y) {
 		final boolean color = position != 0; // if 0 color == 0 or end of line
