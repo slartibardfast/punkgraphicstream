@@ -1025,7 +1025,7 @@ ass_track_t* ass_read_file(ass_library_t* library, char* fname, char* codepage)
 {
 	char* buf;
 	ass_track_t* track;
-	size_t bufsize;
+	int bufsize;
 
 	buf = read_file_recode(fname, codepage, &bufsize);
 	if (!buf)

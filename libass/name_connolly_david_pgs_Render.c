@@ -32,6 +32,9 @@ ass_track_t* ass_track;
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 (JNIEnv * env, jobject obj, jstring filename) 
 {
+	jboolean iscopy;
+	char* subfile = (char*) ((*env)->GetStringUTFChars(env, filename, &iscopy));
+	
 	ass_library = ass_library_init();
 	
 	if (!ass_library) {
@@ -47,14 +50,12 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 		// FIXME: throw exception
 	}
 	
-	ass_set_fonts_dir(ass_library, "/Users/slarti/Development/blu-ray subtitles/code/");
-	
+	ass_set_fonts_dir(ass_library, ".");
 	ass_set_font_scale(ass_renderer, 1.);
 	ass_set_fonts(ass_renderer, NULL, "Arial");
 	ass_set_frame_size(ass_renderer, 1920, 1080);
 	
-	//(ass_library_t* library, char* fname, char* codepage);
-	ass_track = ass_read_file(ass_library, "/Users/slarti/Development/blu-ray subtitles/code/subs.ass", "UTF-8");
+	ass_track = ass_read_file(ass_library, subfile, "UTF-8");
 	
 	if (!ass_track) {
 		printf("not ass_renderer");
