@@ -61,12 +61,15 @@ public class SupGenerator {
 	}
 
 	public void addBitmap(final BufferedImage image, final int width,
-			final int height, final long timecode, final long duration)
+			final int height, long timecode, final long duration)
 			throws IOException {
 		final long endtime = timecode + duration;
 		final RleBitmap bitmap = new RleBitmap(image);
 		final ColorTable colorTable = bitmap.encode();
 
+		if (timecode < 65) 
+			timecode += 65; // TODO: Investigate muxing subtitles before 65ms
+		
 		timeHeader(timecode, timecode - 65);
 		subpictureHeader(width, height, 0, 0);
 		timeHeader(timecode - 1, timecode - 65);
