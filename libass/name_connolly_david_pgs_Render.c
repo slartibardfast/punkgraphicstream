@@ -1,5 +1,5 @@
 /*
- * ass_jni.c
+ * name_connolly_david_pgs_Render.c
  *
  * Copyright 2008 David Connolly. All rights reserved.
  *
@@ -21,6 +21,7 @@
 #include "name_connolly_david_pgs_Render.h"
 #include "ass.h"
 #include "stdlib.h"
+
 #include <string.h>
 
 int loaded = 0;
@@ -62,6 +63,8 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 		// FIXME: throw exception
 	}
 	
+	(*env)->ReleaseStringUTFChars(env, filename, subfile);
+	
 	return;
 }
 
@@ -101,25 +104,26 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventDuration
 	return result;
 }
 
-JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
+JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 (JNIEnv * env, jobject obj, jobject image, jlong timecode)
 {
 	jclass cls = (*env)->GetObjectClass(env, image);
 	jmethodID getRGB = (*env)->GetMethodID(env, cls, "getRGB", "(II)I");
 	jmethodID setRGB = (*env)->GetMethodID(env, cls, "setRGB", "(III)V");
+	int changeDetect;
 	
 	if (getRGB == NULL) {
 		printf("setRGB() not found\n");
-		return; /* method not found */
+		return -1; /* method not found */
 	}
 	
 	if (setRGB == NULL) {
 		printf("setRGB() not found\n");
-		return; /* method not found */
+		return -1; /* method not found */
 	}
 
 	ass_image_t *p_img = ass_render_frame(ass_renderer,
-										  ass_track, (long long)(timecode), NULL);
+										  ass_track, (long long)(timecode), &changeDetect);
 	
 	if (!p_img) {
 		printf("no image %d\n", timecode);
@@ -161,4 +165,6 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 
 		p_img = p_img->next;
 	}
+	
+	return changeDetect;
 }

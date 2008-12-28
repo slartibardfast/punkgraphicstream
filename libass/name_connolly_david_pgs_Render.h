@@ -44,7 +44,7 @@ extern "C" {
 	 * Method:    render
 	 * Signature: (J)V
 	 */
-	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
+	JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 	(JNIEnv *, jobject, jobject, jlong);
 	
 #ifdef __cplusplus
