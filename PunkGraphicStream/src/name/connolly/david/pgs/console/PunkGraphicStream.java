@@ -38,6 +38,7 @@ public class PunkGraphicStream {
 		final ArrayList<SubtitleEvent> events;
 		final PendingRenderLock lock = new PendingRenderLock();
 		final String inputFilename;
+		int cpuCount = Runtime.getRuntime().availableProcessors();
 		
 		System.setProperty("java.awt.headless", "true"); 
 		
@@ -68,18 +69,18 @@ public class PunkGraphicStream {
 		r.openSubtitle(inputFilename);
 
 		events = r.generateEvents();
-
-		// TODO: UI Option or Autoconfigure 1 Quantizer Thread Per CPU
-		new Thread(new QuantizeRunnable(events, lock, 0, 1)).start();
-		// new Thread(new QuantizeRunnable(events, lock, 1, 2)).start();
-
+		
+		for (int i = 0; i < cpuCount; i++) {
+			new Thread(new QuantizeRunnable(events, lock, i, cpuCount)).start();
+		}
+		
 		new Thread(new EncodeRunnable(events, outputFilename, fps)).start();
 
 		for (int i = 0; i < events.size(); i++) {
 			final SubtitleEvent event = events.get(i);
 
 			synchronized (lock) {
-				while (lock.count() > 4) {
+				while (lock.count() > (cpuCount * 2) - 1) {
 					try {
 						lock.wait();
 					} catch (final InterruptedException e) {

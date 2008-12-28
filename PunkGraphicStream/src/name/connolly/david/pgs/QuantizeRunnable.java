@@ -51,14 +51,14 @@ public class QuantizeRunnable implements Runnable {
 				image = event.takeImage();
 
 				indexed = NeuQuantQuantizer.indexImage(image);
+				
 				event.putImage(indexed);
-
 				synchronized (lock) {
 					lock.remove();
 					lock.notify();
 				}
 
-				System.out.println("Quantized no.\t" + i);
+				System.out.println("Quantizer no.\t" + i + " (Thread: " + thread + ")");
 			}
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
