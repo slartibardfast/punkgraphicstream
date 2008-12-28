@@ -36,35 +36,9 @@ public class Render {
 	
 	public native int getEventCount();
 
-	public native SubtitleEvent getEventDuration(int event);
+	public native SubtitleEvent getEvent(int event);
 	
-	public native long nextEvent(long timecode, int movement);
-
 	public native int render(BufferedImage image, long timecode);
-	
-	public ArrayList<SubtitleEvent> generateEvents() {
-		final int eventCount = getEventCount();
-		final ArrayList<SubtitleEvent> events = new ArrayList<SubtitleEvent>();
-
-		for (int i = 0; i < eventCount; i++) {
-			final SubtitleEvent event = getEventDuration(i);
-			events.add(event);
-			
-			/* TODO: Move from ArrayList to LinkedHashSet. 
-			 * Stop generating all events in advance and 
-			 * handle animation similar to below as required e.g. change detect.
-			long frameLength = 1000 / (24000/1001);
-			long numberOfFrames = (long) Math.ceil((double) event.getLength() / (double)frameLength); 
-			
-			for (long j = 0; j < numberOfFrames; j++) {
-				events.add(new SubtitleEvent(event.getTimecode() + (i * frameLength), frameLength));
-			}
-			*/
-		}
-		
-
-		return events;
-	}
 
 	public void printPalette(final int[] palette) {
 		System.out.println("Number of palette entries: " + palette.length);

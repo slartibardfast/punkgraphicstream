@@ -23,7 +23,10 @@
 package name.connolly.david.pgs.console;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import name.connolly.david.pgs.EncodeRunnable;
 import name.connolly.david.pgs.FrameRate;
@@ -35,16 +38,22 @@ import name.connolly.david.pgs.SubtitleEvent;
 public class PunkGraphicStream {
 	public static void main(final String[] args) {
 		final Render r = new Render();
-		final ArrayList<SubtitleEvent> events;
-		final PendingRenderLock lock = new PendingRenderLock();
+		new PendingRenderLock();
 		final String inputFilename;
-		final int cpuCount = Runtime.getRuntime().availableProcessors();
-		
-		System.setProperty("java.awt.headless", "true"); 
-		
+		final int quantizeThreadCount = Runtime.getRuntime()
+				.availableProcessors();
+		int eventIndex = 0;
+		long frameIndex = 0;
+		final int renderCount = quantizeThreadCount * 2 - 1;
+		final BlockingQueue<SubtitleEvent> quantizeQueue;
+		final BlockingQueue<SubtitleEvent> encodeQueue;
+		final AtomicBoolean renderPending = new AtomicBoolean(true);
+		final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
+
+		System.setProperty("java.awt.headless", "true");
+
 		String outputFilename = "default.sup";
 		FrameRate fps = FrameRate.FILM;
-		
 
 		if (args.length != 2) {
 			printUsageAndQuit();
@@ -54,7 +63,7 @@ public class PunkGraphicStream {
 
 		try {
 			fps = FrameRate.valueOf(args[1].toUpperCase());
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			printUsageAndQuit();
 		}
 
@@ -68,58 +77,92 @@ public class PunkGraphicStream {
 
 		r.openSubtitle(inputFilename);
 
-		events = r.generateEvents();
-		
-		for (int i = 0; i < cpuCount; i++) {
-			new Thread(new QuantizeRunnable(events, lock, i, cpuCount)).start();
-		}
-		
-		new Thread(new EncodeRunnable(events, outputFilename, fps)).start();
+		r.getEventCount();
 
-		for (int i = 0; i < events.size(); i++) {
-			BufferedImage image, image2;
-			final SubtitleEvent event = events.get(i);
-			int detectChange;
-			
-			synchronized (lock) {
-				while (lock.count() > (cpuCount * 2) - 1) {
-					try {
-						lock.wait();
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
+		quantizeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderCount);
+		encodeQueue = new LinkedBlockingQueue<SubtitleEvent>();
+
+		for (int cpu = 0; cpu < quantizeThreadCount; cpu++) {
+			new Thread(new QuantizeRunnable(quantizeQueue, encodeQueue,
+					renderPending, quantizePending)).start();
+		}
+
+		new Thread(new EncodeRunnable(encodeQueue, outputFilename, fps,
+				quantizeThreadCount, quantizePending)).start();
+
+		SubtitleEvent event = r.getEvent(eventIndex);
+		long frameRenderUntilTimecode = 0;
+		
+		System.err.println("Rendering Event No.\t" + eventIndex);
+		while (event != null) {
+			final BufferedImage currentFrame;
+			final BufferedImage nextFrame;
+			SubtitleEvent nextEvent = null;
+
+			final int detectChange;
+
+			currentFrame = new BufferedImage(1920, 1080,
+					BufferedImage.TYPE_INT_ARGB);
+
+			// r.render(image, event.getTimecode() + event.getLength() / 2);
+			r.render(currentFrame, event.getTimecode());
+
+			if (frameRenderUntilTimecode == 0) {
+				nextFrame = new BufferedImage(1920, 1080,
+						BufferedImage.TYPE_INT_ARGB);
+				detectChange = r.render(nextFrame, event.getTimecode()
+						+ fps.frameDurationInMilliseconds());
+
+				if (detectChange > 0) {
+					System.out.print("Rendering Frame No.\t" + frameIndex);
+					System.out.print(" (Change in next frame detected...)");
+					System.out.println();
+					frameRenderUntilTimecode = event.getDuration()
+							+ event.getTimecode();
+					event.setDuration(fps.frameDurationInMilliseconds());
+					frameIndex++;
+
+					nextEvent = new SubtitleEvent(event.getTimecode()
+							+ fps.frameDurationInMilliseconds(), fps
+							.frameDurationInMilliseconds());
 				}
-
+			} else if (frameRenderUntilTimecode > event.getTimecode()
+					+ fps.frameDurationInMilliseconds()) {
+				System.out.println("Rendering Frame No.\t" + frameIndex);
+				nextEvent = new SubtitleEvent(event.getTimecode()
+						+ fps.frameDurationInMilliseconds(), fps
+						.frameDurationInMilliseconds());
+				frameIndex++;
 			}
 
-			System.out.println("Rendering no:\t" + i);
-
-			image = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
-			image2 = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
-
-			//r.render(image, event.getTimecode() + event.getLength() / 2);
-			r.render(image, event.getTimecode());
-			
-			detectChange = r.render(image2, event.getTimecode() + fps.frameDurationInMilliseconds());
-			
-			if (detectChange > 0) {		
-				System.out.println("Change in next frame detected...");
+			if (nextEvent == null) {
+				frameRenderUntilTimecode = 0;
+				frameIndex++;
+				eventIndex++;
+				System.err.println("Rendering Event No.\t" + eventIndex);
+				nextEvent = r.getEvent(eventIndex);
 			}
-			
-			event.putImage(image);
 
-			synchronized (lock) {
-				lock.add();
+			event.putImage(currentFrame);
+
+			try {
+				quantizeQueue.put(event);
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+				System.exit(-1);
 			}
+
+			event = nextEvent;
 		}
+
+		renderPending.set(false);
 
 		r.closeSubtitle();
 	}
-	
+
 	private static void printUsageAndQuit() {
 		System.out.println("PunkGraphicStream filename.ass fps");
-		System.out
-				.println("fps: film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc");
+		System.out.println("fps: film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc");
 		System.exit(0);
 	}
 }

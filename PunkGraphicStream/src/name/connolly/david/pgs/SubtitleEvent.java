@@ -25,49 +25,59 @@ package name.connolly.david.pgs;
 import java.awt.image.BufferedImage;
 
 public class SubtitleEvent {
-	private long endTimecode;
+	private static int eventCount = 0;
+	private long duration;
+	private long id;
 	private BufferedImage image;
 	private final Object imageLock = new Object();
 	private BufferedImage indexed;
 	private final Object indexedLock = new Object();
-	private long startTimecode;
-
-	public SubtitleEvent(final long start, final long duration) {
+	private long timecode;
+	/**
+	 * SubtitleEvent must be carefully initialised in order of occurrence!
+	 */
+	public SubtitleEvent(final long timecode, final long duration) {
 		super();
-		endTimecode = duration;
-		startTimecode = start;
+		this.duration = duration;
+		this.timecode = timecode;
+		
+		id = eventCount;
+		
+		eventCount++;
 	}
 
+
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final SubtitleEvent other = (SubtitleEvent) obj;
-		if (endTimecode != other.endTimecode)
-			return false;
-		if (startTimecode != other.startTimecode)
+		SubtitleEvent other = (SubtitleEvent) obj;
+		if (id != other.id)
 			return false;
 		return true;
 	}
 
-	public long getLength() {
-		return endTimecode;
+	public long getId() {
+		return id;
+	}
+
+	public long getDuration() {
+		return duration;
 	}
 
 	public long getTimecode() {
-		return startTimecode;
+		return timecode;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (endTimecode ^ endTimecode >>> 32);
-		result = prime * result + (int) (startTimecode ^ startTimecode >>> 32);
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
@@ -94,11 +104,11 @@ public class SubtitleEvent {
 	}
 
 	public void setDuration(final long duration) {
-		endTimecode = duration;
+		this.duration = duration;
 	}
 
-	public void setStart(final long start) {
-		startTimecode = start;
+	public void setTimecode(final long start) {
+		timecode = start;
 	}
 
 	public BufferedImage takeImage() throws InterruptedException {
@@ -132,7 +142,7 @@ public class SubtitleEvent {
 
 	@Override
 	public String toString() {
-		return "SubtitleEvent start: " + startTimecode + " duration: "
-				+ endTimecode;
+		return "SubtitleEvent start: " + timecode + " duration: "
+				+ duration;
 	}
 }

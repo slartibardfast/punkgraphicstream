@@ -25,17 +25,24 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
 
 public class EncodeRunnable implements Runnable {
-	private final ArrayList<SubtitleEvent> events;
-	final String filename;
-	final FrameRate fps;
-	 
-	public EncodeRunnable(final ArrayList<SubtitleEvent> events, final String filename, final FrameRate fps) {
-		this.events = events;
+	private final BlockingQueue<SubtitleEvent> encodeQueue;
+	private final String filename;
+	private final FrameRate fps;
+	private final int quantizeThreadCount;
+	private final Semaphore quantizePending;
+
+	public EncodeRunnable(final BlockingQueue<SubtitleEvent> encodeQueue,
+			final String filename, final FrameRate fps,
+			final int quantizeThreadCount, final Semaphore quantizePending) {
+		this.encodeQueue = encodeQueue;
 		this.filename = filename;
 		this.fps = fps;
+		this.quantizeThreadCount = quantizeThreadCount;
+		this.quantizePending = quantizePending;
 	}
 
 	public void run() {
@@ -45,19 +52,34 @@ public class EncodeRunnable implements Runnable {
 			final SupGenerator packet = new SupGenerator(os, fps);
 			SubtitleEvent event;
 			BufferedImage indexed;
-			int count = 0;
+			long frameIndex = 0;
 
-			for (int i = 0; i < events.size(); i++) {
-				event = events.get(i);
+			// Continue while at least one quantizeThread is runing or queue is
+			// not empty
+			while (quantizePending.tryAcquire(quantizeThreadCount) == false
+					| encodeQueue.size() > 0) {
+				event = encodeQueue.take();
 
+				if (event.getId() != frameIndex) {
+					System.err.println("Encode Frame Request out of sequence, adding to tail: " + event.getId() + " need:" + frameIndex);
+					
+					if (encodeQueue.size() == 0) {
+						Thread.sleep(200);
+					}
+					
+					encodeQueue.put(event);
+					
+					continue;
+				}
+				
 				indexed = event.takeImage();
-				
-				packet.addBitmap(indexed, 1920, 1080, event.getTimecode(),
-						event.getLength());
 
-				System.out.println("Encoded no.\t" + count);
-				
-				count++;
+				packet.addBitmap(indexed, 1920, 1080, event.getTimecode(),
+						event.getDuration());
+
+				System.out.println("Encoded no.\t" + event.getId());
+
+				frameIndex++;
 			}
 
 			os.flush();

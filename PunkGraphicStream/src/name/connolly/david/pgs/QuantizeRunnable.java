@@ -23,21 +23,22 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class QuantizeRunnable implements Runnable {
-	private final ArrayList<SubtitleEvent> events;
-	private final PendingRenderLock lock;
-	private final int thread;
-	private final int threadCount;
-
-	public QuantizeRunnable(final ArrayList<SubtitleEvent> events,
-			final PendingRenderLock pending, final int thread,
-			final int threadCount) {
-		this.events = events;
-		this.thread = thread;
-		this.threadCount = threadCount;
-		lock = pending;
+	private final BlockingQueue<SubtitleEvent> quantizeQueue;
+	private final BlockingQueue<SubtitleEvent> encodeQueue;
+	private final AtomicBoolean renderPending;
+	private final Semaphore quantizePending;
+	
+	public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
+			final BlockingQueue<SubtitleEvent> encodeQueue, final AtomicBoolean renderPending, final Semaphore quantizePending) {
+		this.quantizeQueue = quantizeQueue;
+		this.encodeQueue = encodeQueue;
+		this.renderPending = renderPending;
+		this.quantizePending = quantizePending;
 	}
 
 	public void run() {
@@ -45,21 +46,22 @@ public class QuantizeRunnable implements Runnable {
 			SubtitleEvent event;
 			BufferedImage indexed;
 			BufferedImage image;
-
-			for (int i = thread; i < events.size(); i = i + threadCount) {
-				event = events.get(i);
+			
+			quantizePending.acquire();
+			
+			while (renderPending.get() || quantizeQueue.size() > 0 ) {
+				event = quantizeQueue.take();
 				image = event.takeImage();
 
 				indexed = NeuQuantQuantizer.indexImage(image);
 				
 				event.putImage(indexed);
-				synchronized (lock) {
-					lock.remove();
-					lock.notify();
-				}
-
-				System.out.println("Quantizer no.\t" + i + " (Thread: " + thread + ")");
+				
+				System.out.println("Quantized Frame No. " + event.getId());
+				encodeQueue.put(event);
 			}
+			
+			quantizePending.release();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
