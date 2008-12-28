@@ -38,13 +38,13 @@ public class PunkGraphicStream {
 		final ArrayList<SubtitleEvent> events;
 		final PendingRenderLock lock = new PendingRenderLock();
 		final String inputFilename;
-		int cpuCount = Runtime.getRuntime().availableProcessors();
+		final int cpuCount = Runtime.getRuntime().availableProcessors();
 		
 		System.setProperty("java.awt.headless", "true"); 
 		
 		String outputFilename = "default.sup";
 		FrameRate fps = FrameRate.FILM;
-		BufferedImage image;
+		
 
 		if (args.length != 2) {
 			printUsageAndQuit();
@@ -77,8 +77,10 @@ public class PunkGraphicStream {
 		new Thread(new EncodeRunnable(events, outputFilename, fps)).start();
 
 		for (int i = 0; i < events.size(); i++) {
+			BufferedImage image, image2;
 			final SubtitleEvent event = events.get(i);
-
+			int detectChange;
+			
 			synchronized (lock) {
 				while (lock.count() > (cpuCount * 2) - 1) {
 					try {
@@ -93,9 +95,17 @@ public class PunkGraphicStream {
 			System.out.println("Rendering no:\t" + i);
 
 			image = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
+			image2 = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
-			r.render(image, event.getTimecode() + event.getLength() / 2);
-
+			//r.render(image, event.getTimecode() + event.getLength() / 2);
+			r.render(image, event.getTimecode());
+			
+			detectChange = r.render(image2, event.getTimecode() + fps.frameDurationInMilliseconds());
+			
+			if (detectChange > 0) {		
+				System.out.println("Change in next frame detected...");
+			}
+			
 			event.putImage(image);
 
 			synchronized (lock) {

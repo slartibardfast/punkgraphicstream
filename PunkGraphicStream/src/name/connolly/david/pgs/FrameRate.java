@@ -25,8 +25,67 @@ package name.connolly.david.pgs;
 public enum FrameRate {
 	FILM, 
 	FILM_NTSC,
-	HD_NTSC, 
-	HD_PAL,
+	TV_PAL,
 	TV_NTSC,
-	TV_PAL
+	HD_PAL,
+	HD_NTSC;
+	
+	public long frameDurationInMilliseconds() {
+		double frame;
+		double secondInMilliseconds = 1000;
+		
+		switch (this) {
+		case FILM:
+			frame = 24d;
+			return Math.round(secondInMilliseconds / frame);
+		case FILM_NTSC:
+			frame = 24000d / 1001d;
+			return Math.round(secondInMilliseconds / frame);
+		case TV_PAL:
+			frame = 25;
+			return Math.round(secondInMilliseconds / frame);
+		case TV_NTSC:
+			frame = 30000d / 1001d;
+			return Math.round(secondInMilliseconds / frame);
+		case HD_PAL:
+			frame = 50;
+			return Math.round(secondInMilliseconds / frame);
+		case HD_NTSC:
+			frame = 60000d / 1001d;
+			return Math.round(secondInMilliseconds / frame);
+		default:
+			return 0;
+		}	
+	}
+	
+	/**
+	 * SupTicks are at a higher resolution than milliseconds
+	 */
+	public long frameDurationInSupTicks() {
+		double frame;
+		double secondInSupTicks = 1000 * 90;
+		
+		switch (this) {
+		case FILM:
+			frame = 24d;
+			return Math.round(secondInSupTicks / frame);
+		case FILM_NTSC:
+			frame = 24000d / 1001d;
+			return Math.round(secondInSupTicks / frame);
+		case TV_PAL:
+			frame = 25;
+			return Math.round(secondInSupTicks / frame);
+		case TV_NTSC:
+			frame = 30000d / 1001d;
+			return Math.round(secondInSupTicks / frame);
+		case HD_PAL:
+			frame = 50;
+			return Math.round(secondInSupTicks / frame);
+		case HD_NTSC:
+			frame = 60000d / 1001d;
+			return Math.round(secondInSupTicks / frame);
+		default:
+			return 0;
+		}	
+	}
 }

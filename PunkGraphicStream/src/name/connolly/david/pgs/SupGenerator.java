@@ -169,7 +169,7 @@ public class SupGenerator {
 		subpictureCount++;
 	}
 
-	// FIXME: Inconsistant naming. too late to code
+	// FIXME: Inconsistent naming. too late to code
 	private void timeHeader(final long fromMilliseconds,
 			final long toMilliseconds) throws IOException {
 		BigInteger from = BigInteger.valueOf(fromMilliseconds);

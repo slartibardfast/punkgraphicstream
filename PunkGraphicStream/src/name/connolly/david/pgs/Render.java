@@ -30,7 +30,17 @@ public class Render {
 		System.loadLibrary("ass");
 	}
 	
+	public native void openSubtitle(String filename);
+
 	public native void closeSubtitle();
+	
+	public native int getEventCount();
+
+	public native SubtitleEvent getEventDuration(int event);
+	
+	public native long nextEvent(long timecode, int movement);
+
+	public native int render(BufferedImage image, long timecode);
 	
 	public ArrayList<SubtitleEvent> generateEvents() {
 		final int eventCount = getEventCount();
@@ -56,14 +66,6 @@ public class Render {
 		return events;
 	}
 
-	public native int getEventCount();
-
-	public native SubtitleEvent getEventDuration(int event);
-
-	public native long nextEvent(long timecode, int movement);
-
-	public native void openSubtitle(String filename);
-
 	public void printPalette(final int[] palette) {
 		System.out.println("Number of palette entries: " + palette.length);
 
@@ -71,6 +73,4 @@ public class Render {
 			YCrCbRec709_ColorSpace.fromRGB(pixel);
 		}
 	}
-
-	public native void render(BufferedImage image, long timecode);
 }
