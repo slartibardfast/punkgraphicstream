@@ -34,7 +34,8 @@ typedef struct ass_image_s {
 	unsigned char* bitmap; // 1bpp stride*h alpha buffer
 	uint32_t color; // RGBA
 	int dst_x, dst_y; // bitmap placement inside the video frame
-
+	int eventIndex; // added for punkgraphicstream
+	
 	struct ass_image_s* next; // linked list
 } ass_image_t;
 

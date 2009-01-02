@@ -80,7 +80,7 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
 	return ass_track->n_events;
 }
 
-JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventDuration
+JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEvent
 (JNIEnv * env, jobject obj, jint event)
 {
 	jclass durationClass;
@@ -96,6 +96,10 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventDuration
 							  "<init>", "(JJ)V");
 	if (cid == NULL) {
 		return NULL; /* exception thrown */
+	}
+	
+	if (event >= ass_track->n_events) {
+		return NULL;
 	}
 	
 	result = (*env)->NewObject(env, durationClass, cid, ass_track->events[event].Start, ass_track->events[event].Duration);

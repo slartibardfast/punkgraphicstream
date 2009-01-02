@@ -33,10 +33,10 @@ extern "C" {
 	
 	/*
 	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    nextEvent
+	 * Method:    getEvent
 	 * Signature: (I)J
 	 */
-	JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventDuration
+	JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEvent
 	(JNIEnv * env, jobject obj, jint event);
 	
 	/*
