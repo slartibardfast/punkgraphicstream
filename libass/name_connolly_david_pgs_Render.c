@@ -130,7 +130,7 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 										  ass_track, (long long)(timecode), &changeDetect);
 	
 	if (!p_img) {
-		printf("no image %d\n", timecode);
+		printf("no image %lld\n", timecode);
 	}
 	
 	while (p_img != NULL)
@@ -160,8 +160,8 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 				const int old_b =  old_argb & 0xFF;
 				new_argb += (255 - ( 255 - old_a ) * ( 255 - an ) / 255) << 24;
 				new_argb += ((( old_r * (255-an) + r * an ) / 255) & 0xFF) << 16;
-                new_argb += ((( old_g * (255-an) + g * an ) / 255) & 0xFF) << 8;
-                new_argb += ((( old_b * (255-an) + b * an ) / 255) & 0xFF);
+                		new_argb += ((( old_g * (255-an) + g * an ) / 255) & 0xFF) << 8;
+                		new_argb += ((( old_b * (255-an) + b * an ) / 255) & 0xFF);
 				
 				(*env)->CallVoidMethod(env, image, setRGB, x + p_img->dst_x, y + p_img->dst_y, new_argb);
 			}
@@ -170,5 +170,5 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 		p_img = p_img->next;
 	}
 	
-	return changeDetect;
+	return (jint) changeDetect;
 }
