@@ -122,7 +122,7 @@ public class RleBitmap {
 	private void writeRleCommand(final ByteArrayOutputStream rle,
 			final int count, final int position, final int y) {
 		final boolean color = position != 0; // if 0 color == 0 or end of line
-												// signal.
+		// signal.
 		// else nonzero color
 		final boolean extended = count > 63;
 		// ByteArrayOutputStream rle = new ByteArrayOutputStream();

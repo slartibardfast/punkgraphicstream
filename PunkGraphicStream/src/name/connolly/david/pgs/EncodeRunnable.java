@@ -61,21 +61,22 @@ public class EncodeRunnable implements Runnable {
 				event = encodeQueue.take();
 
 				if (event.getId() != frameIndex) {
-					System.err.println("Encode Frame Request out of sequence, adding to tail: " + event.getId() + " need:" + frameIndex);
-					
+					System.err
+							.println("Encode Frame Request out of sequence, adding to tail: "
+									+ event.getId() + " need:" + frameIndex);
+
 					if (encodeQueue.size() == 0) {
 						Thread.sleep(200);
 					}
-					
+
 					encodeQueue.put(event);
-					
+
 					continue;
 				}
-				
+
 				indexed = event.takeImage();
 
-				packet.addBitmap(indexed, 1920, 1080, event.getTimecode(),
-						event.getDuration());
+				packet.addBitmap(indexed, 1920, 1080, event);
 
 				System.out.println("Encoded no.\t" + event.getId());
 

@@ -63,30 +63,34 @@ public class SupGenerator {
 	}
 
 	public void addBitmap(final BufferedImage image, final int width,
-			final int height, long timecode, final long duration)
-			throws IOException {
-		final long endtime = timecode + duration;
+			final int height, SubtitleEvent event) throws IOException {
+		final BigInteger to = event.getEndTimecode();
+		BigInteger from = event.getStartTimecode();
 		final RleBitmap bitmap = new RleBitmap(image);
 		final ColorTable colorTable = bitmap.encode();
 
-		if (timecode < 65) 
-			timecode += 65; // TODO: Investigate muxing subtitles before 65ms
-		
-		timeHeader(timecode, timecode - 65);
+		if (from.compareTo(BigInteger.valueOf(65)) == -1) {
+			from = from.add(BigInteger.valueOf(65)); // TODO: Investigate muxing
+														// subtitles before 65ms
+		}
+
+		timeHeader(from, from.subtract(BigInteger.valueOf(65)));
 		subpictureHeader(width, height, 0, 0);
-		timeHeader(timecode - 1, timecode - 65);
+		timeHeader(from.subtract(BigInteger.ONE), from.subtract(BigInteger
+				.valueOf(65)));
 		bitmapHeader(width, height, 0, 0);
-		timeHeader(timecode - 65, 0);
+		timeHeader(from.subtract(BigInteger.valueOf(65)), BigInteger.ZERO);
 		colorTable.writeIndex(os);
-		timeHeader(timecode - 63, timecode - 65);
+		timeHeader(from.subtract(BigInteger.valueOf(63)), from
+				.subtract(BigInteger.valueOf(65)));
 		bitmap.writeBitmap(os);
-		timeHeader(timecode - 63, 0);
+		timeHeader(from.subtract(BigInteger.valueOf(63)), BigInteger.ZERO);
 		trailer();
-		timeHeader(endtime, endtime - 1);
+		timeHeader(to, to.subtract(BigInteger.ONE));
 		clearSubpictureHeader(width, height);
-		timeHeader(endtime, 0);
+		timeHeader(to, BigInteger.ZERO);
 		bitmapHeader(width, height, 0, 0);
-		timeHeader(endtime, 0);
+		timeHeader(to, BigInteger.ZERO);
 		trailer();
 	}
 
@@ -169,17 +173,10 @@ public class SupGenerator {
 		subpictureCount++;
 	}
 
-	// FIXME: Inconsistent naming. too late to code
-	private void timeHeader(final long fromMilliseconds,
-			final long toMilliseconds) throws IOException {
-		BigInteger from = BigInteger.valueOf(fromMilliseconds);
-		BigInteger to = BigInteger.valueOf(toMilliseconds);
+	private void timeHeader(final BigInteger from, final BigInteger to)
+			throws IOException {
 		String fromBytes;
 		String toBytes;
-
-		// Scale time from milliseconds
-		from = from.multiply(BigInteger.valueOf(90));
-		to = to.multiply(BigInteger.valueOf(90));
 
 		// one ninetieth of a millisecond
 		fromBytes = from.toString(16);

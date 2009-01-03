@@ -32,9 +32,10 @@ public class QuantizeRunnable implements Runnable {
 	private final BlockingQueue<SubtitleEvent> encodeQueue;
 	private final AtomicBoolean renderPending;
 	private final Semaphore quantizePending;
-	
+
 	public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
-			final BlockingQueue<SubtitleEvent> encodeQueue, final AtomicBoolean renderPending, final Semaphore quantizePending) {
+			final BlockingQueue<SubtitleEvent> encodeQueue,
+			final AtomicBoolean renderPending, final Semaphore quantizePending) {
 		this.quantizeQueue = quantizeQueue;
 		this.encodeQueue = encodeQueue;
 		this.renderPending = renderPending;
@@ -46,21 +47,21 @@ public class QuantizeRunnable implements Runnable {
 			SubtitleEvent event;
 			BufferedImage indexed;
 			BufferedImage image;
-			
+
 			quantizePending.acquire();
-			
-			while (renderPending.get() || quantizeQueue.size() > 0 ) {
+
+			while (renderPending.get() || quantizeQueue.size() > 0) {
 				event = quantizeQueue.take();
 				image = event.takeImage();
 
 				indexed = NeuQuantQuantizer.indexImage(image);
-				
+
 				event.putImage(indexed);
-				
+
 				System.out.println("Quantized Frame No. " + event.getId());
 				encodeQueue.put(event);
 			}
-			
+
 			quantizePending.release();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();

@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import name.connolly.david.pgs.EncodeRunnable;
 import name.connolly.david.pgs.FrameRate;
-import name.connolly.david.pgs.PendingRenderLock;
 import name.connolly.david.pgs.QuantizeRunnable;
 import name.connolly.david.pgs.Render;
 import name.connolly.david.pgs.SubtitleEvent;
@@ -38,12 +37,11 @@ import name.connolly.david.pgs.SubtitleEvent;
 public class PunkGraphicStream {
 	public static void main(final String[] args) {
 		final Render r = new Render();
-		new PendingRenderLock();
 		final String inputFilename;
 		final int quantizeThreadCount = Runtime.getRuntime()
 				.availableProcessors();
 		int eventIndex = 0;
-		long frameIndex = 0;
+		int frameIndex = 0;
 		final int renderCount = quantizeThreadCount * 2 - 1;
 		final BlockingQueue<SubtitleEvent> quantizeQueue;
 		final BlockingQueue<SubtitleEvent> encodeQueue;
@@ -92,7 +90,7 @@ public class PunkGraphicStream {
 
 		SubtitleEvent event = r.getEvent(eventIndex);
 		long frameRenderUntilTimecode = 0;
-		
+
 		System.err.println("Rendering Event No.\t" + eventIndex);
 		while (event != null) {
 			final BufferedImage currentFrame;
@@ -104,40 +102,38 @@ public class PunkGraphicStream {
 			currentFrame = new BufferedImage(1920, 1080,
 					BufferedImage.TYPE_INT_ARGB);
 
-			// r.render(image, event.getTimecode() + event.getLength() / 2);
-			r.render(currentFrame, event.getTimecode());
+			r.render(currentFrame, event.getRenderTimecode());
 
 			if (frameRenderUntilTimecode == 0) {
 				nextFrame = new BufferedImage(1920, 1080,
 						BufferedImage.TYPE_INT_ARGB);
-				detectChange = r.render(nextFrame, event.getTimecode()
+
+				detectChange = r.render(nextFrame, event.getRenderTimecode()
 						+ fps.frameDurationInMilliseconds());
 
 				if (detectChange > 0) {
+					frameRenderUntilTimecode = event.getDuration()
+							+ event.getRenderTimecode();
+
+					event.setFrameRate(fps);
+					frameIndex++;
+
 					System.out.print("Rendering Frame No.\t" + frameIndex);
 					System.out.print(" (Change in next frame detected...)");
 					System.out.println();
-					frameRenderUntilTimecode = event.getDuration()
-							+ event.getTimecode();
-					event.setDuration(fps.frameDurationInMilliseconds());
-					frameIndex++;
 
-					nextEvent = new SubtitleEvent(event.getTimecode()
-							+ fps.frameDurationInMilliseconds(), fps
-							.frameDurationInMilliseconds());
+					nextEvent = new SubtitleEvent(event, fps, frameIndex);
 				}
-			} else if (frameRenderUntilTimecode > event.getTimecode()
+			} else if (frameRenderUntilTimecode > event.getRenderTimecode()
 					+ fps.frameDurationInMilliseconds()) {
-				System.out.println("Rendering Frame No.\t" + frameIndex);
-				nextEvent = new SubtitleEvent(event.getTimecode()
-						+ fps.frameDurationInMilliseconds(), fps
-						.frameDurationInMilliseconds());
 				frameIndex++;
+				System.out.println("Rendering Frame No.\t" + frameIndex);
+				nextEvent = new SubtitleEvent(event, fps, frameIndex);
 			}
 
 			if (nextEvent == null) {
 				frameRenderUntilTimecode = 0;
-				frameIndex++;
+				frameIndex = 0;
 				eventIndex++;
 				System.err.println("Rendering Event No.\t" + eventIndex);
 				nextEvent = r.getEvent(eventIndex);
@@ -161,8 +157,25 @@ public class PunkGraphicStream {
 	}
 
 	private static void printUsageAndQuit() {
-		System.out.println("PunkGraphicStream filename.ass fps");
-		System.out.println("fps: film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc");
+		System.out.println("Usage: ");
+		System.out.println("java -jar PunkGraphicStream.jar filename.ass fps");
+		System.out.println();
+		System.out
+				.println("fps = [film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc]");
+
+		printLicence();
+
 		System.exit(0);
+	}
+
+	private static void printLicence() {
+		System.out.println("PunkGraphicStream 0.2");
+		System.out
+				.println("Copyright 2008 David Connolly. All rights reserved.");
+		System.out.println();
+		System.out
+				.println("This is free software; see sources for copying conditions and credits of dependencies.");
+		System.out
+				.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE");
 	}
 }

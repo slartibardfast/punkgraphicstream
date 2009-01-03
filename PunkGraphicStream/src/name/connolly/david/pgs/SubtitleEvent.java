@@ -23,29 +23,55 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
+import java.math.BigInteger;
 
-public class SubtitleEvent {
+public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	private static int eventCount = 0;
-	private long duration;
-	private long id;
+
+	private long eventDuration;
+	private long eventTimecode;
+	private final int frameCount;
+	private FrameRate frameRate;
+	private final long id;
+
 	private BufferedImage image;
 	private final Object imageLock = new Object();
 	private BufferedImage indexed;
 	private final Object indexedLock = new Object();
-	private long timecode;
+
 	/**
 	 * SubtitleEvent must be carefully initialised in order of occurrence!
 	 */
 	public SubtitleEvent(final long timecode, final long duration) {
-		super();
-		this.duration = duration;
-		this.timecode = timecode;
-		
+		eventDuration = duration;
+		eventTimecode = timecode;
+
 		id = eventCount;
-		
+		frameRate = null;
+		frameCount = 0;
+
 		eventCount++;
 	}
 
+	/**
+	 * SubtitleEvent must be carefully initialised in order of occurrence! This
+	 * constructor is for Animation mode
+	 */
+	public SubtitleEvent(final SubtitleEvent lastEvent,
+			final FrameRate frameRate, final int frameCount) {
+		eventDuration = lastEvent.eventDuration;
+		eventTimecode = lastEvent.eventTimecode;
+		this.frameRate = frameRate;
+
+		id = eventCount;
+		this.frameCount = frameCount;
+
+		eventCount++;
+	}
+
+	public int compareTo(SubtitleEvent o) {
+		return new Long(eventTimecode).compareTo(o.eventTimecode);
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -55,21 +81,61 @@ public class SubtitleEvent {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SubtitleEvent other = (SubtitleEvent) obj;
-		if (id != other.id)
+		final SubtitleEvent other = (SubtitleEvent) obj;
+		if (eventTimecode != other.eventTimecode)
 			return false;
 		return true;
+	}
+
+	public long getDuration() {
+		return eventDuration;
+	}
+
+	public BigInteger getEndTimecode() {
+		BigInteger endTimecode = BigInteger.valueOf(getRenderTimecode());
+		endTimecode = endTimecode.multiply(BigInteger.valueOf(90));
+
+		if (frameRate != null) {
+			endTimecode = endTimecode.add(BigInteger.valueOf(frameRate
+					.frameDurationInSupTicks()));
+		} else {
+			BigInteger duration = BigInteger.valueOf(getDuration());
+			duration = duration.multiply(BigInteger.valueOf(90));
+			endTimecode = endTimecode.add(duration);
+		}
+
+		return endTimecode;
+	}
+
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	public FrameRate getFrameRate() {
+		return frameRate;
 	}
 
 	public long getId() {
 		return id;
 	}
 
-	public long getDuration() {
-		return duration;
+	public long getRenderTimecode() {
+		if (frameRate != null)
+			return eventTimecode + frameRate.frameDurationInMilliseconds()
+					* frameCount;
+
+		return eventTimecode;
 	}
 
-	public long getTimecode() {
+	public BigInteger getStartTimecode() {
+		BigInteger timecode = BigInteger.valueOf(eventTimecode);
+		timecode = timecode.multiply(BigInteger.valueOf(90));
+
+		if (frameRate != null)
+			return timecode.add(BigInteger.valueOf(frameRate
+					.frameDurationInSupTicks()
+					* frameCount));
+
 		return timecode;
 	}
 
@@ -77,8 +143,12 @@ public class SubtitleEvent {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (eventTimecode ^ eventTimecode >>> 32);
 		return result;
+	}
+
+	public boolean isFrame() {
+		return frameRate != null;
 	}
 
 	public void putImage(final BufferedImage image) {
@@ -104,11 +174,15 @@ public class SubtitleEvent {
 	}
 
 	public void setDuration(final long duration) {
-		this.duration = duration;
+		eventDuration = duration;
+	}
+
+	public void setFrameRate(FrameRate frameRate) {
+		this.frameRate = frameRate;
 	}
 
 	public void setTimecode(final long start) {
-		timecode = start;
+		eventTimecode = start;
 	}
 
 	public BufferedImage takeImage() throws InterruptedException {
@@ -142,7 +216,7 @@ public class SubtitleEvent {
 
 	@Override
 	public String toString() {
-		return "SubtitleEvent start: " + timecode + " duration: "
-				+ duration;
+		return "SubtitleEvent start: " + eventTimecode + " duration: "
+				+ eventDuration;
 	}
 }

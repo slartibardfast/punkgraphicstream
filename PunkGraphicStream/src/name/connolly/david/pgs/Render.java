@@ -23,21 +23,20 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Render {
 	static {
 		System.loadLibrary("ass");
 	}
-	
+
 	public native void openSubtitle(String filename);
 
 	public native void closeSubtitle();
-	
+
 	public native int getEventCount();
 
-	public native SubtitleEvent getEvent(int event);
-	
+	public native SubtitleEvent getEvent(int eventIndex);
+
 	public native int render(BufferedImage image, long timecode);
 
 	public void printPalette(final int[] palette) {

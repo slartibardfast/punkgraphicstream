@@ -23,17 +23,12 @@
 package name.connolly.david.pgs;
 
 public enum FrameRate {
-	FILM, 
-	FILM_NTSC,
-	TV_PAL,
-	TV_NTSC,
-	HD_PAL,
-	HD_NTSC;
-	
+	FILM, FILM_NTSC, TV_PAL, TV_NTSC, HD_PAL, HD_NTSC;
+
 	public long frameDurationInMilliseconds() {
 		double frame;
-		double secondInMilliseconds = 1000;
-		
+		final double secondInMilliseconds = 1000;
+
 		switch (this) {
 		case FILM:
 			frame = 24d;
@@ -55,16 +50,16 @@ public enum FrameRate {
 			return Math.round(secondInMilliseconds / frame);
 		default:
 			return 0;
-		}	
+		}
 	}
-	
+
 	/**
 	 * SupTicks are at a higher resolution than milliseconds
 	 */
 	public long frameDurationInSupTicks() {
 		double frame;
-		double secondInSupTicks = 1000 * 90;
-		
+		final double secondInSupTicks = 1000 * 90;
+
 		switch (this) {
 		case FILM:
 			frame = 24d;
@@ -86,6 +81,13 @@ public enum FrameRate {
 			return Math.round(secondInSupTicks / frame);
 		default:
 			return 0;
-		}	
+		}
+	}
+
+	/**
+	 * @returns Number of Frames between timecode & duration.
+	 */
+	public int getFrameCount(long timecode, long duration) {
+		return 0;
 	}
 }
