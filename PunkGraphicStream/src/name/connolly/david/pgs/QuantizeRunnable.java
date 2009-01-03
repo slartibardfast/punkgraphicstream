@@ -58,7 +58,7 @@ public class QuantizeRunnable implements Runnable {
 
 				event.putImage(indexed);
 
-				System.out.println("Quantized Frame No. " + event.getId());
+				//System.out.println("Quantized Frame No. " + event.getId());
 				encodeQueue.put(event);
 			}
 
