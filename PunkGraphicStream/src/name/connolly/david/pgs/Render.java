@@ -32,6 +32,8 @@ public class Render {
 	public native void openSubtitle(String filename);
 
 	public native void closeSubtitle();
+	
+	public native int changeDetect(long timecode);
 
 	public native int getEventCount();
 

@@ -61,12 +61,12 @@ public class EncodeRunnable implements Runnable {
 				event = encodeQueue.take();
 
 				if (event.getId() != frameIndex) {
-					System.err
-							.println("Encode Request out of sequence [recieved:"
-									+ event.getId() + " wanted:" + frameIndex + "]");
+					//System.err
+					//		.println("Encode Request out of sequence [recieved:"
+					//				+ event.getId() + " wanted:" + frameIndex + "]");
 
 					if (encodeQueue.size() == 0) {
-						Thread.sleep(200);
+						Thread.sleep(400);
 					}
 
 					encodeQueue.put(event);

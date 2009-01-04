@@ -94,7 +94,6 @@ public class PunkGraphicStream {
 		System.out.println("Rendering Event No.\t" + eventIndex);
 		while (event != null) {
 			final BufferedImage currentFrame;
-			final BufferedImage nextFrame;
 			SubtitleEvent nextEvent = null;
 
 			final int detectChange;
@@ -105,11 +104,8 @@ public class PunkGraphicStream {
 			r.render(currentFrame, event.getRenderTimecode());
 
 			if (frameRenderUntilTimecode == 0) {
-				nextFrame = new BufferedImage(1920, 1080,
-						BufferedImage.TYPE_INT_ARGB);
-
-				detectChange = r.render(nextFrame, event.getRenderTimecode()
-						+ fps.frameDurationInMilliseconds());
+				detectChange = r.changeDetect(event.getTimecode()
+						+ (event.getDuration() - 1));
 
 				if (detectChange > 0) {
 					frameRenderUntilTimecode = event.getDuration()
@@ -119,7 +115,7 @@ public class PunkGraphicStream {
 					frameIndex++;
 
 					//System.out.print("Rendering Frame No.\t" + frameIndex);
-					//System.out.print(" (Change in next frame detected...)");
+					System.out.println(" (Change in next frame detected...)");
 					//System.out.println();
 
 					nextEvent = new SubtitleEvent(event, fps, frameIndex);
