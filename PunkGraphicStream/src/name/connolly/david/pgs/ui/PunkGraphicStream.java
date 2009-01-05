@@ -1,56 +1,60 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * PunkGraphicStream.java
  *
- * Created on 04-Jan-2009, 15:50:39
+ * Copyright 2008 David Connolly. All rights reserved.
+ *
+ * This file is part of PunkGraphicStream.
+ *
+ * PunkGraphicStream is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs.ui;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import name.connolly.david.pgs.mac.ApplicationEvent;
+import name.connolly.david.pgs.mac.ApplicationHandler;
+import name.connolly.david.pgs.mac.Application;
 
-import com.apple.eawt.Application;
-import com.apple.eawt.ApplicationAdapter;
-import com.apple.eawt.ApplicationEvent;
-
-/**
- *
- * @author slarti
- */
 public class PunkGraphicStream extends javax.swing.JFrame {
+
     /** Creates new form PunkGraphicStream */
     public PunkGraphicStream() {
-    	final PunkGraphicStream parent = this;
+        final PunkGraphicStream parent = this;
         String lcOSName = System.getProperty("os.name").toLowerCase();
         boolean MAC_OS_X = lcOSName.startsWith("mac os x");
 
         initComponents();
 
         if (MAC_OS_X) {
-            	Application application = Application.getApplication();
-                ApplicationAdapter listener = new ApplicationAdapter() {
-                	@Override
-            		public void handleAbout(ApplicationEvent event) {
-                        event.setHandled(true);
-                		new AboutDialog(parent, true).setVisible(true);
-            		}
+           Application application = Application.INSTANCE;
 
+           menuBar.setVisible(false);
+           
+           application.addListener(new ApplicationHandler("handleAbout") {
                 @Override
-                public void handleQuit(ApplicationEvent event) {
+                public void handle(ApplicationEvent event) {
+                    event.setHandled(true);
+                    new AboutDialog(parent, true).setVisible(true);
+                }
+           });
+
+           application.addListener(new ApplicationHandler("handleQuit") {
+                @Override
+                public void handle(ApplicationEvent event) {
                     event.setHandled(true);
                     System.exit(0);
                 }
-
-                    
-                };
-                application.addApplicationListener(listener);
-
-            menuBar.setVisible(false);
+           });
         }
     }
 
@@ -90,6 +94,11 @@ public class PunkGraphicStream extends javax.swing.JFrame {
 
         jButtonBrowse.setText("Browse...");
         jButtonBrowse.setToolTipText("Select Subtitle File");
+        jButtonBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBrowseActionPerformed(evt);
+            }
+        });
 
         buttonGroupFrameRate.add(jRadioButtonFilmNtsc);
         jRadioButtonFilmNtsc.setText("Film (NTSC) ");
@@ -265,11 +274,16 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         // TODO add your handling code here:
 }//GEN-LAST:event_jButtonEncodeActionPerformed
 
+    private void jButtonBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBrowseActionPerformed
+
+    }//GEN-LAST:event_jButtonBrowseActionPerformed
+
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 new PunkGraphicStream().setVisible(true);
             }
@@ -297,5 +311,4 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldSubtitleFile;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
-
 }
