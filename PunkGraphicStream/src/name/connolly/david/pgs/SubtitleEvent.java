@@ -127,6 +127,10 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		return eventTimecode;
 	}
 
+    public long getAverageTimecode() {
+		return eventTimecode + Math.round((double) eventDuration / 2);
+	}
+
 	public BigInteger getStartTimecode() {
 		BigInteger timecode = BigInteger.valueOf(eventTimecode);
 		timecode = timecode.multiply(BigInteger.valueOf(90));

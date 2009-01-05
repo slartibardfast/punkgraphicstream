@@ -1,10 +1,10 @@
 /*
- * Render.java
+ * QuantizeRunnable.java
  *
  * Copyright 2008 David Connolly. All rights reserved.
- * 
+ *
  * This file is part of PunkGraphicStream.
- * 
+ *
  * PunkGraphicStream is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,32 +22,7 @@
 
 package name.connolly.david.pgs;
 
-import java.awt.image.BufferedImage;
-
-public enum Render {
-    INSTANCE;
-    
-	static {
-		System.loadLibrary("ass");
-	}
-
-	public native void openSubtitle(String filename);
-
-	public native void closeSubtitle();
-	
-	public native int changeDetect(long timecode);
-
-	public native int getEventCount();
-
-	public native SubtitleEvent getEvent(int eventIndex);
-
-	public native int render(BufferedImage image, long timecode);
-
-	public void printPalette(final int[] palette) {
-		System.out.println("Number of palette entries: " + palette.length);
-
-		for (final int pixel : palette) {
-			YCrCbRec709_ColorSpace.fromRGB(pixel);
-		}
-	}
+public interface ProgressSink {
+    void progress(int percentage, String message);
+    void done();
 }

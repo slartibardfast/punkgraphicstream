@@ -34,15 +34,18 @@ public class EncodeRunnable implements Runnable {
 	private final FrameRate fps;
 	private final int quantizeThreadCount;
 	private final Semaphore quantizePending;
+    private final ProgressSink progress;
 
 	public EncodeRunnable(final BlockingQueue<SubtitleEvent> encodeQueue,
 			final String filename, final FrameRate fps,
-			final int quantizeThreadCount, final Semaphore quantizePending) {
+			final int quantizeThreadCount, final Semaphore quantizePending,
+            final ProgressSink progress) {
 		this.encodeQueue = encodeQueue;
 		this.filename = filename;
 		this.fps = fps;
 		this.quantizeThreadCount = quantizeThreadCount;
 		this.quantizePending = quantizePending;
+        this.progress = progress;
 	}
 
 	public void run() {
