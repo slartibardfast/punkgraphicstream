@@ -23,16 +23,19 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SupGenerator {
 	private int fps;
-	private final OutputStream os;
+	private FileOutputStream os;
 	private int subpictureCount;
 
-	public SupGenerator(final OutputStream os, final FrameRate fps) {
+	public SupGenerator(final FileOutputStream os, final FrameRate fps) {
 		this.os = os;
 
 		subpictureCount = 0;
@@ -93,7 +96,17 @@ public class SupGenerator {
 		timeHeader(to, BigInteger.ZERO);
 		trailer();
 	}
-
+    
+    public void close() {
+        try {
+            os.flush();
+            os.close();
+            os = null;
+        } catch (IOException ex) {
+            Logger.getLogger(SupGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 	private void bitmapHeader(final int width, final int height,
 			final int widthOffset, final int heightOffset) throws IOException {
 		// 17 00 0A 01 00 00 00 03 F7 07 80 00 31

@@ -143,8 +143,10 @@ public class NeuQuant {
         network[2][0] = 0.0;
         // Transparent background
         network[2][1] = 0.0;
+        network[2][1] = 0.0;
         network[2][2] = 0.0;
-        network[2][3] = 0.0;
+        network[2][0] = 0.0;
+        
         for (int i = 0; i < specials; i++) {
             freq[i] = 1.0 / netsize;
             bias[i] = 0.0;

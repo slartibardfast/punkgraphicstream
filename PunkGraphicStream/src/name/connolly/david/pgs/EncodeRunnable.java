@@ -50,9 +50,8 @@ public class EncodeRunnable implements Runnable {
 
 	public void run() {
 		try {
-			final OutputStream os = new BufferedOutputStream(
-					new FileOutputStream(filename));
-			final SupGenerator packet = new SupGenerator(os, fps);
+			final SupGenerator generator = new SupGenerator(
+                    new FileOutputStream(filename), fps);
 			SubtitleEvent event;
 			BufferedImage indexed;
 			long frameIndex = 0;
@@ -60,7 +59,7 @@ public class EncodeRunnable implements Runnable {
 			// Continue while at least one quantizeThread is runing or queue is
 			// not empty
 			while (quantizePending.tryAcquire(quantizeThreadCount) == false
-					| encodeQueue.size() > 0) {
+					|| encodeQueue.size() > 0) {
 				event = encodeQueue.take();
 
 				if (event.getId() != frameIndex) {
@@ -79,15 +78,14 @@ public class EncodeRunnable implements Runnable {
 
 				indexed = event.takeImage();
 
-				packet.addBitmap(indexed, 1920, 1080, event);
+				generator.addBitmap(indexed, 1920, 1080, event);
 
 				//System.out.println("Encoded no.\t" + event.getId());
 
 				frameIndex++;
 			}
 
-			os.flush();
-			os.close();
+			generator.close();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

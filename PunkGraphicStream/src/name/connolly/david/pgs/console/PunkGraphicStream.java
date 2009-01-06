@@ -55,10 +55,12 @@ public class PunkGraphicStream {
         }
 
         new Thread(new RenderRunnable(input, output, frameRate, animated, new ProgressSink() {
+            @Override
             public void progress(int percentage, String message) {
                 System.out.println(message);
             }
 
+            @Override
             public void done() {
                 System.out.println("Encode of " + input + " Done");
             }
