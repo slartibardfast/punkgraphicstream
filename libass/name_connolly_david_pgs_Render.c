@@ -74,6 +74,16 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_closeSubtitle
 	return;
 }
 
+JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_changeDetect
+(JNIEnv * env, jobject obj, jlong timecode)
+{
+	int changeDetect;
+
+	ass_render_frame(ass_renderer, ass_track, (long long)(timecode), &changeDetect);
+
+	return (jint) changeDetect;
+}
+
 JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
 (JNIEnv * env, jobject obj)
 {	
@@ -108,7 +118,37 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEvent
 	return result;
 }
 
-JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
+JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
+(JNIEnv * env, jobject obj, jint event)
+{
+	jclass durationClass;
+	jmethodID cid;
+	jobject result;
+	durationClass = (*env)->FindClass(env, "name/connolly/david/pgs/Timecode");
+	long long start;
+	long long end;
+	if (durationClass == NULL) {
+		return NULL; /* exception thrown */
+	}
+	/* Get the method ID for the String(char[]) constructor */
+	cid = (*env)->GetMethodID(env, durationClass,
+							  "<init>", "(JJ)V");
+	if (cid == NULL) {
+		return NULL; /* exception thrown */
+	}
+	
+	if (event >= ass_track->n_events) {
+		return NULL;
+	}
+	start = ass_track->events[event].Start;
+	end = start + ass_track->events[event].Duration;
+	result = (*env)->NewObject(env, durationClass, cid, start, end);
+	
+	(*env)->DeleteLocalRef(env, durationClass);
+	return result;
+}
+
+JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 (JNIEnv * env, jobject obj, jobject image, jlong timecode)
 {
 	jclass cls = (*env)->GetObjectClass(env, image);
@@ -118,12 +158,10 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 	
 	if (getRGB == NULL) {
 		printf("setRGB() not found\n");
-		return -1; /* method not found */
 	}
 	
 	if (setRGB == NULL) {
 		printf("setRGB() not found\n");
-		return -1; /* method not found */
 	}
 
 	ass_image_t *p_img = ass_render_frame(ass_renderer,
@@ -169,6 +207,4 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
 
 		p_img = p_img->next;
 	}
-	
-	return (jint) changeDetect;
 }

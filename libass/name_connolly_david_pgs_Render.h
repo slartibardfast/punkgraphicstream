@@ -25,6 +25,14 @@ extern "C" {
 	
 	/*
 	 * Class:     name_connolly_david_pgs_Render
+	 * Method:    render
+	 * Signature: (J)I
+	 */
+	JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_changeDetect
+	(JNIEnv *, jobject, jlong);
+	
+	/*
+	 * Class:     name_connolly_david_pgs_Render
 	 * Method:    getEventCount
 	 * Signature: ()I
 	 */
@@ -34,17 +42,25 @@ extern "C" {
 	/*
 	 * Class:     name_connolly_david_pgs_Render
 	 * Method:    getEvent
-	 * Signature: (I)J
+	 * Signature: (Lname/connolly/david/pgs/SubtitleEvent;)J
 	 */
 	JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEvent
+	(JNIEnv * env, jobject obj, jint event);
+
+	/*
+	 * Class:     name_connolly_david_pgs_Render
+	 * Method:    getEventTimecode
+	 * Signature: (Lname/connolly/david/pgs/Timecode;)J
+	 */
+	JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 	(JNIEnv * env, jobject obj, jint event);
 	
 	/*
 	 * Class:     name_connolly_david_pgs_Render
 	 * Method:    render
-	 * Signature: (J)V
+	 * Signature: (Ljava.awt.image.BufferedImage;J)V
 	 */
-	JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_render
+	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 	(JNIEnv *, jobject, jobject, jlong);
 	
 #ifdef __cplusplus
