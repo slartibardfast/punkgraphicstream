@@ -22,14 +22,18 @@
 
 package name.connolly.david.pgs.ui;
 
-import name.connolly.david.pgs.ProgressSink;
+import name.connolly.david.pgs.util.ProgressSink;
 
 /**
  *
  * @author slarti
  */
 public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
-    /** A return status code - returned if Cancel button has been pressed */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5076673874186761150L;
+	/** A return status code - returned if Cancel button has been pressed */
     public static final int RET_CANCEL = 0;
     /** A return status code - returned if OK button has been pressed */
     public static final int RET_OK = 1;

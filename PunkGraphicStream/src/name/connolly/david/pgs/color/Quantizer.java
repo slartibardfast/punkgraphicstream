@@ -20,10 +20,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-package name.connolly.david.pgs;
+package name.connolly.david.pgs.color;
 
+import name.connolly.david.pgs.concurrency.EncodeRunnable;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Quantizer {
 	public static BufferedImage indexImage(BufferedImage image) {
@@ -39,8 +42,9 @@ public class Quantizer {
 					image.setRGB(x, y, nq.convert(argb));
 				}
 			}
-		} catch (final IOException e) {
-			throw new RuntimeException("Quantizer failed" + e.getMessage());
+		} catch (final IOException ex) {
+			// throw new RuntimeException("Quantizer failed" + e.getMessage()); // Should never happen so no RuntimeException
+            Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 		return image;

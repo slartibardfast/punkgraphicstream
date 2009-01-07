@@ -20,12 +20,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-package name.connolly.david.pgs;
+package name.connolly.david.pgs.concurrency;
 
+import name.connolly.david.pgs.util.ProgressSink;
+import name.connolly.david.pgs.color.Quantizer;
+import name.connolly.david.pgs.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class QuantizeRunnable implements Runnable {
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
@@ -66,8 +71,8 @@ public class QuantizeRunnable implements Runnable {
 			}
 
 			quantizePending.release();
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
+		} catch (final InterruptedException ex) {
+			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
         progress.done();

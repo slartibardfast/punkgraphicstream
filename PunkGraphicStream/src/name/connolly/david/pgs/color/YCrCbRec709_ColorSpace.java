@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-package name.connolly.david.pgs;
+package name.connolly.david.pgs.color;
 
 public class YCrCbRec709_ColorSpace {
 	public static int fromRGB(final int rgbvalue) {
@@ -39,8 +39,8 @@ public class YCrCbRec709_ColorSpace {
 		 */
 
 		final double ey = 0.7152 * eg + 0.0722 * eb + 0.2126 * er;
-		final double epr = -(0.3854 * eg) + 0.5 * eb - 0.1146 * er;
-		final double epb = -(0.4542 * eg) - 0.0458 * eb + 0.5 * er;
+		final double epb = -(0.3854 * eg) + 0.5 * eb - 0.1146 * er;
+		final double epr = -(0.4542 * eg) - 0.0458 * eb + 0.5 * er;
 
 		// System.out.println("E′Y: "+ ey + " E′Pb: " + epb+ " E′Pr: " + epr +
 		// " A: " + a);
@@ -51,10 +51,10 @@ public class YCrCbRec709_ColorSpace {
 		 */
 		final int y = (int) Math.max(0, Math
 				.min(255, Math.round(219 * ey) + 16));
-		final int cr = (int) Math.max(0, Math.min(255,
-				Math.round(224 * epr) + 128));
 		final int cb = (int) Math.max(0, Math.min(255,
 				Math.round(224 * epb) + 128));
+		final int cr = (int) Math.max(0, Math.min(255,
+				Math.round(224 * epr) + 128));
 
 		// System.out.println("Y: "+ y + " Cb: " + cb+ "Cr: " + cr + " A: " +
 		// a);

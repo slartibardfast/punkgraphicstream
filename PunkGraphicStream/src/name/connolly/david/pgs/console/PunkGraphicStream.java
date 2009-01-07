@@ -22,8 +22,8 @@
 package name.connolly.david.pgs.console;
 
 import name.connolly.david.pgs.FrameRate;
-import name.connolly.david.pgs.ProgressSink;
-import name.connolly.david.pgs.RenderRunnable;
+import name.connolly.david.pgs.util.ProgressSink;
+import name.connolly.david.pgs.concurrency.RenderRunnable;
 
 public class PunkGraphicStream {
 
@@ -55,12 +55,10 @@ public class PunkGraphicStream {
         }
 
         new Thread(new RenderRunnable(input, output, frameRate, animated, new ProgressSink() {
-            @Override
             public void progress(int percentage, String message) {
                 System.out.println(message);
             }
 
-            @Override
             public void done() {
                 System.out.println("Encode of " + input + " Done");
             }

@@ -1,10 +1,10 @@
 /*
- * YCrCbRec709_ColorSpaceTest.java
+ * QuantizeRunnable.java
  *
  * Copyright 2008 David Connolly. All rights reserved.
- * 
+ *
  * This file is part of PunkGraphicStream.
- * 
+ *
  * PunkGraphicStream is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -20,27 +20,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-package name.connolly.david.pgs.test;
+package name.connolly.david.pgs.util;
 
-import static org.junit.Assert.fail;
-import name.connolly.david.pgs.YCrCbRec709_ColorSpace;
-
-import org.junit.Test;
-
-public class YCrCbRec709_ColorSpaceTest {
-
-	@Test
-	public void testFromRGB() {
-		YCrCbRec709_ColorSpace.fromRGB(0);
-		YCrCbRec709_ColorSpace.fromRGB(0x00FFFFFF);
-		YCrCbRec709_ColorSpace.fromRGB(0x00FF0000);
-		YCrCbRec709_ColorSpace.fromRGB(0x0000FF00);
-		YCrCbRec709_ColorSpace.fromRGB(0x000000FF);
-	}
-
-	@Test
-	public void testToRGB() {
-		fail("Not yet implemented");
-	}
-
+public interface ProgressSink {
+    void progress(int percentage, String message);
+    void done();
 }

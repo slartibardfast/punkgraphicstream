@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-package name.connolly.david.pgs;
+package name.connolly.david.pgs.color;
 
 import java.io.IOException;
 import java.io.OutputStream;

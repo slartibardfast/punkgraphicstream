@@ -19,13 +19,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package name.connolly.david.pgs;
+package name.connolly.david.pgs.concurrency;
 
+import name.connolly.david.pgs.util.ProgressSink;
+import name.connolly.david.pgs.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RenderRunnable implements Runnable {
     private final AtomicBoolean cancelled = new AtomicBoolean(false);
@@ -132,13 +136,13 @@ public class RenderRunnable implements Runnable {
             }
 
             event.putImage(currentFrame);
-
+            
             try {
                 quantizeQueue.put(event);
-            } catch (final InterruptedException e) {
-                e.printStackTrace();
-                System.exit(-1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
 
             event = nextEvent;
         }

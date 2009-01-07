@@ -22,10 +22,14 @@
 
 package name.connolly.david.pgs;
 
+import name.connolly.david.pgs.color.ColorTable;
+import name.connolly.david.pgs.concurrency.EncodeRunnable;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RleBitmap {
 	private final BufferedImage image;
@@ -110,9 +114,8 @@ public class RleBitmap {
 
 		try {
 			baos.write(rle.toByteArray());
-		} catch (final IOException e) {
-			e.printStackTrace(System.err);
-			System.exit(-1);
+		} catch (final IOException ex) {
+			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

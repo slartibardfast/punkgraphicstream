@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public enum PesStreamSink {
 	INSTANCE;
@@ -54,12 +56,13 @@ public enum PesStreamSink {
 			stream = new ByteArrayOutputStream();
 			streams.put(pid, stream);
 		}
-
-		try {
-			stream.write(payload);
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+        
+        try {
+            stream.write(payload);
+        } catch (IOException ex) {
+            Logger.getLogger(PesStreamSink.class.getName()).log(Level.SEVERE, null, ex);
+        }
+		
 	}
 
 	public List<PesPacket> getPackets(final int pid) {

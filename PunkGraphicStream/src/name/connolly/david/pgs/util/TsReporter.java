@@ -24,10 +24,11 @@ package name.connolly.david.pgs.util;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TsReporter {
 
@@ -123,10 +124,8 @@ public class TsReporter {
 			pw.close();
 
 			sink.printPesPackets(4608);
-		} catch (final FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.printStackTrace();
+		} catch (final IOException ex) {
+			Logger.getLogger(SupReporter.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 }

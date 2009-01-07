@@ -26,12 +26,11 @@ import java.awt.HeadlessException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ButtonModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import name.connolly.david.pgs.FrameRate;
-import name.connolly.david.pgs.RenderRunnable;
+import name.connolly.david.pgs.concurrency.RenderRunnable;
 import name.connolly.david.pgs.mac.ApplicationEvent;
 import name.connolly.david.pgs.mac.ApplicationHandler;
 import name.connolly.david.pgs.mac.Application;
@@ -317,8 +316,9 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     // TODO Native FileOpener on Mac.
     private void jButtonBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBrowseActionPerformed
         JFileChooser chooser = new JFileChooser(jTextFieldSubtitleFile.getText()) {
+			private static final long serialVersionUID = 2849546445500725876L;
 
-            @Override
+			@Override
             protected JDialog createDialog(Component parent) throws HeadlessException {
                 JDialog jDialog = super.createDialog(parent);
                 jDialog.setLocationByPlatform(true);
