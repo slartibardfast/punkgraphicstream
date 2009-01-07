@@ -198,6 +198,11 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         helpMenu.setText("Help");
 
         aboutMenuItem.setText("About");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
@@ -213,7 +218,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
                 .addComponent(jButtonBrowse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonEncode)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -232,20 +237,20 @@ public class PunkGraphicStream extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelSubtitleFile)
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(173, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelFrameRate)
-                .addContainerGap(168, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
             .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextFieldSubtitleFile, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                .addComponent(jTextFieldSubtitleFile, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBoxAnimated)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jRadioButtonFilm, jRadioButtonFilmNtsc, jRadioButtonNtsc, jRadioButtonNtscHd, jRadioButtonPal, jRadioButtonPalHd});
@@ -364,6 +369,10 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     private void jRadioButtonNtscHdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonNtscHdActionPerformed
         frameRate = FrameRate.HD_NTSC;
     }//GEN-LAST:event_jRadioButtonNtscHdActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        new AboutDialog(this, true).setVisible(true);
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     /**
      * @param args the command line arguments

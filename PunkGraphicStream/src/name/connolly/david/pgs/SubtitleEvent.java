@@ -50,6 +50,17 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		frameRate = null;
 		frameCount = 0;
 
+		// eventCount++; // TODO Update native library.
+	}
+
+    public SubtitleEvent(final Timecode timecode) {
+		eventDuration = timecode.getDuration();
+		eventTimecode = timecode.getStart();
+
+		id = eventCount;
+		frameRate = null;
+		frameCount = 0;
+
 		eventCount++;
 	}
 
@@ -129,6 +140,10 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 
     public long getAverageTimecode() {
 		return eventTimecode + Math.round((double) eventDuration / 2);
+	}
+
+    public long getStart() {
+		return eventTimecode;
 	}
 
 	public BigInteger getStartTimecode() {

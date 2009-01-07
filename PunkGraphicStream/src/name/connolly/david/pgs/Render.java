@@ -42,6 +42,8 @@ public enum Render {
 
 	public native SubtitleEvent getEvent(int eventIndex);
 
+    public native Timecode getEventTimecode(int eventIndex);
+
 	public native int render(BufferedImage image, long timecode);
 
 	public void printPalette(final int[] palette) {
