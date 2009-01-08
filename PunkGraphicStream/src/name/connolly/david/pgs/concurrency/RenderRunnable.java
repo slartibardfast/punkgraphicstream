@@ -39,15 +39,13 @@ public class RenderRunnable implements Runnable {
     private final String inputFilename;
     private final String outputFilename;
     private final FrameRate fps;
-    private final boolean animated;
     private final ProgressSink progress;
 
     public RenderRunnable(String inputFilename, String outputFilename,
-            FrameRate fps, boolean animated, ProgressSink progress) {
+            FrameRate fps, ProgressSink progress) {
         this.inputFilename = inputFilename;
         this.outputFilename = outputFilename;
         this.fps = fps;
-        this.animated = animated;
         this.progress = progress;
     }
 
@@ -101,13 +99,17 @@ public class RenderRunnable implements Runnable {
                 int change = 0;
                 long changeTimecode = event.getTimecode();
                 
-                r.render(image, event.getRenderTimecode());
+                
 
-                // Change Detect Loop: Check each frame to see if animation has occured
-                while (changeTimecode < (timecode.getEnd() - 1) && change == 0) {
-                    changeTimecode++;
-                    change = r.changeDetect(changeTimecode);
-                }
+                // Change Detect Loop: Check each frame to see if animation has
+				// occurred
+				while (changeTimecode < (timecode.getEnd() - 1)
+						&& (change == 0 || (changeTimecode
+								- event.getTimecode() < fps
+								.frameDurationInMilliseconds()))) {
+					changeTimecode++;
+					change = r.changeDetect(changeTimecode);
+				}
 
                 if (change > 0) {
                     long lastTimecode = changeTimecode - 1;
@@ -116,6 +118,8 @@ public class RenderRunnable implements Runnable {
 
                     nextEvent = new SubtitleEvent(new Timecode(changeTimecode, timecode.getEnd()));
                 }
+                
+                r.render(image, event.getRenderTimecode());
                 
                 event.putImage(image);
 
