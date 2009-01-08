@@ -10,10 +10,10 @@ extern "C" {
 	/*
 	 * Class:     name_connolly_david_pgs_Render
 	 * Method:    openSubtitle
-	 * Signature: (Ljava/lang/String;)V
+	 * Signature: (Ljava/lang/String;II)V
 	 */
 	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
-	(JNIEnv *, jobject, jstring);
+	(JNIEnv *, jobject, jstring, jint x, jint y);
 	
 	/*
 	 * Class:     name_connolly_david_pgs_Render
@@ -62,7 +62,6 @@ extern "C" {
 	 */
 	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 	(JNIEnv *, jobject, jobject, jlong);
-	
 #ifdef __cplusplus
 }
 #endif

@@ -31,7 +31,7 @@ ass_renderer_t* ass_renderer;
 ass_track_t* ass_track;
 
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
-(JNIEnv * env, jobject obj, jstring filename) 
+(JNIEnv * env, jobject obj, jstring filename, jint x, jint y) 
 {
 	jboolean iscopy;
 	char* subfile = (char*) ((*env)->GetStringUTFChars(env, filename, &iscopy));
@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 	ass_set_fonts_dir(ass_library, ".");
 	ass_set_font_scale(ass_renderer, 1.);
 	ass_set_fonts(ass_renderer, NULL, "Arial");
-	ass_set_frame_size(ass_renderer, 1920, 1080);
+	ass_set_frame_size(ass_renderer, x, y);
 	
 	ass_track = ass_read_file(ass_library, subfile, "UTF-8");
 	
