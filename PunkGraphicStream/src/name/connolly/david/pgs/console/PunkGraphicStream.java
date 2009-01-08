@@ -31,8 +31,6 @@ public class PunkGraphicStream {
         final String input;
         String output = "default.ass";
         FrameRate frameRate = FrameRate.FILM;
-        boolean animated = false;
-
         System.setProperty("java.awt.headless", "true");
 
         if (args.length != 2) {
@@ -54,7 +52,7 @@ public class PunkGraphicStream {
             printUsageAndQuit();
         }
 
-        new Thread(new RenderRunnable(input, output, frameRate, animated, new ProgressSink() {
+        new Thread(new RenderRunnable(input, output, frameRate, new ProgressSink() {
             public void progress(int percentage, String message) {
                 System.out.println(message);
             }

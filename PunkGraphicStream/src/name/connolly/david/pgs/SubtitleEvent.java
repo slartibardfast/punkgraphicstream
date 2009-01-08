@@ -131,15 +131,12 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	}
 
 	public long getRenderTimecode() {
+		/*
 		if (frameRate != null)
 			return eventTimecode + frameRate.frameDurationInMilliseconds()
 					* frameCount;
-
-		return eventTimecode;
-	}
-
-    public long getAverageTimecode() {
-		return eventTimecode + Math.round((double) eventDuration / 2);
+		*/
+		return eventTimecode + Math.round(eventDuration / 2d);
 	}
 
     public long getStart() {

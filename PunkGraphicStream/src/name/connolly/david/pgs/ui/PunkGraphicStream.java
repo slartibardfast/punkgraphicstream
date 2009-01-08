@@ -299,7 +299,6 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     private void jButtonEncodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEncodeActionPerformed
         String input = jTextFieldSubtitleFile.getText();
         String output = "default.ass";
-        boolean animated = jCheckBoxAnimated.isSelected();
         EncodeDialog dialog = new EncodeDialog(this, true);
         RenderRunnable renderer;
         if (input.length() > 5) {
@@ -307,7 +306,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
                     input.length() - 4) + ".sup";
         }
 
-        renderer = new RenderRunnable(input, output, frameRate, animated, dialog);
+        renderer = new RenderRunnable(input, output, frameRate, dialog);
 
         new Thread(renderer).start();
 
@@ -316,7 +315,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         if (dialog.getReturnStatus() == 0) {
             renderer.cancel();
         }
-}//GEN-LAST:event_jButtonEncodeActionPerformed
+    }//GEN-LAST:event_jButtonEncodeActionPerformed
 
     // TODO Native FileOpener on Mac.
     private void jButtonBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBrowseActionPerformed

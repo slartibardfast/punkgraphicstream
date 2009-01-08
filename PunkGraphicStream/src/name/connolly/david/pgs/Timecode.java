@@ -28,7 +28,6 @@ public class Timecode implements Comparable<Timecode> {
     private long start;
     private long end;
 
-    @Override
     public int compareTo(Timecode o) {
         return new Long(start).compareTo(o.start);
     }
