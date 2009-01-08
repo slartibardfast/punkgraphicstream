@@ -32,7 +32,7 @@ public enum Render {
 		System.loadLibrary("ass");
 	}
 
-	public native void openSubtitle(String filename);
+	public native void openSubtitle(String filename, int x, int y);
 
 	public native void closeSubtitle();
 	

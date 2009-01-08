@@ -28,6 +28,7 @@ import name.connolly.david.pgs.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,14 +60,18 @@ public class QuantizeRunnable implements Runnable {
 			quantizePending.acquire();
 
 			while (renderPending.get() || quantizeQueue.size() > 0) {
-				event = quantizeQueue.take();
+				event = quantizeQueue.poll(200, TimeUnit.MILLISECONDS);
+
+                if (event == null) {
+                    continue;
+                }
+                
 				image = event.takeImage();
 
 				indexed = Quantizer.indexImage(image);
 
 				event.putImage(indexed);
-
-				//System.out.println("Quantized Frame No. " + event.getId());
+                
 				encodeQueue.put(event);
 			}
 
@@ -75,6 +80,6 @@ public class QuantizeRunnable implements Runnable {
 			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-        progress.done();
+        System.out.println("Quantize Thread Ended");
 	}
 }

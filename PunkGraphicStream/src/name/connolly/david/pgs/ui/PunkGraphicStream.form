@@ -4,6 +4,8 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="buttonGroupFrameRate">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupResolution">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="fileMenu">
@@ -69,48 +71,56 @@
               <Component id="jButtonBrowse" min="-2" max="-2" attributes="2"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButtonEncode" min="-2" max="-2" attributes="2"/>
-              <EmptySpace pref="80" max="32767" attributes="0"/>
+              <EmptySpace pref="39" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="2" attributes="0">
-                      <Component id="jRadioButtonFilmNtsc" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jRadioButtonFilm" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="2" attributes="0">
-                      <Component id="jRadioButtonPal" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jRadioButtonPalHd" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jRadioButtonNtsc" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jRadioButtonNtscHd" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jRadioButtonFilmNtsc" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonNtsc" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonNtscHd" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="jRadioButtonFilm" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonPal" linkSize="1" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonPalHd" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabelSubtitleFile" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="173" max="32767" attributes="0"/>
+              <EmptySpace pref="153" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabelFrameRate" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="191" max="32767" attributes="0"/>
+              <EmptySpace pref="158" max="32767" attributes="0"/>
           </Group>
-          <Component id="jSeparator2" alignment="1" pref="242" max="32767" attributes="1"/>
+          <Component id="jSeparator2" alignment="1" pref="251" max="32767" attributes="1"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTextFieldSubtitleFile" pref="222" max="32767" attributes="1"/>
+              <Component id="jTextFieldSubtitleFile" pref="211" max="32767" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBoxAnimated" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="165" max="32767" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="160" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jRadioButton480p" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButton720p" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jRadioButton576p" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButton1080p" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -129,24 +139,36 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-              <Component id="jLabelFrameRate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="jLabelFrameRate" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonFilmNtsc" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonNtsc" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonNtscHd" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="jRadioButtonFilm" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonPal" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonPalHd" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jRadioButtonFilmNtsc" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jRadioButtonFilm" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jRadioButtonPal" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jRadioButtonPalHd" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jRadioButtonNtsc" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jRadioButtonNtscHd" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButton480p" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButton576p" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jCheckBoxAnimated" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jRadioButton720p" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButton1080p" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -252,7 +274,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelFrameRate">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Options:"/>
+        <Property name="text" type="java.lang.String" value="Frame Rate:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelSubtitleFile">
@@ -260,11 +282,55 @@
         <Property name="text" type="java.lang.String" value="Subtitle File:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBoxAnimated">
+    <Component class="javax.swing.JRadioButton" name="jRadioButton480p">
       <Properties>
-        <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" value="Animated"/>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupResolution"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="NTSC (480p)"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton480pActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Resolution:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButton576p">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupResolution"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PAL (576p)"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton576pActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButton720p">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupResolution"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="HD (720p)"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton720pActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButton1080p">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupResolution"/>
+        </Property>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="HD (1080p)"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton1080pActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

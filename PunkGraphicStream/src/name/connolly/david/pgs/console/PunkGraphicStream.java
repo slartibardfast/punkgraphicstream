@@ -22,6 +22,7 @@
 package name.connolly.david.pgs.console;
 
 import name.connolly.david.pgs.FrameRate;
+import name.connolly.david.pgs.Resolution;
 import name.connolly.david.pgs.util.ProgressSink;
 import name.connolly.david.pgs.concurrency.RenderRunnable;
 
@@ -52,7 +53,7 @@ public class PunkGraphicStream {
             printUsageAndQuit();
         }
 
-        new Thread(new RenderRunnable(input, output, frameRate, new ProgressSink() {
+        new Thread(new RenderRunnable(input, output, frameRate, Resolution.HD_1080p, new ProgressSink() {
             public void progress(int percentage, String message) {
                 System.out.println(message);
             }

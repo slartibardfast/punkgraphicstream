@@ -32,14 +32,16 @@ public class Quantizer {
 	public static BufferedImage indexImage(BufferedImage image) {
 		NeuQuant nq;
 		try {
-			nq = new NeuQuant(image, 1920, 1080);
+            final int x = image.getWidth();
+            final int y = image.getHeight();
+			nq = new NeuQuant(image, x, y);
 			nq.init();
 			int argb;
 
-			for (int y = 0; y < 1080; y++) {
-				for (int x = 0; x < 1920; x++) {
-					argb = image.getRGB(x, y);
-					image.setRGB(x, y, nq.convert(argb));
+			for (int yIndex = 0; yIndex < y; yIndex++) {
+				for (int xIndex = 0; xIndex < x; xIndex++) {
+					argb = image.getRGB(xIndex, yIndex);
+					image.setRGB(xIndex, yIndex, nq.convert(argb));
 				}
 			}
 		} catch (final IOException ex) {

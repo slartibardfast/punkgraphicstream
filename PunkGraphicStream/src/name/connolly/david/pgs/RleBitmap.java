@@ -42,21 +42,23 @@ public class RleBitmap {
 
 	public ColorTable encode() {
 		final ColorTable table = new ColorTable();
-		int x = 0;
-		int y = 0;
+        int x = image.getWidth();
+        int y = image.getHeight();
+		int xIndex = 0;
+		int yIndex = 0;
 		int count = 0;
 		int position = 0;
 
 		Integer pixel = null; // ARGB 32-Bit -> Need null :)
 
-		while (y < 1080) {
-			x = 0;
+		while (yIndex < y) {
+			xIndex = 0;
 
-			while (x < 1920) {
-				if (new Integer(image.getRGB(x, y)).equals(pixel)) {
+			while (xIndex < x) {
+				if (new Integer(image.getRGB(xIndex, yIndex)).equals(pixel)) {
 					count++;
 				} else if (pixel == null) {
-					pixel = image.getRGB(x, y);
+					pixel = image.getRGB(xIndex, yIndex);
 					position = table.getColorPosition(pixel);
 
 					if (position == -1) {
@@ -66,10 +68,10 @@ public class RleBitmap {
 					count = 1;
 				} else {
 					// write out old pixel
-					writeRleCommand(rle, count, position, y);
+					writeRleCommand(rle, count, position, yIndex);
 
 					// new pixel
-					pixel = image.getRGB(x, y);
+					pixel = image.getRGB(xIndex, yIndex);
 					position = table.getColorPosition(pixel);
 
 					if (position == -1) {
@@ -78,16 +80,16 @@ public class RleBitmap {
 					count = 1;
 				}
 
-				x++;
+				xIndex++;
 			}
 
-			writeRleCommand(rle, count, position, y);
+			writeRleCommand(rle, count, position, yIndex);
 
 			pixel = null;
 			rle.write(0x00);
 			rle.write(0x00);
 
-			y++;
+			yIndex++;
 		}
 
 		return table;
@@ -130,7 +132,7 @@ public class RleBitmap {
 		final boolean extended = count > 63;
 		// ByteArrayOutputStream rle = new ByteArrayOutputStream();
 
-		// System.out.println("y: " + y + " color: " + color + " extended: "
+		// System.out.println("yIndex: " + yIndex + " color: " + color + " extended: "
 		// + extended + " pixel count: " + count + " index Position: "
 		// + position);
 

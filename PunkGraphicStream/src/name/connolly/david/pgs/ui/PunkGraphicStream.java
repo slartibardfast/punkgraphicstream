@@ -30,6 +30,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import name.connolly.david.pgs.FrameRate;
+import name.connolly.david.pgs.Resolution;
 import name.connolly.david.pgs.concurrency.RenderRunnable;
 import name.connolly.david.pgs.mac.ApplicationEvent;
 import name.connolly.david.pgs.mac.ApplicationHandler;
@@ -39,7 +40,8 @@ public class PunkGraphicStream extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 3301916545310764557L;
     private FrameRate frameRate = FrameRate.FILM;
-
+    private Resolution resolution = Resolution.HD_1080p;
+    
     /** Creates new form PunkGraphicStream */
     public PunkGraphicStream() {
         final PunkGraphicStream parent = this;
@@ -82,6 +84,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroupFrameRate = new javax.swing.ButtonGroup();
+        buttonGroupResolution = new javax.swing.ButtonGroup();
         jTextFieldSubtitleFile = new javax.swing.JTextField();
         jButtonBrowse = new javax.swing.JButton();
         jRadioButtonFilmNtsc = new javax.swing.JRadioButton();
@@ -94,7 +97,11 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jLabelFrameRate = new javax.swing.JLabel();
         jLabelSubtitleFile = new javax.swing.JLabel();
-        jCheckBoxAnimated = new javax.swing.JCheckBox();
+        jRadioButton480p = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jRadioButton576p = new javax.swing.JRadioButton();
+        jRadioButton720p = new javax.swing.JRadioButton();
+        jRadioButton1080p = new javax.swing.JRadioButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         exitMenuItem = new javax.swing.JMenuItem();
@@ -176,12 +183,44 @@ public class PunkGraphicStream extends javax.swing.JFrame {
             }
         });
 
-        jLabelFrameRate.setText("Options:");
+        jLabelFrameRate.setText("Frame Rate:");
 
         jLabelSubtitleFile.setText("Subtitle File:");
 
-        jCheckBoxAnimated.setSelected(true);
-        jCheckBoxAnimated.setText("Animated");
+        buttonGroupResolution.add(jRadioButton480p);
+        jRadioButton480p.setText("NTSC (480p)");
+        jRadioButton480p.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton480pActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Resolution:");
+
+        buttonGroupResolution.add(jRadioButton576p);
+        jRadioButton576p.setText("PAL (576p)");
+        jRadioButton576p.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton576pActionPerformed(evt);
+            }
+        });
+
+        buttonGroupResolution.add(jRadioButton720p);
+        jRadioButton720p.setText("HD (720p)");
+        jRadioButton720p.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton720pActionPerformed(evt);
+            }
+        });
+
+        buttonGroupResolution.add(jRadioButton1080p);
+        jRadioButton1080p.setSelected(true);
+        jRadioButton1080p.setText("HD (1080p)");
+        jRadioButton1080p.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1080pActionPerformed(evt);
+            }
+        });
 
         fileMenu.setText("File");
 
@@ -218,39 +257,46 @@ public class PunkGraphicStream extends javax.swing.JFrame {
                 .addComponent(jButtonBrowse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonEncode)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButtonFilmNtsc)
+                    .addComponent(jRadioButtonNtsc)
+                    .addComponent(jRadioButtonNtscHd))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, layout.createSequentialGroup()
-                        .addComponent(jRadioButtonFilmNtsc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButtonFilm))
-                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, layout.createSequentialGroup()
-                        .addComponent(jRadioButtonPal)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButtonPalHd))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jRadioButtonNtsc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButtonNtscHd))))
+                    .addComponent(jRadioButtonFilm, javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jRadioButtonPal, javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jRadioButtonPalHd, javax.swing.GroupLayout.Alignment.LEADING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelSubtitleFile)
-                .addContainerGap(173, Short.MAX_VALUE))
+                .addContainerGap(153, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelFrameRate)
-                .addContainerGap(191, Short.MAX_VALUE))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                .addContainerGap(158, Short.MAX_VALUE))
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextFieldSubtitleFile, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addComponent(jTextFieldSubtitleFile, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBoxAnimated)
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addComponent(jLabel1)
+                .addContainerGap(160, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton480p)
+                    .addComponent(jRadioButton720p))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton576p)
+                    .addComponent(jRadioButton1080p))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jRadioButtonFilm, jRadioButtonFilmNtsc, jRadioButtonNtsc, jRadioButtonNtscHd, jRadioButtonPal, jRadioButtonPalHd});
@@ -269,21 +315,31 @@ public class PunkGraphicStream extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addComponent(jLabelFrameRate)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelFrameRate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonFilmNtsc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonNtsc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonNtscHd))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jRadioButtonFilm)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonPal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonPalHd)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonFilmNtsc)
-                    .addComponent(jRadioButtonFilm))
+                    .addComponent(jRadioButton480p)
+                    .addComponent(jRadioButton576p))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonPal)
-                    .addComponent(jRadioButtonPalHd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonNtsc)
-                    .addComponent(jRadioButtonNtscHd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBoxAnimated)
+                    .addComponent(jRadioButton720p)
+                    .addComponent(jRadioButton1080p))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -306,7 +362,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
                     input.length() - 4) + ".sup";
         }
 
-        renderer = new RenderRunnable(input, output, frameRate, dialog);
+        renderer = new RenderRunnable(input, output, frameRate, resolution, dialog);
 
         new Thread(renderer).start();
 
@@ -373,6 +429,22 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         new AboutDialog(this, true).setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
+    private void jRadioButton480pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton480pActionPerformed
+         resolution = Resolution.NTSC_480p;
+    }//GEN-LAST:event_jRadioButton480pActionPerformed
+
+    private void jRadioButton576pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton576pActionPerformed
+        resolution = Resolution.PAL_576p;
+    }//GEN-LAST:event_jRadioButton576pActionPerformed
+
+    private void jRadioButton720pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton720pActionPerformed
+        resolution = Resolution.HD_720p;
+    }//GEN-LAST:event_jRadioButton720pActionPerformed
+
+    private void jRadioButton1080pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1080pActionPerformed
+        resolution = Resolution.HD_1080p;
+    }//GEN-LAST:event_jRadioButton1080pActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -388,14 +460,19 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.ButtonGroup buttonGroupFrameRate;
+    private javax.swing.ButtonGroup buttonGroupResolution;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton jButtonBrowse;
     private javax.swing.JButton jButtonEncode;
-    private javax.swing.JCheckBox jCheckBoxAnimated;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelFrameRate;
     private javax.swing.JLabel jLabelSubtitleFile;
+    private javax.swing.JRadioButton jRadioButton1080p;
+    private javax.swing.JRadioButton jRadioButton480p;
+    private javax.swing.JRadioButton jRadioButton576p;
+    private javax.swing.JRadioButton jRadioButton720p;
     private javax.swing.JRadioButton jRadioButtonFilm;
     private javax.swing.JRadioButton jRadioButtonFilmNtsc;
     private javax.swing.JRadioButton jRadioButtonNtsc;

@@ -65,8 +65,9 @@ public class SupGenerator {
 		}
 	}
 
-	public void addBitmap(final BufferedImage image, final int width,
-			final int height, SubtitleEvent event) throws IOException {
+	public void addBitmap(final BufferedImage image, SubtitleEvent event) throws IOException {
+        final int width = image.getWidth();
+		final int height = image.getHeight();
 		final BigInteger to = event.getEndTimecode();
 		BigInteger from = event.getStartTimecode();
 		final RleBitmap bitmap = new RleBitmap(image);

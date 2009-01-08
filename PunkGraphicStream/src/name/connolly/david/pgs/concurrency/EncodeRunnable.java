@@ -72,11 +72,13 @@ public class EncodeRunnable implements Runnable {
                     if (encodeQueue.size() == 0) {
                         Thread.sleep(400);
                     }
+                    
                     encodeQueue.put(event);
                     continue;
                 }
                 indexed = event.takeImage();
-                packet.addBitmap(indexed, 1920, 1080, event);
+                
+                packet.addBitmap(indexed, event);
                 //System.out.println("Encoded no.\t" + event.getId());
                 frameIndex++;
             }
@@ -94,6 +96,9 @@ public class EncodeRunnable implements Runnable {
                 Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-		
+        
+        progress.done();
+
+        System.out.println("Encode Thread Ended");
 	}
 }

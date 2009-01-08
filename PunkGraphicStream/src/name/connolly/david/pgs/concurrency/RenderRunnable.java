@@ -40,13 +40,15 @@ public class RenderRunnable implements Runnable {
     private final String outputFilename;
     private final FrameRate fps;
     private final ProgressSink progress;
-
+    private final Resolution resolution;
+    
     public RenderRunnable(String inputFilename, String outputFilename,
-            FrameRate fps, ProgressSink progress) {
+            FrameRate fps, Resolution resolution, ProgressSink progress) {
         this.inputFilename = inputFilename;
         this.outputFilename = outputFilename;
         this.fps = fps;
         this.progress = progress;
+        this.resolution = resolution;
     }
 
     public void run() {
@@ -61,8 +63,30 @@ public class RenderRunnable implements Runnable {
         final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
         final AtomicBoolean renderPending = new AtomicBoolean(true);
         final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
+        int x;
+        int y;
 
-        r.openSubtitle(inputFilename);
+        switch (resolution) {
+            case NTSC_480p:
+                x = 720;
+                y = 480;
+                break;
+            case PAL_576p:
+                x = 720;
+                y = 576;
+                break;
+            case HD_720p:
+                x = 1280;
+                y = 720;
+                break;
+            case HD_1080p:
+            default: 
+                x = 1920;
+                y = 1080;
+                break;
+        }
+
+        r.openSubtitle(inputFilename, x, y);
 
         eventCount = r.getEventCount();
 
@@ -94,7 +118,7 @@ public class RenderRunnable implements Runnable {
             // Render loop: render, check for change, split on change
             while (event != null && !cancelled.get()) {
                 SubtitleEvent nextEvent = null;
-                final BufferedImage image = new BufferedImage(1920, 1080,
+                final BufferedImage image = new BufferedImage(x, y,
                         BufferedImage.TYPE_INT_ARGB);
                 int change = 0;
                 long changeTimecode = event.getTimecode();
@@ -138,6 +162,8 @@ public class RenderRunnable implements Runnable {
         renderPending.set(false);
 
         r.closeSubtitle();
+
+        System.out.println("Render Thread Ended");
     }
 
     public void cancel() {
