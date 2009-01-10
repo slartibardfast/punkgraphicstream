@@ -26,9 +26,9 @@
 
 int loaded = 0;
 
-ass_library_t* ass_library;
-ass_renderer_t* ass_renderer;
-ass_track_t* ass_track;
+ass_library_t* ass_library = NULL;
+ass_renderer_t* ass_renderer = NULL;
+ass_track_t* ass_track = NULL;
 
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 (JNIEnv * env, jobject obj, jstring filename, jint x, jint y) 
@@ -36,19 +36,20 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 	jboolean iscopy;
 	char* subfile = (char*) ((*env)->GetStringUTFChars(env, filename, &iscopy));
 	
+	if (is_subtitle_open()) {
+		throw_render_exception(env, "Error opening Subtitle (Subtitle Already Open)");
+	}
+	
 	ass_library = ass_library_init();
 	
 	if (!ass_library) {
-		// FIXME: throw exception
-		printf("not ass_library");
-		return ;
+		throw_render_exception(env, "Error initialising ASS Library");
 	}
 	
 	ass_renderer = ass_renderer_init(ass_library);
 	
 	if (!ass_renderer) {
-		printf("not ass_renderer");
-		// FIXME: throw exception
+		throw_render_exception(env, "Error initialising ASS Renderer");
 	}
 	
 	ass_set_fonts_dir(ass_library, ".");
@@ -59,8 +60,7 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 	ass_track = ass_read_file(ass_library, subfile, "UTF-8");
 	
 	if (!ass_track) {
-		printf("not ass_renderer");
-		// FIXME: throw exception
+		throw_render_exception(env, "Error initialising ASS Track");
 	}
 	
 	(*env)->ReleaseStringUTFChars(env, filename, subfile);
@@ -71,6 +71,17 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_closeSubtitle
 (JNIEnv * env, jobject obj) 
 {
+	if (is_subtitle_open()) {
+		ass_free_track(ass_track);
+		ass_renderer_done(ass_renderer);
+		ass_library_done(ass_library);
+		ass_track = NULL;
+		ass_renderer = NULL;
+		ass_library = NULL;
+	} else {
+		throw_render_exception(env, "Error subtitle already Closed or not opened)");
+	}
+	
 	return;
 }
 
@@ -78,7 +89,11 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_changeDetect
 (JNIEnv * env, jobject obj, jlong timecode)
 {
 	int changeDetect;
-
+	
+	if (!is_subtitle_open()) {
+		throw_render_exception(env, "Subtitle Not Open");
+	}
+	
 	ass_render_frame(ass_renderer, ass_track, (long long)(timecode), &changeDetect);
 
 	return (jint) changeDetect;
@@ -86,65 +101,43 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_changeDetect
 
 JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
 (JNIEnv * env, jobject obj)
-{	
-	return ass_track->n_events;
-}
-
-JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEvent
-(JNIEnv * env, jobject obj, jint event)
 {
-	jclass durationClass;
-	jmethodID cid;
-	jobject result;
-	durationClass = (*env)->FindClass(env, "name/connolly/david/pgs/SubtitleEvent");
-	
-	if (durationClass == NULL) {
-		return NULL; /* exception thrown */
-	}
-	/* Get the method ID for the String(char[]) constructor */
-	cid = (*env)->GetMethodID(env, durationClass,
-							  "<init>", "(JJ)V");
-	if (cid == NULL) {
-		return NULL; /* exception thrown */
+	if (!is_subtitle_open()) {
+		throw_render_exception(env, "Subtitle Not Open");
 	}
 	
-	if (event >= ass_track->n_events) {
-		return NULL;
-	}
-	
-	result = (*env)->NewObject(env, durationClass, cid, ass_track->events[event].Start, ass_track->events[event].Duration);
-	
-	(*env)->DeleteLocalRef(env, durationClass);
-	return result;
+	return ass_track->n_events;
 }
 
 JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 (JNIEnv * env, jobject obj, jint event)
 {
-	jclass durationClass;
+	jclass timecodeClass;
 	jmethodID cid;
 	jobject result;
-	durationClass = (*env)->FindClass(env, "name/connolly/david/pgs/Timecode");
+	timecodeClass = (*env)->FindClass(env, "name/connolly/david/pgs/Timecode");
 	long long start;
 	long long end;
-	if (durationClass == NULL) {
-		return NULL; /* exception thrown */
+	
+	if (timecodeClass == NULL) {
+		throw_render_exception(env, "Error loading SubtitleEvent class");
 	}
-	/* Get the method ID for the String(char[]) constructor */
-	cid = (*env)->GetMethodID(env, durationClass,
+	
+	cid = (*env)->GetMethodID(env, timecodeClass,
 							  "<init>", "(JJ)V");
 	if (cid == NULL) {
-		return NULL; /* exception thrown */
+		throw_render_exception(env, "Error loading SubtitleEvent constructor");
 	}
 	
-	if (event >= ass_track->n_events) {
-		return NULL;
+	if (event >= ass_track->n_events || event < 0) {
+		throw_render_exception(env, "Requested SubtitleEvent does not exist");
 	}
+	
 	start = ass_track->events[event].Start;
 	end = start + ass_track->events[event].Duration;
-	result = (*env)->NewObject(env, durationClass, cid, start, end);
+	result = (*env)->NewObject(env, timecodeClass, cid, start, end);
+	(*env)->DeleteLocalRef(env, timecodeClass);
 	
-	(*env)->DeleteLocalRef(env, durationClass);
 	return result;
 }
 
@@ -156,20 +149,20 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 	jmethodID setRGB = (*env)->GetMethodID(env, cls, "setRGB", "(III)V");
 	int changeDetect;
 	
+	if (cls == NULL) {
+		throw_render_exception(env, "Error getting reference to BufferedImage");
+	}
+	
 	if (getRGB == NULL) {
-		printf("setRGB() not found\n");
+		throw_render_exception(env, "Error getting reference to BufferedImage getRGB()");
 	}
 	
 	if (setRGB == NULL) {
-		printf("setRGB() not found\n");
+		throw_render_exception(env, "Error getting reference to BufferedImage setRGB()");
 	}
 
 	ass_image_t *p_img = ass_render_frame(ass_renderer,
 										  ass_track, (long long)(timecode), &changeDetect);
-	
-	if (!p_img) {
-		printf("no image %lld\n", timecode);
-	}
 	
 	while (p_img != NULL)
 	{ 
@@ -207,4 +200,20 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 
 		p_img = p_img->next;
 	}
+	
+	(*env)->DeleteLocalRef(env, cls);	
+}
+
+void throw_render_exception(JNIEnv *env, const char *msg) {
+	jclass ex = (*env)->FindClass(env, "name/connolly/david/pgs/RenderException");
+	
+	if (ex != NULL) {
+		(*env)->ThrowNew(env, ex, msg);
+	}
+	
+	(*env)->DeleteLocalRef(env, ex);
+}
+
+int is_subtitle_open() {
+	return (ass_track != NULL && ass_renderer != NULL && ass_library != NULL);
 }

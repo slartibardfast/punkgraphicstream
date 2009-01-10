@@ -7,61 +7,57 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    openSubtitle
-	 * Signature: (Ljava/lang/String;II)V
-	 */
-	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
-	(JNIEnv *, jobject, jstring, jint x, jint y);
-	
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    closeSubtitle
-	 * Signature: ()V
-	 */
-	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_closeSubtitle
-	(JNIEnv *, jobject);
-	
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    render
-	 * Signature: (J)I
-	 */
-	JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_changeDetect
-	(JNIEnv *, jobject, jlong);
-	
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    getEventCount
-	 * Signature: ()I
-	 */
-	JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
-	(JNIEnv *, jobject);
-	
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    getEvent
-	 * Signature: (Lname/connolly/david/pgs/SubtitleEvent;)J
-	 */
-	JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEvent
-	(JNIEnv * env, jobject obj, jint event);
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    openSubtitle
+ * Signature: (Ljava/lang/String;II)V
+ */
+JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
+  (JNIEnv *, jobject, jstring, jint, jint);
 
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    getEventTimecode
-	 * Signature: (Lname/connolly/david/pgs/Timecode;)J
-	 */
-	JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
-	(JNIEnv * env, jobject obj, jint event);
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    closeSubtitle
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_closeSubtitle
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    changeDetect
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_changeDetect
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    getEventCount
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    getEventTimecode
+ * Signature: (I)Lname/connolly/david/pgs/Timecode;
+ */
+JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    render
+ * Signature: (Ljava/awt/image/BufferedImage;J)V
+ */
+JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
+  (JNIEnv *, jobject, jobject, jlong);
+
+void throw_render_exception(JNIEnv *env, const char *msg);
+int is_subtitle_open() ;
 	
-	/*
-	 * Class:     name_connolly_david_pgs_Render
-	 * Method:    render
-	 * Signature: (Ljava.awt.image.BufferedImage;J)V
-	 */
-	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
-	(JNIEnv *, jobject, jobject, jlong);
 #ifdef __cplusplus
 }
 #endif
