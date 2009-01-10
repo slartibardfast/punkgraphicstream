@@ -24,5 +24,6 @@ package name.connolly.david.pgs.util;
 
 public interface ProgressSink {
     void progress(int percentage, String message);
+    void fail(String message);
     void done();
 }

@@ -61,6 +61,10 @@ public class PunkGraphicStream {
             public void done() {
                 System.out.println("Encode of " + input + " Done");
             }
+
+			public void fail(String message) {
+				System.out.println("Encode of " + input + " Failed - " + message);
+			}
         })).start();
     }
 

@@ -22,7 +22,6 @@
 
 package name.connolly.david.pgs;
 
-import name.connolly.david.pgs.color.YCrCbRec709_ColorSpace;
 import java.awt.image.BufferedImage;
 
 public enum Render {
@@ -32,25 +31,15 @@ public enum Render {
 		System.loadLibrary("ass");
 	}
 
-	public native void openSubtitle(String filename, int x, int y);
+	public native void openSubtitle(String filename, int x, int y) throws RenderException;
 
-	public native void closeSubtitle();
+	public native void closeSubtitle() throws RenderException;
 	
-	public native int changeDetect(long timecode);
+	public native int changeDetect(long timecode) throws RenderException;
 
-	public native int getEventCount();
+	public native int getEventCount() throws RenderException;
 
-	public native SubtitleEvent getEvent(int eventIndex);
+    public native Timecode getEventTimecode(int eventIndex) throws RenderException;
 
-    public native Timecode getEventTimecode(int eventIndex);
-
-	public native int render(BufferedImage image, long timecode);
-
-	public void printPalette(final int[] palette) {
-		System.out.println("Number of palette entries: " + palette.length);
-
-		for (final int pixel : palette) {
-			YCrCbRec709_ColorSpace.fromRGB(pixel);
-		}
-	}
+	public native void render(BufferedImage image, long timecode) throws RenderException;
 }

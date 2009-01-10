@@ -23,7 +23,6 @@ package name.connolly.david.pgs.concurrency;
 
 import name.connolly.david.pgs.util.ProgressSink;
 import name.connolly.david.pgs.*;
-import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
@@ -58,41 +57,40 @@ public class EncodeRunnable implements Runnable {
             os = new FileOutputStream(filename);
             final SupGenerator packet = new SupGenerator(os, fps);
             SubtitleEvent event;
-            BufferedImage indexed;
-            long frameIndex = 0;
+            long encodeIndex = 0;
             
-            // Continue while at least one quantizeThread is runing or queue is
-            // not empty
+            // Continue while at least one quantizeThread is runing or queue is not empty
             while (quantizePending.tryAcquire(quantizeThreadCount) == false | encodeQueue.size() > 0) {
                 event = encodeQueue.take();
-                if (event.getId() != frameIndex) {
-                    //System.err
-                    //		.println("Encode Request out of sequence [recieved:"
-                    //				+ event.getId() + " wanted:" + frameIndex + "]");
+                
+                // If out of sequence, pause & add to the end of the queue
+                if (event.getId() != encodeIndex) {
                     if (encodeQueue.size() == 0) {
-                        Thread.sleep(400);
+                        Thread.sleep(100);
                     }
                     
                     encodeQueue.put(event);
                     continue;
                 }
-                indexed = event.takeImage();
+           
+                packet.addBitmap(event);
                 
-                packet.addBitmap(indexed, event);
-                //System.out.println("Encoded no.\t" + event.getId());
-                frameIndex++;
+                encodeIndex++;
             }
             
            os.flush();
         } catch (IOException ex) {
+        	progress.fail(ex.getMessage());
             Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
+        	progress.fail(ex.getMessage());
             Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 os.close();
                 progress.done();
             } catch (IOException ex) {
+            	progress.fail(ex.getMessage());
                 Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

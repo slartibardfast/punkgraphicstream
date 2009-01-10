@@ -96,7 +96,9 @@ public class Timecode implements Comparable<Timecode> {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        
         final Timecode other = (Timecode) obj;
+        
         if (this.start != other.start) {
             return false;
         }

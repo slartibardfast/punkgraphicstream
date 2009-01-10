@@ -77,9 +77,8 @@ public class QuantizeRunnable implements Runnable {
 
 			quantizePending.release();
 		} catch (final InterruptedException ex) {
+			progress.fail("Quantizer Thread Interupted");
 			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
-        System.out.println("Quantize Thread Ended");
 	}
 }

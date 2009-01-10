@@ -183,4 +183,10 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
         jLabelEncodeMessage.setText("Encode complete");
         okButton.setEnabled(true);
     }
+
+	public void fail(String message) {
+		jProgressBarEncode.setValue(0);
+        jLabelEncodeMessage.setText("Encode failed - " + message);
+        okButton.setEnabled(true);
+	}
 }

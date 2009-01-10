@@ -22,13 +22,12 @@
 
 package name.connolly.david.pgs;
 
-import name.connolly.david.pgs.color.ColorTable;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import name.connolly.david.pgs.color.ColorTable;
 
 public class SupGenerator {
 	private int fps;
@@ -65,11 +64,12 @@ public class SupGenerator {
 		}
 	}
 
-	public void addBitmap(final BufferedImage image, SubtitleEvent event) throws IOException {
+	public void addBitmap(SubtitleEvent event) throws IOException, InterruptedException {
+		final BufferedImage image = event.takeImage();
         final int width = image.getWidth();
 		final int height = image.getHeight();
-		final BigInteger to = event.getEndTimecode();
-		BigInteger from = event.getStartTimecode();
+		final BigInteger to = event.getTimecode().getEndTicks();
+		BigInteger from = event.getTimecode().getStartTicks();
 		final RleBitmap bitmap = new RleBitmap(image);
 		final ColorTable colorTable = bitmap.encode();
 
@@ -97,16 +97,6 @@ public class SupGenerator {
 		timeHeader(to, BigInteger.ZERO);
 		trailer();
 	}
-    
-    public void close() {
-        try {
-            os.flush();
-            os.close();
-            os = null;
-        } catch (IOException ex) {
-            Logger.getLogger(SupGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
 	private void bitmapHeader(final int width, final int height,
 			final int widthOffset, final int heightOffset) throws IOException {

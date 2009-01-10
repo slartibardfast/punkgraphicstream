@@ -23,15 +23,10 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
-import java.math.BigInteger;
 
 public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	private static int eventCount = 0;
-
-	private long eventDuration;
-	private long eventTimecode;
-	private final int frameCount;
-	private FrameRate frameRate;
+	private Timecode timecode;
 	private final long id;
 
 	private BufferedImage image;
@@ -39,49 +34,15 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	private BufferedImage indexed;
 	private final Object indexedLock = new Object();
 
-	/**
-	 * SubtitleEvent must be carefully initialised in order of occurrence!
-	 */
-	public SubtitleEvent(final long timecode, final long duration) {
-		eventDuration = duration;
-		eventTimecode = timecode;
-
+	public SubtitleEvent(final Timecode timecode) {
+		this.timecode = timecode;
 		id = eventCount;
-		frameRate = null;
-		frameCount = 0;
-
-		// eventCount++; // TODO Update native library.
-	}
-
-    public SubtitleEvent(final Timecode timecode) {
-		eventDuration = timecode.getDuration();
-		eventTimecode = timecode.getStart();
-
-		id = eventCount;
-		frameRate = null;
-		frameCount = 0;
-
-		eventCount++;
-	}
-
-	/**
-	 * SubtitleEvent must be carefully initialised in order of occurrence! This
-	 * constructor is for Animation mode
-	 */
-	public SubtitleEvent(final SubtitleEvent lastEvent,
-			final FrameRate frameRate, final int frameCount) {
-		eventDuration = lastEvent.eventDuration;
-		eventTimecode = lastEvent.eventTimecode;
-		this.frameRate = frameRate;
-
-		id = eventCount;
-		this.frameCount = frameCount;
 
 		eventCount++;
 	}
 
 	public int compareTo(SubtitleEvent o) {
-		return new Long(eventTimecode).compareTo(o.eventTimecode);
+		return timecode.compareTo(o.timecode);
 	}
 
 	@Override
@@ -93,37 +54,12 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		if (getClass() != obj.getClass())
 			return false;
 		final SubtitleEvent other = (SubtitleEvent) obj;
-		if (eventTimecode != other.eventTimecode)
+		if (timecode == null) {
+			if (other.timecode != null)
+				return false;
+		} else if (!timecode.equals(other.timecode))
 			return false;
 		return true;
-	}
-
-	public long getDuration() {
-		return eventDuration;
-	}
-
-	public BigInteger getEndTimecode() {
-		BigInteger endTimecode = BigInteger.valueOf(getRenderTimecode());
-		endTimecode = endTimecode.multiply(BigInteger.valueOf(90));
-
-		if (frameRate != null) {
-			endTimecode = endTimecode.add(BigInteger.valueOf(frameRate
-					.frameDurationInSupTicks()));
-		} else {
-			BigInteger duration = BigInteger.valueOf(getDuration());
-			duration = duration.multiply(BigInteger.valueOf(90));
-			endTimecode = endTimecode.add(duration);
-		}
-
-		return endTimecode;
-	}
-
-	public int getFrameCount() {
-		return frameCount;
-	}
-
-	public FrameRate getFrameRate() {
-		return frameRate;
 	}
 
 	public long getId() {
@@ -131,44 +67,19 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	}
 
 	public long getRenderTimecode() {
-		/*
-		if (frameRate != null)
-			return eventTimecode + frameRate.frameDurationInMilliseconds()
-					* frameCount;
-		*/
-		return eventTimecode + Math.round(eventDuration / 2d);
+		return timecode.getStart() + Math.round(timecode.getDuration() / 2d);
 	}
 
-    public long getStart() {
-		return eventTimecode;
-	}
-
-	public BigInteger getStartTimecode() {
-		BigInteger timecode = BigInteger.valueOf(eventTimecode);
-		timecode = timecode.multiply(BigInteger.valueOf(90));
-
-		if (frameRate != null)
-			return timecode.add(BigInteger.valueOf(frameRate
-					.frameDurationInSupTicks()
-					* frameCount));
-
+	public Timecode getTimecode() {
 		return timecode;
-	}
-
-	public long getTimecode() {
-		return eventTimecode;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (eventTimecode ^ eventTimecode >>> 32);
+		result = prime * result + (timecode == null ? 0 : timecode.hashCode());
 		return result;
-	}
-
-	public boolean isFrame() {
-		return frameRate != null;
 	}
 
 	public void putImage(final BufferedImage image) {
@@ -193,16 +104,8 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		}
 	}
 
-	public void setDuration(final long duration) {
-		eventDuration = duration;
-	}
-
-	public void setFrameRate(FrameRate frameRate) {
-		this.frameRate = frameRate;
-	}
-
-	public void setTimecode(final long start) {
-		eventTimecode = start;
+	public void setTimecode(Timecode timecode) {
+		this.timecode = timecode;
 	}
 
 	public BufferedImage takeImage() throws InterruptedException {
@@ -236,7 +139,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 
 	@Override
 	public String toString() {
-		return "SubtitleEvent start: " + eventTimecode + " duration: "
-				+ eventDuration;
+		return "SubtitleEvent start: " + timecode.getStart() + " duration: "
+				+ timecode.getDuration();
 	}
 }
