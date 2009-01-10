@@ -54,7 +54,7 @@ public class RenderRunnable implements Runnable {
 
 	public void run() {
 		final Render r = Render.INSTANCE;
-		final int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
+		int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
 		int eventIndex = 0;
 		int eventCount;
 		int percentage;
@@ -131,8 +131,7 @@ public class RenderRunnable implements Runnable {
 					// occurred
 					while (changeTimecode < (timecode.getEnd() - 1)
 							&& (change == 0 || (changeTimecode
-									- event.getTimecode().getStart() < fps
-									.frameDurationInMilliseconds()))) {
+									- event.getTimecode().getStart() < fps.milliseconds()))) {
 						changeTimecode++;
 						change = r.changeDetect(changeTimecode);
 					}
