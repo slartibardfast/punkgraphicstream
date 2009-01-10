@@ -28,6 +28,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import name.connolly.david.pgs.FrameRate;
 import name.connolly.david.pgs.Resolution;
@@ -41,7 +44,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     private static final long serialVersionUID = 3301916545310764557L;
     private FrameRate frameRate = FrameRate.FILM;
     private Resolution resolution = Resolution.HD_1080p;
-    
+
     /** Creates new form PunkGraphicStream */
     public PunkGraphicStream() {
         final PunkGraphicStream parent = this;
@@ -376,9 +379,10 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     // TODO Native FileOpener on Mac.
     private void jButtonBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBrowseActionPerformed
         JFileChooser chooser = new JFileChooser(jTextFieldSubtitleFile.getText()) {
-			private static final long serialVersionUID = 2849546445500725876L;
 
-			@Override
+            private static final long serialVersionUID = 2849546445500725876L;
+
+            @Override
             protected JDialog createDialog(Component parent) throws HeadlessException {
                 JDialog jDialog = super.createDialog(parent);
                 jDialog.setLocationByPlatform(true);
@@ -430,7 +434,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void jRadioButton480pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton480pActionPerformed
-         resolution = Resolution.NTSC_480p;
+        resolution = Resolution.NTSC_480p;
     }//GEN-LAST:event_jRadioButton480pActionPerformed
 
     private void jRadioButton576pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton576pActionPerformed
@@ -452,6 +456,18 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(PunkGraphicStream.class.getName()).log(Level.WARNING, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(PunkGraphicStream.class.getName()).log(Level.WARNING, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(PunkGraphicStream.class.getName()).log(Level.WARNING, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(PunkGraphicStream.class.getName()).log(Level.WARNING, null, ex);
+                }
+                
                 new PunkGraphicStream().setVisible(true);
             }
         });
