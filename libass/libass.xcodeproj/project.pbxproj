@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA6A78280F18F9CE00715C0C /* name_connolly_david_pgs_Render_RenderException.h in Headers */ = {isa = PBXBuildFile; fileRef = DA6A78270F18F9CE00715C0C /* name_connolly_david_pgs_Render_RenderException.h */; };
 		DA6A782E0F18FA0800715C0C /* name_connolly_david_pgs_Render.h in Headers */ = {isa = PBXBuildFile; fileRef = DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */; };
 		DA89E4320EAE5EE300CC8DFF /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F120EACF415008EA596 /* libfontconfig.dylib */; };
 		DA89E4330EAE5EE300CC8DFF /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */; };
@@ -35,7 +34,6 @@
 
 /* Begin PBXFileReference section */
 		D2AAC0630554660B00DB518D /* libass.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libass.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA6A78270F18F9CE00715C0C /* name_connolly_david_pgs_Render_RenderException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = name_connolly_david_pgs_Render_RenderException.h; sourceTree = SOURCE_ROOT; };
 		DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = name_connolly_david_pgs_Render.h; sourceTree = SOURCE_ROOT; };
 		DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		DAB47F120EACF415008EA596 /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /usr/X11/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
@@ -133,7 +131,6 @@
 				DAEF21B80EAB9E11005CE370 /* help_mp.h */,
 				DAEF21BD0EAB9E11005CE370 /* mputils.h */,
 				DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */,
-				DA6A78270F18F9CE00715C0C /* name_connolly_david_pgs_Render_RenderException.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -155,7 +152,6 @@
 				DAEF21D10EAB9E11005CE370 /* ass_utils.h in Headers */,
 				DAEF21D20EAB9E11005CE370 /* help_mp.h in Headers */,
 				DAEF21D40EAB9E11005CE370 /* mputils.h in Headers */,
-				DA6A78280F18F9CE00715C0C /* name_connolly_david_pgs_Render_RenderException.h in Headers */,
 				DA6A782E0F18FA0800715C0C /* name_connolly_david_pgs_Render.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
