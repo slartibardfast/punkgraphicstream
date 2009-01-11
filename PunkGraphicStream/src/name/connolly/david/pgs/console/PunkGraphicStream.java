@@ -23,67 +23,72 @@ package name.connolly.david.pgs.console;
 
 import name.connolly.david.pgs.FrameRate;
 import name.connolly.david.pgs.Resolution;
-import name.connolly.david.pgs.util.ProgressSink;
 import name.connolly.david.pgs.concurrency.RenderRunnable;
+import name.connolly.david.pgs.util.ProgressSink;
 
 public class PunkGraphicStream {
 
-    public static void main(final String[] args) {
-        final String input;
-        String output = "default.ass";
-        FrameRate frameRate = FrameRate.FILM;
-        System.setProperty("java.awt.headless", "true");
+	public static void main(final String[] args) {
+		final String input;
+		String output = "default.ass";
+		FrameRate frameRate = FrameRate.FILM;
+		System.setProperty("java.awt.headless", "true");
 
-        if (args.length != 2) {
-            printUsageAndQuit();
-        }
+		if (args.length != 2) {
+			printUsageAndQuit();
+		}
 
-        input = args[0];
+		input = args[0];
 
-        try {
-            frameRate = FrameRate.valueOf(args[1].toUpperCase());
-        } catch (final IllegalArgumentException e) {
-            printUsageAndQuit();
-        }
+		try {
+			frameRate = FrameRate.valueOf(args[1].toUpperCase());
+		} catch (final IllegalArgumentException e) {
+			printUsageAndQuit();
+		}
 
-        if (input.length() > 5) {
-            output = input.substring(0,
-                    input.length() - 4) + ".sup";
-        } else {
-            printUsageAndQuit();
-        }
+		if (input.length() > 5) {
+			output = input.substring(0, input.length() - 4) + ".sup";
+		} else {
+			printUsageAndQuit();
+		}
 
-        new Thread(new RenderRunnable(input, output, frameRate, Resolution.HD_1080p, new ProgressSink() {
-            public void progress(int percentage, String message) {
-                System.out.println(message);
-            }
+		new Thread(new RenderRunnable(input, output, frameRate,
+				Resolution.HD_1080p, new ProgressSink() {
+					public void progress(int percentage, String message) {
+						System.out.println(message);
+					}
 
-            public void done() {
-                System.out.println("Encode of " + input + " Done");
-            }
+					public void done() {
+						System.out.println("Encode of " + input + " Done");
+					}
 
-			public void fail(String message) {
-				System.out.println("Encode of " + input + " Failed - " + message);
-			}
-        })).start();
-    }
+					public void fail(String message) {
+						System.out.println("Encode of " + input + " Failed - "
+								+ message);
+					}
+				})).start();
+	}
 
-    private static void printUsageAndQuit() {
-        System.out.println("Usage: ");
-        System.out.println("java -jar PunkGraphicStream.jar filename.ass fps");
-        System.out.println();
-        System.out.println("fps = [film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc]");
+	private static void printUsageAndQuit() {
+		System.out.println("Usage: ");
+		System.out.println("java -jar PunkGraphicStream.jar filename.ass fps");
+		System.out.println();
+		System.out
+				.println("fps = [film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc]");
 
-        printLicence();
+		printLicence();
 
-        System.exit(0);
-    }
+		System.exit(0);
+	}
 
-    private static void printLicence() {
-        System.out.println("PunkGraphicStream 0.2");
-        System.out.println("Copyright 2008 David Connolly. All rights reserved.");
-        System.out.println();
-        System.out.println("This is free software; see sources for copying conditions and credits of dependencies.");
-        System.out.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE");
-    }
+	private static void printLicence() {
+		System.out.println("PunkGraphicStream 0.2");
+		System.out
+				.println("Copyright 2008 David Connolly. All rights reserved.");
+		System.out.println();
+		System.out
+				.println("This is free software; see sources for copying conditions and credits of dependencies.");
+		System.out
+				.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE");
+	}
 }

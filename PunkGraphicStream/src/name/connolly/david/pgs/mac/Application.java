@@ -35,53 +35,67 @@ import java.util.logging.Logger;
  */
 public enum Application {
 
-    INSTANCE;
-    AtomicBoolean initalized = new AtomicBoolean(false);
-    Object application;
-    @SuppressWarnings("unchecked")
+	INSTANCE;
+	AtomicBoolean initalized = new AtomicBoolean(false);
+	Object application;
+	@SuppressWarnings("unchecked")
 	Class listenerClass;
-    Method addApplicationListener;
+	Method addApplicationListener;
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private void init() {
-        try {
-            Class applicationClass = Class.forName("com.apple.eawt.Application");
-            Method applicationSingleton = applicationClass.getDeclaredMethod("getApplication", (Class[]) null);
-            application = applicationSingleton.invoke(applicationClass, (Object[]) null);
-            listenerClass = Class.forName("com.apple.eawt.ApplicationListener");
-            addApplicationListener = applicationClass.getDeclaredMethod("addApplicationListener", listenerClass);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		try {
+			final Class applicationClass = Class
+					.forName("com.apple.eawt.Application");
+			final Method applicationSingleton = applicationClass
+					.getDeclaredMethod("getApplication", (Class[]) null);
+			application = applicationSingleton.invoke(applicationClass,
+					(Object[]) null);
+			listenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+			addApplicationListener = applicationClass.getDeclaredMethod(
+					"addApplicationListener", listenerClass);
+		} catch (final IllegalAccessException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final IllegalArgumentException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final InvocationTargetException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final NoSuchMethodException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final SecurityException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final ClassNotFoundException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
 
-        initalized.set(true);
-    }
+		initalized.set(true);
+	}
 
-    public void addListener(ApplicationHandler listener) {
-        if (initalized.get() == false) {
-            init();
-        }
+	public void addListener(ApplicationHandler listener) {
+		if (initalized.get() == false) {
+			init();
+		}
 
-        Object proxy = Proxy.newProxyInstance(listenerClass.getClassLoader(), new Class[]{listenerClass}, listener);
+		final Object proxy = Proxy.newProxyInstance(listenerClass
+				.getClassLoader(), new Class[] { listenerClass }, listener);
 
-        try {
-            addApplicationListener.invoke(application, proxy);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+		try {
+			addApplicationListener.invoke(application, proxy);
+		} catch (final IllegalAccessException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final IllegalArgumentException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final InvocationTargetException ex) {
+			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+	}
 }

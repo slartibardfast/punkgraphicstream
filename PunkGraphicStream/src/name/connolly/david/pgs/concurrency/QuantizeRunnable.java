@@ -22,9 +22,6 @@
 
 package name.connolly.david.pgs.concurrency;
 
-import name.connolly.david.pgs.util.ProgressSink;
-import name.connolly.david.pgs.color.Quantizer;
-import name.connolly.david.pgs.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
@@ -33,22 +30,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.connolly.david.pgs.SubtitleEvent;
+import name.connolly.david.pgs.color.Quantizer;
+import name.connolly.david.pgs.util.ProgressSink;
+
 public class QuantizeRunnable implements Runnable {
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
 	private final BlockingQueue<SubtitleEvent> encodeQueue;
 	private final AtomicBoolean renderPending;
 	private final Semaphore quantizePending;
-    private final ProgressSink progress;
-    
+	private final ProgressSink progress;
+
 	public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
 			final BlockingQueue<SubtitleEvent> encodeQueue,
 			final AtomicBoolean renderPending, final Semaphore quantizePending,
-            final ProgressSink progress) {
+			final ProgressSink progress) {
 		this.quantizeQueue = quantizeQueue;
 		this.encodeQueue = encodeQueue;
 		this.renderPending = renderPending;
 		this.quantizePending = quantizePending;
-        this.progress = progress;
+		this.progress = progress;
 	}
 
 	public void run() {
@@ -56,15 +57,15 @@ public class QuantizeRunnable implements Runnable {
 			quantizePending.acquire();
 
 			while (renderPending.get() || quantizeQueue.size() > 0) {
-                final SubtitleEvent event;
-                final BufferedImage image;
+				final SubtitleEvent event;
+				final BufferedImage image;
 
 				event = quantizeQueue.poll(200, TimeUnit.MILLISECONDS);
 
-                if (event == null) {
-                    continue;
-                }
-                
+				if (event == null) {
+					continue;
+				}
+
 				image = event.getImage();
 
 				Quantizer.indexImage(image);
@@ -75,7 +76,8 @@ public class QuantizeRunnable implements Runnable {
 			quantizePending.release();
 		} catch (final InterruptedException ex) {
 			progress.fail("Quantizer Thread Interupted");
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+					null, ex);
 		}
 	}
 }

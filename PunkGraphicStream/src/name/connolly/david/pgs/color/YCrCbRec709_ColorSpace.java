@@ -51,11 +51,10 @@ public class YCrCbRec709_ColorSpace {
 		 */
 		final int y = (int) Math.max(0, Math
 				.min(255, Math.round(219 * ey) + 16));
-        final int cb = (int) Math.max(0, Math.min(255,
+		final int cb = (int) Math.max(0, Math.min(255,
 				Math.round(224 * epr) + 128));
 		final int cr = (int) Math.max(0, Math.min(255,
 				Math.round(224 * epb) + 128));
-		
 
 		// System.out.println("Y: "+ y + " Cb: " + cb+ "Cr: " + cr + " A: " +
 		// a);

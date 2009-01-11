@@ -25,21 +25,24 @@ package name.connolly.david.pgs;
 import java.awt.image.BufferedImage;
 
 public enum Render {
-    INSTANCE;
-    
+	INSTANCE;
+
 	static {
 		System.loadLibrary("ass");
 	}
 
-	public native void openSubtitle(String filename, int x, int y) throws RenderException;
+	public native void openSubtitle(String filename, int x, int y)
+			throws RenderException;
 
 	public native void closeSubtitle() throws RenderException;
-	
+
 	public native int changeDetect(long timecode) throws RenderException;
 
 	public native int getEventCount() throws RenderException;
 
-    public native Timecode getEventTimecode(int eventIndex) throws RenderException;
+	public native Timecode getEventTimecode(int eventIndex)
+			throws RenderException;
 
-	public native void render(BufferedImage image, long timecode) throws RenderException;
+	public native void render(BufferedImage image, long timecode)
+			throws RenderException;
 }

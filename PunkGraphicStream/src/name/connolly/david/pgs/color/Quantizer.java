@@ -22,18 +22,19 @@
 
 package name.connolly.david.pgs.color;
 
-import name.connolly.david.pgs.concurrency.EncodeRunnable;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.connolly.david.pgs.concurrency.EncodeRunnable;
+
 public class Quantizer {
 	public static BufferedImage indexImage(BufferedImage image) {
 		NeuQuant nq;
 		try {
-            final int x = image.getWidth();
-            final int y = image.getHeight();
+			final int x = image.getWidth();
+			final int y = image.getHeight();
 			nq = new NeuQuant(image, x, y);
 			nq.init();
 			int argb;
@@ -45,8 +46,10 @@ public class Quantizer {
 				}
 			}
 		} catch (final IOException ex) {
-			// throw new RuntimeException("Quantizer failed" + e.getMessage()); // Should never happen so no RuntimeException
-            Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
+			// throw new RuntimeException("Quantizer failed" + e.getMessage());
+			// // Should never happen so no RuntimeException
+			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+					null, ex);
 		}
 
 		return image;

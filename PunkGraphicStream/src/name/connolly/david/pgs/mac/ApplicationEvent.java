@@ -32,63 +32,77 @@ import java.util.logging.Logger;
  * @author slarti
  */
 public class ApplicationEvent {
-    private final Object event;
-    private Method getFilename;
-    private Method isHandled;
-    private Method setHandled;
-    
-    public ApplicationEvent(Object event) {
-        this.event = event;
+	private final Object event;
+	private Method getFilename;
+	private Method isHandled;
+	private Method setHandled;
 
-        try {
-            getFilename = event.getClass().getDeclaredMethod("getFilename", (Class[]) null);
-            isHandled = event.getClass().getDeclaredMethod("isHandled", (Class[]) null);
-            setHandled = event.getClass().getDeclaredMethod("setHandled", new Class[]{boolean.class});
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    
-    public String getFilename() {
-        try {
-            return (String) getFilename.invoke(event, (Object[]) null);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        }
+	public ApplicationEvent(Object event) {
+		this.event = event;
 
-        return null;
-    }
+		try {
+			getFilename = event.getClass().getDeclaredMethod("getFilename",
+					(Class[]) null);
+			isHandled = event.getClass().getDeclaredMethod("isHandled",
+					(Class[]) null);
+			setHandled = event.getClass().getDeclaredMethod("setHandled",
+					new Class[] { boolean.class });
+		} catch (final NoSuchMethodException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final SecurityException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		}
 
-    public boolean isHandled() {
-        try {
-            return (Boolean) isHandled.invoke(event, (Object[]) null);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        }
+	}
 
-        return false;
-    }
+	public String getFilename() {
+		try {
+			return (String) getFilename.invoke(event, (Object[]) null);
+		} catch (final IllegalAccessException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final IllegalArgumentException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final InvocationTargetException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		}
 
-    public void setHandled(boolean handled) {
-        try {
-            setHandled.invoke(event, new Object[]{handled});
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(ApplicationEvent.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+		return null;
+	}
+
+	public boolean isHandled() {
+		try {
+			return (Boolean) isHandled.invoke(event, (Object[]) null);
+		} catch (final IllegalAccessException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final IllegalArgumentException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final InvocationTargetException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		}
+
+		return false;
+	}
+
+	public void setHandled(boolean handled) {
+		try {
+			setHandled.invoke(event, new Object[] { handled });
+		} catch (final IllegalAccessException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final IllegalArgumentException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		} catch (final InvocationTargetException ex) {
+			Logger.getLogger(ApplicationEvent.class.getName()).log(
+					Level.SEVERE, null, ex);
+		}
+	}
 }

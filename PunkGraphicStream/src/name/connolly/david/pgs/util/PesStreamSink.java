@@ -56,13 +56,14 @@ public enum PesStreamSink {
 			stream = new ByteArrayOutputStream();
 			streams.put(pid, stream);
 		}
-        
-        try {
-            stream.write(payload);
-        } catch (IOException ex) {
-            Logger.getLogger(PesStreamSink.class.getName()).log(Level.SEVERE, null, ex);
-        }
-		
+
+		try {
+			stream.write(payload);
+		} catch (final IOException ex) {
+			Logger.getLogger(PesStreamSink.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+
 	}
 
 	public List<PesPacket> getPackets(final int pid) {

@@ -24,158 +24,166 @@ package name.connolly.david.pgs.concurrency;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.TreeSet;
-
-import name.connolly.david.pgs.util.ProgressSink;
-import name.connolly.david.pgs.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import name.connolly.david.pgs.FrameRate;
+import name.connolly.david.pgs.Render;
+import name.connolly.david.pgs.RenderException;
+import name.connolly.david.pgs.Resolution;
+import name.connolly.david.pgs.SubtitleEvent;
 import name.connolly.david.pgs.Timecode;
+import name.connolly.david.pgs.util.ProgressSink;
 
 public class RenderRunnable implements Runnable {
-    private final AtomicBoolean cancelled = new AtomicBoolean(false);
-    private final String inputFilename;
-    private final String outputFilename;
-    private final FrameRate fps;
-    private final ProgressSink progress;
-    private final Resolution resolution;
-    private final Render renderer = Render.INSTANCE;
-    private final int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
-    private final int renderAheadCount = (quantizeThreadCount * 2) - 1;
-    private final BlockingQueue<SubtitleEvent> quantizeQueue;
-    private final BlockingQueue<SubtitleEvent> encodeQueue;
-    private final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
-    private final AtomicBoolean renderPending = new AtomicBoolean(true);
-    private final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
-    private final int x;
-    private final int y;
+	private final AtomicBoolean cancelled = new AtomicBoolean(false);
+	private final String inputFilename;
+	private final FrameRate fps;
+	private final ProgressSink progress;
+	private final Render renderer = Render.INSTANCE;
+	private final int quantizeThreadCount = Runtime.getRuntime()
+			.availableProcessors();
+	private final int renderAheadCount = quantizeThreadCount * 2 - 1;
+	private final BlockingQueue<SubtitleEvent> quantizeQueue;
+	private final BlockingQueue<SubtitleEvent> encodeQueue;
+	private final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
+	private final AtomicBoolean renderPending = new AtomicBoolean(true);
+	private final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
+	private final int x;
+	private final int y;
 
-    public RenderRunnable(String inputFilename, String outputFilename,
-            FrameRate fps, Resolution resolution, ProgressSink progress) {
-        this.inputFilename = inputFilename;
-        this.outputFilename = outputFilename;
-        this.fps = fps;
-        this.progress = progress;
-        this.resolution = resolution;
+	public RenderRunnable(String inputFilename, String outputFilename,
+			FrameRate fps, Resolution resolution, ProgressSink progress) {
+		this.inputFilename = inputFilename;
+		this.fps = fps;
+		this.progress = progress;
+		quantizeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount);
+		encodeQueue = new LinkedBlockingQueue<SubtitleEvent>();
 
-        quantizeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount);
-        encodeQueue = new LinkedBlockingQueue<SubtitleEvent>();
+		for (int cpu = 0; cpu < quantizeThreadCount; cpu++) {
+			new Thread(new QuantizeRunnable(quantizeQueue, encodeQueue,
+					renderPending, quantizePending, progress), "Quantizer-"
+					+ cpu).start();
+		}
 
-        for (int cpu = 0; cpu < quantizeThreadCount; cpu++) {
-            new Thread(new QuantizeRunnable(quantizeQueue, encodeQueue,
-                    renderPending, quantizePending, progress), "Quantizer-" + cpu).start();
-        }
+		new Thread(new EncodeRunnable(encodeQueue, outputFilename, fps,
+				quantizeThreadCount, quantizePending, progress), "Encoder")
+				.start();
 
-        new Thread(new EncodeRunnable(encodeQueue, outputFilename, fps,
-                quantizeThreadCount, quantizePending, progress), "Encoder").start();
+		switch (resolution) {
+		case NTSC_480p:
+			x = 720;
+			y = 480;
+			break;
+		case PAL_576p:
+			x = 720;
+			y = 576;
+			break;
+		case HD_720p:
+			x = 1280;
+			y = 720;
+			break;
+		case HD_1080p:
+		default:
+			x = 1920;
+			y = 1080;
+			break;
+		}
+	}
 
-        switch (resolution) {
-            case NTSC_480p:
-                x = 720;
-                y = 480;
-                break;
-            case PAL_576p:
-                x = 720;
-                y = 576;
-                break;
-            case HD_720p:
-                x = 1280;
-                y = 720;
-                break;
-            case HD_1080p:
-            default:
-                x = 1920;
-                y = 1080;
-                break;
-        }
-    }
+	public void run() {
+		try {
+			renderer.openSubtitle(inputFilename, x, y);
 
-    public void run() {
-        try {
-            renderer.openSubtitle(inputFilename, x, y);
+			processTimecodes();
 
-            processTimecodes();
+			renderTimecodes();
 
-            renderTimecodes();
+			renderPending.set(false);
 
-            renderPending.set(false);
+			renderer.closeSubtitle();
+		} catch (final RenderException ex) {
+			progress.fail(ex.getMessage());
+			Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (final InterruptedException ex) {
+			progress.fail(ex.getMessage());
+			Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE,
+					null, ex);
+		}
+	}
 
-            renderer.closeSubtitle();
-        } catch (RenderException ex) {
-            progress.fail(ex.getMessage());
-            Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            progress.fail(ex.getMessage());
-            Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	public void cancel() {
+		cancelled.set(true);
+	}
 
-    public void cancel() {
-        cancelled.set(true);
-    }
+	private TreeSet<Timecode> processTimecodes() throws RenderException {
+		final int eventCount = renderer.getEventCount();
 
-    private TreeSet<Timecode> processTimecodes() throws RenderException {
-        int eventCount = renderer.getEventCount();
+		for (int eventIndex = 0; eventIndex < eventCount; eventIndex++) {
+			Timecode timecode = renderer.getEventTimecode(eventIndex);
+			final Iterator<Timecode> i = timecodes.iterator();
 
-        for (int eventIndex = 0; eventIndex < eventCount; eventIndex++) {
-            Timecode timecode = renderer.getEventTimecode(eventIndex);
-            Iterator<Timecode> i = timecodes.iterator();
+			while (i.hasNext()) {
+				final Timecode other = i.next();
+				if (timecode.overlaps(other)) {
+					i.remove();
+					timecode = timecode.merge(other);
+				}
+			}
+			timecodes.add(timecode);
+		}
 
-            while (i.hasNext()) {
-                Timecode other = i.next();
-                if (timecode.overlaps(other)) {
-                    i.remove();
-                    timecode = timecode.merge(other);
-                }
-            }
-            timecodes.add(timecode);
-        }
+		return timecodes;
+	}
 
-        return timecodes;
-    }
+	private void renderTimecodes() throws RenderException, InterruptedException {
+		int percentage;
+		int eventCount = timecodes.size();
+		int eventIndex = 0;
+		final Iterator<Timecode> i = timecodes.iterator();
 
-    private void renderTimecodes() throws RenderException, InterruptedException {
-        int percentage;
-        int eventCount = timecodes.size();
-        int eventIndex = 0;
-        Iterator<Timecode> i = timecodes.iterator();
-
-        // Timecode loop: build subtitle event for timecode
-        while (i.hasNext()) {
-            SubtitleEvent event = new SubtitleEvent(i.next());
-            percentage = Math.round((float) eventIndex / eventCount * 100f);
-            progress.progress(percentage, "Rendering Event " + eventIndex + " of " + eventCount + " (Estimated)");
-            // Render loop: render, check for change, split on change
-            while (event != null && !cancelled.get()) {
-                final Timecode timecode = event.getTimecode();
-                SubtitleEvent nextEvent = null;
-                final BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
-                long changeAtMillisecond = timecode.getStart() + fps.milliseconds();
-                boolean changed = false;
-                boolean ended = changeAtMillisecond >= (timecode.getEnd() - 1);
-                // Prepare for change detect
-                renderer.changeDetect(timecode.getStart());
-                // Change Detect Loop
-                while (!ended && !changed) {
-                    ended = changeAtMillisecond >= (timecode.getEnd() - 1);
-                    changed = renderer.changeDetect(changeAtMillisecond) > 0;
-                    if (changed) {
-                        nextEvent = new SubtitleEvent(new Timecode(changeAtMillisecond, timecode.getEnd()));
-                        timecode.setEnd(changeAtMillisecond - 1);
-                        event.setTimecode(timecode);
-                        eventCount++;
-                    }
-                    changeAtMillisecond++;
-                }
-                renderer.render(image, event.getRenderTimecode());
-                event.setImage(image);
-                quantizeQueue.put(event);
-                eventIndex++;
-                event = nextEvent;
-            }
-        }
-    }
+		// Timecode loop: build subtitle event for timecode
+		while (i.hasNext()) {
+			SubtitleEvent event = new SubtitleEvent(i.next());
+			percentage = Math.round((float) eventIndex / eventCount * 100f);
+			progress.progress(percentage, "Rendering Event " + eventIndex
+					+ " of " + eventCount + " (Estimated)");
+			// Render loop: render, check for change, split on change
+			while (event != null && !cancelled.get()) {
+				final Timecode timecode = event.getTimecode();
+				SubtitleEvent nextEvent = null;
+				final BufferedImage image = new BufferedImage(x, y,
+						BufferedImage.TYPE_INT_ARGB);
+				long changeAtMillisecond = timecode.getStart()
+						+ fps.milliseconds();
+				boolean changed = false;
+				boolean ended = changeAtMillisecond >= timecode.getEnd() - 1;
+				// Prepare for change detect
+				renderer.changeDetect(timecode.getStart());
+				// Change Detect Loop
+				while (!ended && !changed) {
+					ended = changeAtMillisecond >= timecode.getEnd() - 1;
+					changed = renderer.changeDetect(changeAtMillisecond) > 0;
+					if (changed) {
+						nextEvent = new SubtitleEvent(new Timecode(
+								changeAtMillisecond, timecode.getEnd()));
+						timecode.setEnd(changeAtMillisecond - 1);
+						event.setTimecode(timecode);
+						eventCount++;
+					}
+					changeAtMillisecond++;
+				}
+				renderer.render(image, event.getRenderTimecode());
+				event.setImage(image);
+				quantizeQueue.put(event);
+				eventIndex++;
+				event = nextEvent;
+			}
+		}
+	}
 }

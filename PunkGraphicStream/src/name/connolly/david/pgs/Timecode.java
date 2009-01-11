@@ -25,117 +25,113 @@ package name.connolly.david.pgs;
 import java.math.BigInteger;
 
 public class Timecode implements Comparable<Timecode> {
-    private long start;
-    private long end;
+	private long start;
+	private long end;
 
-    public int compareTo(Timecode o) {
-        return new Long(start).compareTo(o.start);
-    }
+	public int compareTo(Timecode o) {
+		return new Long(start).compareTo(o.start);
+	}
 
 	public long getDuration() {
-        return end - start;
-    }
+		return end - start;
+	}
 
-    public long getStart() {
-        return start;
-    }
+	public long getStart() {
+		return start;
+	}
 
-    private Timecode() {
-        
-    }
-    
-    public Timecode(long start, long end) {
-        this.start = start;
-        this.end = end;
-    }
+	private Timecode() {
 
-    public BigInteger getStartTicks() {
-        BigInteger startTicks = BigInteger.valueOf(start);
-        startTicks = startTicks.multiply(BigInteger.valueOf(90));
-        return startTicks;
-    }
+	}
 
-    public long getEnd() {
-        return end;
-    }
+	public Timecode(long start, long end) {
+		this.start = start;
+		this.end = end;
+	}
 
-    public BigInteger getEndTicks() {
-        BigInteger endTicks = BigInteger.valueOf(end);
-        endTicks = endTicks.multiply(BigInteger.valueOf(90));
-        return endTicks;
-    }
+	public BigInteger getStartTicks() {
+		BigInteger startTicks = BigInteger.valueOf(start);
+		startTicks = startTicks.multiply(BigInteger.valueOf(90));
+		return startTicks;
+	}
 
-    public Timecode merge(Timecode other) {
-        if (other == null) {
-            throw new IllegalArgumentException("Timecode other must not be null");
-        }
-        Timecode merged = new Timecode();
+	public long getEnd() {
+		return end;
+	}
 
-        // First occuring Start
-        if (start <= other.start) {
-            merged.start = start;
-        } else {
-            merged.start = other.start;
-        }
+	public BigInteger getEndTicks() {
+		BigInteger endTicks = BigInteger.valueOf(end);
+		endTicks = endTicks.multiply(BigInteger.valueOf(90));
+		return endTicks;
+	}
 
-        // Last occuring End
-        if (end >= other.end) {
-            merged.end = end;
-        } else {
-            merged.end = other.end;
-        }
+	public Timecode merge(Timecode other) {
+		if (other == null)
+			throw new IllegalArgumentException(
+					"Timecode other must not be null");
+		final Timecode merged = new Timecode();
 
-        return merged;
-    }
+		// First occuring Start
+		if (start <= other.start) {
+			merged.start = start;
+		} else {
+			merged.start = other.start;
+		}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        final Timecode other = (Timecode) obj;
-        
-        if (this.start != other.start) {
-            return false;
-        }
-        return true;
-    }
+		// Last occuring End
+		if (end >= other.end) {
+			merged.end = end;
+		} else {
+			merged.end = other.end;
+		}
 
-    @Override
-    public int hashCode() {
-        return new Long(start).hashCode();
-    }
+		return merged;
+	}
 
-    public boolean overlaps(Timecode other) {
-        if (other == null) {
-            throw new IllegalArgumentException("Timecode other must not be null");
-        }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 
-        if (other.start >= start && other.start <= end) {
-            return true;
-        } else if (other.end >= start && other.end <= end) {
-            return true;
-        } else if (start >= other.start && start <= other.end) {
-            return true;
-        } else if (end >= other.start && end <= other.end) {
-            return true;
-        }
-        return false;
-    }
+		final Timecode other = (Timecode) obj;
 
-    public void setDuration(long duration) {
-        end = start + duration;
-    }
+		if (start != other.start)
+			return false;
+		return true;
+	}
 
-    public void setStart(long start) {
-        this.start = start;
-    }
+	@Override
+	public int hashCode() {
+		return new Long(start).hashCode();
+	}
 
-    public void setEnd(long end) {
-        this.end = end;
-    }
+	public boolean overlaps(Timecode other) {
+		if (other == null)
+			throw new IllegalArgumentException(
+					"Timecode other must not be null");
+
+		if (other.start >= start && other.start <= end)
+			return true;
+		else if (other.end >= start && other.end <= end)
+			return true;
+		else if (start >= other.start && start <= other.end)
+			return true;
+		else if (end >= other.start && end <= other.end)
+			return true;
+		return false;
+	}
+
+	public void setDuration(long duration) {
+		end = start + duration;
+	}
+
+	public void setStart(long start) {
+		this.start = start;
+	}
+
+	public void setEnd(long end) {
+		this.end = end;
+	}
 }

@@ -31,7 +31,7 @@ import name.connolly.david.pgs.color.ColorTable;
 
 public class SupGenerator {
 	private int fps;
-	private OutputStream os;
+	private final OutputStream os;
 	private int subpictureCount;
 
 	public SupGenerator(final OutputStream os, final FrameRate fps) {
@@ -64,9 +64,10 @@ public class SupGenerator {
 		}
 	}
 
-	public void addBitmap(SubtitleEvent event) throws IOException, InterruptedException {
+	public void addBitmap(SubtitleEvent event) throws IOException,
+			InterruptedException {
 		final BufferedImage image = event.getImage();
-        final int width = image.getWidth();
+		final int width = image.getWidth();
 		final int height = image.getHeight();
 		final BigInteger to = event.getTimecode().getEndTicks();
 		BigInteger from = event.getTimecode().getStartTicks();
@@ -75,7 +76,7 @@ public class SupGenerator {
 
 		if (from.compareTo(BigInteger.valueOf(65)) == -1) {
 			from = from.add(BigInteger.valueOf(65)); // TODO: Investigate muxing
-														// subtitles before 65ms
+			// subtitles before 65ms
 		}
 
 		timeHeader(from, from.subtract(BigInteger.valueOf(65)));
@@ -97,7 +98,7 @@ public class SupGenerator {
 		timeHeader(to, BigInteger.ZERO);
 		trailer();
 	}
-    
+
 	private void bitmapHeader(final int width, final int height,
 			final int widthOffset, final int heightOffset) throws IOException {
 		// 17 00 0A 01 00 00 00 03 F7 07 80 00 31

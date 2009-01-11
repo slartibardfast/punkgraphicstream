@@ -26,24 +26,26 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- *
+ * 
  * @author slarti
  */
 public abstract class ApplicationHandler implements InvocationHandler {
-    private final String methodName;
+	private final String methodName;
 
-    public ApplicationHandler(final String methodName) {
-        this.methodName = methodName;
-    }
+	public ApplicationHandler(final String methodName) {
+		this.methodName = methodName;
+	}
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        boolean valid = methodName.equals(method.getName()) && args.length == 1;
-        
-        if (valid) {
-            handle(new ApplicationEvent(args[0]));
-        }
-        return null;
-    }
+	public Object invoke(Object proxy, Method method, Object[] args)
+			throws Throwable {
+		final boolean valid = methodName.equals(method.getName())
+				&& args.length == 1;
 
-    public abstract void handle(ApplicationEvent event);
+		if (valid) {
+			handle(new ApplicationEvent(args[0]));
+		}
+		return null;
+	}
+
+	public abstract void handle(ApplicationEvent event);
 }

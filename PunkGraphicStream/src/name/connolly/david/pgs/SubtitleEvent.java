@@ -30,8 +30,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	private final long id;
 
 	private BufferedImage image;
-	private final Object imageLock = new Object();
-    
+
 	public SubtitleEvent(final Timecode timecode) {
 		this.timecode = timecode;
 		id = eventCount;

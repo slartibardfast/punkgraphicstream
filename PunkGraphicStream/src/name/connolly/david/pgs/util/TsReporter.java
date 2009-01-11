@@ -125,7 +125,8 @@ public class TsReporter {
 
 			sink.printPesPackets(4608);
 		} catch (final IOException ex) {
-			Logger.getLogger(SupReporter.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(SupReporter.class.getName()).log(Level.SEVERE,
+					null, ex);
 		}
 	}
 }

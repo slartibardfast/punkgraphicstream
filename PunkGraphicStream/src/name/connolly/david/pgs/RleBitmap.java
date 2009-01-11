@@ -22,14 +22,15 @@
 
 package name.connolly.david.pgs;
 
-import name.connolly.david.pgs.color.ColorTable;
-import name.connolly.david.pgs.concurrency.EncodeRunnable;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import name.connolly.david.pgs.color.ColorTable;
+import name.connolly.david.pgs.concurrency.EncodeRunnable;
 
 public class RleBitmap {
 	private final BufferedImage image;
@@ -42,8 +43,8 @@ public class RleBitmap {
 
 	public ColorTable encode() {
 		final ColorTable table = new ColorTable();
-        int x = image.getWidth();
-        int y = image.getHeight();
+		final int x = image.getWidth();
+		final int y = image.getHeight();
 		int xIndex = 0;
 		int yIndex = 0;
 		int count = 0;
@@ -117,7 +118,8 @@ public class RleBitmap {
 		try {
 			baos.write(rle.toByteArray());
 		} catch (final IOException ex) {
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+					null, ex);
 		}
 	}
 
@@ -132,7 +134,8 @@ public class RleBitmap {
 		final boolean extended = count > 63;
 		// ByteArrayOutputStream rle = new ByteArrayOutputStream();
 
-		// System.out.println("yIndex: " + yIndex + " color: " + color + " extended: "
+		// System.out.println("yIndex: " + yIndex + " color: " + color +
+		// " extended: "
 		// + extended + " pixel count: " + count + " index Position: "
 		// + position);
 
