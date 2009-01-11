@@ -31,9 +31,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 
 	private BufferedImage image;
 	private final Object imageLock = new Object();
-	private BufferedImage indexed;
-	private final Object indexedLock = new Object();
-
+    
 	public SubtitleEvent(final Timecode timecode) {
 		this.timecode = timecode;
 		id = eventCount;
@@ -82,59 +80,19 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		return result;
 	}
 
-	public void putImage(final BufferedImage image) {
+	public void setImage(final BufferedImage image) {
 		if (this.image != null)
 			throw new RuntimeException("Image already initialized");
 
 		this.image = image;
-
-		synchronized (imageLock) {
-			imageLock.notify();
-		}
-	}
-
-	public void putIndexed(final BufferedImage indexed) {
-		if (this.indexed != null)
-			throw new RuntimeException("Indexed already initialized");
-
-		this.indexed = indexed;
-
-		synchronized (indexedLock) {
-			indexedLock.notify();
-		}
 	}
 
 	public void setTimecode(Timecode timecode) {
 		this.timecode = timecode;
 	}
 
-	public BufferedImage takeImage() throws InterruptedException {
-		if (image == null) {
-			synchronized (imageLock) {
-				imageLock.wait();
-			}
-		}
-
-		final BufferedImage image = this.image;
-
-		this.image = null;
-
+	public BufferedImage getImage() throws InterruptedException {
 		return image;
-	}
-
-	public BufferedImage takeIndexed() throws InterruptedException {
-		if (indexed == null) {
-			synchronized (indexedLock) {
-				indexedLock.wait();
-			}
-		}
-		BufferedImage indexed;
-
-		indexed = this.indexed;
-
-		this.indexed = null;
-
-		return indexed;
 	}
 
 	@Override

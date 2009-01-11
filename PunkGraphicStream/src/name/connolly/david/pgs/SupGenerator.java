@@ -23,18 +23,18 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 
 import name.connolly.david.pgs.color.ColorTable;
 
 public class SupGenerator {
 	private int fps;
-	private FileOutputStream os;
+	private OutputStream os;
 	private int subpictureCount;
 
-	public SupGenerator(final FileOutputStream os, final FrameRate fps) {
+	public SupGenerator(final OutputStream os, final FrameRate fps) {
 		this.os = os;
 
 		subpictureCount = 0;
@@ -65,7 +65,7 @@ public class SupGenerator {
 	}
 
 	public void addBitmap(SubtitleEvent event) throws IOException, InterruptedException {
-		final BufferedImage image = event.takeImage();
+		final BufferedImage image = event.getImage();
         final int width = image.getWidth();
 		final int height = image.getHeight();
 		final BigInteger to = event.getTimecode().getEndTicks();

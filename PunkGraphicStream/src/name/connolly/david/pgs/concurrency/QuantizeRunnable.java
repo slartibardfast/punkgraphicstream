@@ -53,25 +53,22 @@ public class QuantizeRunnable implements Runnable {
 
 	public void run() {
 		try {
-			SubtitleEvent event;
-			BufferedImage indexed;
-			BufferedImage image;
-
 			quantizePending.acquire();
 
 			while (renderPending.get() || quantizeQueue.size() > 0) {
+                final SubtitleEvent event;
+                final BufferedImage image;
+
 				event = quantizeQueue.poll(200, TimeUnit.MILLISECONDS);
 
                 if (event == null) {
                     continue;
                 }
                 
-				image = event.takeImage();
+				image = event.getImage();
 
-				indexed = Quantizer.indexImage(image);
+				Quantizer.indexImage(image);
 
-				event.putImage(indexed);
-                
 				encodeQueue.put(event);
 			}
 

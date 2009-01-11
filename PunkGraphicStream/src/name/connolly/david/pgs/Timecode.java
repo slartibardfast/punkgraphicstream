@@ -32,7 +32,7 @@ public class Timecode implements Comparable<Timecode> {
         return new Long(start).compareTo(o.start);
     }
 
-    public long getDuration() {
+	public long getDuration() {
         return end - start;
     }
 

@@ -21,12 +21,15 @@
  */
 package name.connolly.david.pgs.concurrency;
 
+import java.io.BufferedOutputStream;
 import name.connolly.david.pgs.util.ProgressSink;
 import name.connolly.david.pgs.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,18 +54,20 @@ public class EncodeRunnable implements Runnable {
 	}
 
 	public void run() {
-        FileOutputStream os = null;
+        OutputStream os = null;
         
         try {
-            os = new FileOutputStream(filename);
+            os = new BufferedOutputStream(new FileOutputStream(filename));
             final SupGenerator packet = new SupGenerator(os, fps);
             SubtitleEvent event;
             long encodeIndex = 0;
+            boolean quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
+            boolean encodePending = encodeQueue.size() > 0;
             
             // Continue while at least one quantizeThread is runing or queue is not empty
-            while (quantizePending.tryAcquire(quantizeThreadCount) == false | encodeQueue.size() > 0) {
+            while (quantizeThreadsActive || encodePending) {
                 event = encodeQueue.take();
-                
+
                 // If out of sequence, pause & add to the end of the queue
                 if (event.getId() != encodeIndex) {
                     if (encodeQueue.size() == 0) {
@@ -74,7 +79,14 @@ public class EncodeRunnable implements Runnable {
                 }
            
                 packet.addBitmap(event);
+
+                encodePending = encodeQueue.size() > 0;
                 
+                quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
+                
+                if (!quantizeThreadsActive)
+                    quantizePending.release(quantizeThreadCount); // For Next Run
+
                 encodeIndex++;
             }
             
@@ -96,7 +108,5 @@ public class EncodeRunnable implements Runnable {
         }
         
         progress.done();
-
-        System.out.println("Encode Thread Ended");
 	}
 }

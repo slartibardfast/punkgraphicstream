@@ -366,7 +366,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
 
         renderer = new RenderRunnable(input, output, frameRate, resolution, dialog);
 
-        new Thread(renderer).start();
+        new Thread(renderer, "Renderer").start();
 
         dialog.setVisible(true);
 
