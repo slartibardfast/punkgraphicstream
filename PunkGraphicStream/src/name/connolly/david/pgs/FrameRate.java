@@ -23,29 +23,47 @@
 package name.connolly.david.pgs;
 
 public enum FrameRate {
-	FILM(42, 3750), FILM_NTSC(42, 3754), TV_PAL(40, 3600), TV_NTSC(33, 3003), HD_PAL(
-			20, 1800), HD_NTSC(17, 1502);
+	FILM(23.976023976024, 42, 3750), 
+	FILM_NTSC(24, 42, 3753.75), 
+	TV_PAL(25, 40, 3600), 
+	TV_NTSC(29.97002997003, 33, 3003), 
+	HD_PAL(50, 20, 1800), 
+	HD_NTSC(59.9400599400599, 17, 1501.5);
 
 	private final int milliseconds;
-	private final int ticks;
+	private final double ticks;
+	private final double fps;
 
-	FrameRate(int milliseconds, int ticks) {
+	/**
+	 * 
+	 * @param fps Frames Per Second
+	 * @param milliseconds Duration in milliseconds
+	 * @param ticks Duration in sup ticks
+	 */
+	FrameRate(double fps, int milliseconds, double ticks) {
 		this.milliseconds = milliseconds;
 		this.ticks = ticks;
+		this.fps = fps;
 	}
 
 	/**
-	 * @returns Number of Frames between timecode & duration.
+	 * 
+	 * @param timecode in millisecond
+	 * @return Number of Frame
 	 */
-	public int getFrameCount(long timecode, long duration) {
-		return 0;
+	public long nearestFrameNumber(double timecode) {	
+		return Math.round((timecode / 1000) * fps);
 	}
 
 	public long milliseconds() {
 		return milliseconds;
 	}
 
-	public long ticks() {
+	public double ticks() {
 		return ticks;
+	}
+	
+	public double fps() {
+		return fps;
 	}
 }

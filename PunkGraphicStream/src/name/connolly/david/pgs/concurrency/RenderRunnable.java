@@ -37,6 +37,7 @@ import name.connolly.david.pgs.RenderException;
 import name.connolly.david.pgs.Resolution;
 import name.connolly.david.pgs.SubtitleEvent;
 import name.connolly.david.pgs.Timecode;
+import name.connolly.david.pgs.SubtitleEvent.SubtitleType;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class RenderRunnable implements Runnable {
@@ -149,13 +150,13 @@ public class RenderRunnable implements Runnable {
 
 		// Timecode loop: build subtitle event for timecode
 		while (i.hasNext()) {
-			SubtitleEvent event = new SubtitleEvent(i.next());
+			SubtitleEvent event = new SubtitleEvent(i.next(), SubtitleType.FIRST);
 			percentage = Math.round((float) eventIndex / eventCount * 100f);
 			progress.progress(percentage, "Rendering Event " + eventIndex
 					+ " of " + eventCount + " (Estimated)");
 			// Render loop: render, check for change, split on change
 			while (event != null && !cancelled.get()) {
-				final Timecode timecode = event.getTimecode();
+				Timecode timecode = event.getTimecode();
 				SubtitleEvent nextEvent = null;
 				final BufferedImage image = new BufferedImage(x, y,
 						BufferedImage.TYPE_INT_ARGB);
@@ -171,13 +172,14 @@ public class RenderRunnable implements Runnable {
 					changed = renderer.changeDetect(changeAtMillisecond) > 0;
 					if (changed) {
 						nextEvent = new SubtitleEvent(new Timecode(
-								changeAtMillisecond, timecode.getEnd()));
-						timecode.setEnd(changeAtMillisecond - 1);
+								changeAtMillisecond, timecode.getEnd()), SubtitleType.SEQUENCE);
+						timecode = new Timecode(timecode.getStart(), changeAtMillisecond - 1);
 						event.setTimecode(timecode);
 						eventCount++;
 					}
 					changeAtMillisecond++;
 				}
+				
 				renderer.render(image, event.getRenderTimecode());
 				event.setImage(image);
 				quantizeQueue.put(event);

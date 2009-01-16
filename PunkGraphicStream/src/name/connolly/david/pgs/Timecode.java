@@ -22,7 +22,9 @@
 
 package name.connolly.david.pgs;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 
 public class Timecode implements Comparable<Timecode> {
 	private long start;
@@ -49,20 +51,26 @@ public class Timecode implements Comparable<Timecode> {
 		this.end = end;
 	}
 
-	public BigInteger getStartTicks() {
-		BigInteger startTicks = BigInteger.valueOf(start);
-		startTicks = startTicks.multiply(BigInteger.valueOf(90));
-		return startTicks;
+	public BigInteger getStartTicks(FrameRate fps) {
+		long frameNumber = fps.nearestFrameNumber(start);
+		BigDecimal startTicks = BigDecimal.valueOf(frameNumber);
+		
+		startTicks = startTicks.multiply(BigDecimal.valueOf(fps.ticks()));
+		
+		return startTicks.round(MathContext.DECIMAL64).toBigInteger();
 	}
 
 	public long getEnd() {
 		return end;
 	}
 
-	public BigInteger getEndTicks() {
-		BigInteger endTicks = BigInteger.valueOf(end);
-		endTicks = endTicks.multiply(BigInteger.valueOf(90));
-		return endTicks;
+	public BigInteger getEndTicks(FrameRate fps) {
+		long frameNumber = fps.nearestFrameNumber(end);
+		BigDecimal endTicks = BigDecimal.valueOf(frameNumber);
+		
+		endTicks = endTicks.multiply(BigDecimal.valueOf(fps.ticks()));
+		
+		return endTicks.round(MathContext.DECIMAL64).toBigInteger();
 	}
 
 	public Timecode merge(Timecode other) {
@@ -121,17 +129,5 @@ public class Timecode implements Comparable<Timecode> {
 		else if (end >= other.start && end <= other.end)
 			return true;
 		return false;
-	}
-
-	public void setDuration(long duration) {
-		end = start + duration;
-	}
-
-	public void setStart(long start) {
-		this.start = start;
-	}
-
-	public void setEnd(long end) {
-		this.end = end;
 	}
 }

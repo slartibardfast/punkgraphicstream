@@ -28,11 +28,12 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	private static int eventCount = 0;
 	private Timecode timecode;
 	private final long id;
-
+	private SubtitleType type;
 	private BufferedImage image;
 
-	public SubtitleEvent(final Timecode timecode) {
+	public SubtitleEvent(final Timecode timecode, final SubtitleType type) {
 		this.timecode = timecode;
+		this.type = type;
 		id = eventCount;
 
 		eventCount++;
@@ -98,5 +99,16 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	public String toString() {
 		return "SubtitleEvent start: " + timecode.getStart() + " duration: "
 				+ timecode.getDuration();
+	}
+	
+	
+	public SubtitleType getType() {
+		return type;
+	}
+
+
+	public enum SubtitleType {
+		FIRST, // One one SubtitleEvent for Native Event or First in Sequence
+		SEQUENCE;   // Substitute start of subtitle for end of last subtitle + 1
 	}
 }

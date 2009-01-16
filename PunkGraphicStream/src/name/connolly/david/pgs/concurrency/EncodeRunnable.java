@@ -67,8 +67,8 @@ public class EncodeRunnable implements Runnable {
 					.tryAcquire(quantizeThreadCount) == false;
 			boolean encodePending = encodeQueue.size() > 0;
 
-			// Continue while at least one quantizeThread is runing or queue is
-			// not empty
+			// Continue while at least one quantizeThread is 
+			// running or queue is not empty.
 			while (quantizeThreadsActive || encodePending) {
 				event = encodeQueue.take();
 
@@ -90,8 +90,7 @@ public class EncodeRunnable implements Runnable {
 						.tryAcquire(quantizeThreadCount) == false;
 
 				if (!quantizeThreadsActive) {
-					quantizePending.release(quantizeThreadCount); // For Next
-																	// Run
+					quantizePending.release(quantizeThreadCount); // For Next Run																 
 				}
 
 				encodeIndex++;

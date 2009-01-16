@@ -30,36 +30,43 @@ import java.math.BigInteger;
 import name.connolly.david.pgs.color.ColorTable;
 
 public class SupGenerator {
-	private int fps;
+	final FrameRate fps;
+	private int fpsCode;
 	private final OutputStream os;
 	private int subpictureCount;
+	private BigInteger preloadHeader = BigInteger.valueOf(5832);
+	private BigInteger preloadBitmap = BigInteger.valueOf(5652);
+	private BigInteger preloadMs = BigInteger.valueOf(90);
+	private BigInteger lastEndTicks;
 
 	public SupGenerator(final OutputStream os, final FrameRate fps) {
 		this.os = os;
 
 		subpictureCount = 0;
 
+		this.fps = fps;
+
 		switch (fps) {
 		case FILM_NTSC:
-			this.fps = 0x10;
+			this.fpsCode = 0x10;
 			break;
 		case FILM:
-			this.fps = 0x20;
+			this.fpsCode = 0x20;
 			break;
 		case TV_PAL:
-			this.fps = 0x30;
+			this.fpsCode = 0x30;
 			break;
 		case TV_NTSC:
-			this.fps = 0x40;
+			this.fpsCode = 0x40;
 			break;
 		case HD_PAL:
-			this.fps = 0x50;
+			this.fpsCode = 0x50;
 			break;
 		case HD_NTSC:
-			this.fps = 0x60;
+			this.fpsCode = 0x60;
 			break;
 		default:
-			this.fps = 0x20;
+			this.fpsCode = 0x20;
 			break;
 		}
 	}
@@ -69,33 +76,69 @@ public class SupGenerator {
 		final BufferedImage image = event.getImage();
 		final int width = image.getWidth();
 		final int height = image.getHeight();
-		final BigInteger to = event.getTimecode().getEndTicks();
-		BigInteger from = event.getTimecode().getStartTicks();
+		final BigInteger end = event.getTimecode().getEndTicks(fps);
+		BigInteger start; // = event.getTimecode().getStartTicks(fps);
 		final RleBitmap bitmap = new RleBitmap(image);
 		final ColorTable colorTable = bitmap.encode();
 
-		if (from.compareTo(BigInteger.valueOf(65)) == -1) {
-			from = from.add(BigInteger.valueOf(65)); // TODO: Investigate muxing
-			// subtitles before 65ms
+		switch (event.getType()) {
+		case SEQUENCE:
+			start = lastEndTicks.add(BigInteger.ONE);
+			break;
+		case FIRST:
+		default:
+			start = event.getTimecode().getStartTicks(fps);
+			lastEndTicks = end;
+			break;
 		}
 
-		timeHeader(from, from.subtract(BigInteger.valueOf(65)));
+		if (start.compareTo(preloadHeader) >= 0) {
+			writeBitmap(width, height, end, start, bitmap, colorTable);
+		} else {
+			writeBitmapNoPreload(width, height, end, start, bitmap, colorTable);
+		}
+	}
+
+	private void writeBitmap(final int width, final int height,
+			final BigInteger end, BigInteger start, final RleBitmap bitmap,
+			final ColorTable colorTable) throws IOException {
+		timeHeader(start, start.subtract(preloadHeader));
 		subpictureHeader(width, height, 0, 0);
-		timeHeader(from.subtract(BigInteger.ONE), from.subtract(BigInteger
-				.valueOf(65)));
+		timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
 		bitmapHeader(width, height, 0, 0);
-		timeHeader(from.subtract(BigInteger.valueOf(65)), BigInteger.ZERO);
+		timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
 		colorTable.writeIndex(os);
-		timeHeader(from.subtract(BigInteger.valueOf(63)), from
-				.subtract(BigInteger.valueOf(65)));
+		timeHeader(start.subtract(preloadBitmap), start.subtract(preloadHeader));
 		bitmap.writeBitmap(os);
-		timeHeader(from.subtract(BigInteger.valueOf(63)), BigInteger.ZERO);
+		timeHeader(start.subtract(preloadBitmap), BigInteger.ZERO);
 		trailer();
-		timeHeader(to, to.subtract(BigInteger.ONE));
+		timeHeader(end, end.subtract(preloadMs));
 		clearSubpictureHeader(width, height);
-		timeHeader(to, BigInteger.ZERO);
+		timeHeader(end, BigInteger.ZERO);
 		bitmapHeader(width, height, 0, 0);
-		timeHeader(to, BigInteger.ZERO);
+		timeHeader(end, BigInteger.ZERO);
+		trailer();
+	}
+	
+	// TODO: Test of multiplexed subtitles before 64.8ms
+	private void writeBitmapNoPreload(final int width, final int height,
+			final BigInteger end, BigInteger start, final RleBitmap bitmap,
+			final ColorTable colorTable) throws IOException {
+		timeHeader(start, start);
+		subpictureHeader(width, height, 0, 0);
+		timeHeader(start, start);
+		bitmapHeader(width, height, 0, 0);
+		timeHeader(start, BigInteger.ZERO);
+		colorTable.writeIndex(os);
+		timeHeader(start, start);
+		bitmap.writeBitmap(os);
+		timeHeader(start, BigInteger.ZERO);
+		trailer();
+		timeHeader(end, end);
+		clearSubpictureHeader(width, height);
+		timeHeader(end, BigInteger.ZERO);
+		bitmapHeader(width, height, 0, 0);
+		timeHeader(end, BigInteger.ZERO);
 		trailer();
 	}
 
@@ -132,7 +175,7 @@ public class SupGenerator {
 		os.write(width & 0xFF);
 		os.write(height >> 8 & 0xFF);
 		os.write(height & 0xFF);
-		os.write(fps); // ??
+		os.write(fpsCode); // ??
 		os.write(subpictureCount >> 8 & 0xFF);
 		os.write(subpictureCount & 0xFF);
 		os.write(0x00);
@@ -159,7 +202,7 @@ public class SupGenerator {
 		os.write(height >> 8 & 0xFF);
 		os.write(height & 0xFF);
 
-		os.write(fps);
+		os.write(fpsCode);
 		os.write(subpictureCount >> 8 & 0xFF);
 		os.write(subpictureCount & 0xFF);
 		os.write(0x80);
