@@ -26,6 +26,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import name.connolly.david.pgs.color.ColorTable;
 
@@ -77,7 +79,7 @@ public class SupGenerator {
 		final int width = image.getWidth();
 		final int height = image.getHeight();
 		final BigInteger end = event.getTimecode().getEndTicks(fps);
-		BigInteger start; // = event.getTimecode().getStartTicks(fps);
+		BigInteger start;
 		final RleBitmap bitmap = new RleBitmap(image);
 		final ColorTable colorTable = bitmap.encode();
 
@@ -97,6 +99,17 @@ public class SupGenerator {
 		} else {
 			writeBitmapNoPreload(width, height, end, start, bitmap, colorTable);
 		}
+        /*
+        Logger.getLogger(SupGenerator.class.getName()).setLevel(Level.INFO);
+        
+        Logger.getLogger(SupGenerator.class.getName()).log(Level.INFO, event.toString()
+                + " Start Frame: "
+                + fps.startFrame(event.getTimecode().getStart())
+                + " ticks: " + start.toString()
+                + " End Frame: " +
+                + fps.endFrame(event.getTimecode().getEnd())
+                + " ticks: " + end.toString());
+        */
 	}
 
 	private void writeBitmap(final int width, final int height,
@@ -119,7 +132,7 @@ public class SupGenerator {
 		timeHeader(end, BigInteger.ZERO);
 		trailer();
 	}
-	
+
 	// TODO: Test of multiplexed subtitles before 64.8ms
 	private void writeBitmapNoPreload(final int width, final int height,
 			final BigInteger end, BigInteger start, final RleBitmap bitmap,

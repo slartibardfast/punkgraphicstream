@@ -47,7 +47,7 @@ public class RenderRunnable implements Runnable {
 	private final ProgressSink progress;
 	private final Render renderer = Render.INSTANCE;
 	private final int quantizeThreadCount = Runtime.getRuntime()
-			.availableProcessors();
+	.availableProcessors();
 	private final int renderAheadCount = quantizeThreadCount * 2 - 1;
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
 	private final BlockingQueue<SubtitleEvent> encodeQueue;
@@ -73,7 +73,7 @@ public class RenderRunnable implements Runnable {
 
 		new Thread(new EncodeRunnable(encodeQueue, outputFilename, fps,
 				quantizeThreadCount, quantizePending, progress), "Encoder")
-				.start();
+		.start();
 
 		switch (resolution) {
 		case NTSC_480p:
@@ -91,8 +91,8 @@ public class RenderRunnable implements Runnable {
 		case HD_1080p:
 		default:
 			x = 1920;
-			y = 1080;
-			break;
+		y = 1080;
+		break;
 		}
 	}
 
@@ -160,8 +160,7 @@ public class RenderRunnable implements Runnable {
 				SubtitleEvent nextEvent = null;
 				final BufferedImage image = new BufferedImage(x, y,
 						BufferedImage.TYPE_INT_ARGB);
-				long changeAtMillisecond = timecode.getStart()
-						+ fps.milliseconds();
+				long changeAtMillisecond = timecode.getStart() + fps.milliseconds();
 				boolean changed = false;
 				boolean ended = changeAtMillisecond >= timecode.getEnd() - 1;
 				// Prepare for change detect
@@ -170,16 +169,20 @@ public class RenderRunnable implements Runnable {
 				while (!ended && !changed) {
 					ended = changeAtMillisecond >= timecode.getEnd() - 1;
 					changed = renderer.changeDetect(changeAtMillisecond) > 0;
+
 					if (changed) {
-						nextEvent = new SubtitleEvent(new Timecode(
-								changeAtMillisecond, timecode.getEnd()), SubtitleType.SEQUENCE);
-						timecode = new Timecode(timecode.getStart(), changeAtMillisecond - 1);
-						event.setTimecode(timecode);
+						nextEvent = new SubtitleEvent(new Timecode(changeAtMillisecond, timecode.getEnd()), SubtitleType.SEQUENCE);
+						event.setTimecode(new Timecode(timecode.getStart(), changeAtMillisecond - 1));
 						eventCount++;
 					}
-					changeAtMillisecond++;
+
+					if (changeAtMillisecond + fps.milliseconds() > timecode.getEnd() - 1) {
+						changeAtMillisecond = timecode.getEnd() - 1;
+					} else {
+						changeAtMillisecond += fps.milliseconds();
+					}
 				}
-				
+
 				renderer.render(image, event.getRenderTimecode());
 				event.setImage(image);
 				quantizeQueue.put(event);

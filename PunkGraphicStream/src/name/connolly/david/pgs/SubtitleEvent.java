@@ -65,7 +65,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	}
 
 	public long getRenderTimecode() {
-		return timecode.getStart() + Math.round(timecode.getDuration() / 2d);
+		return timecode.getStart();
 	}
 
 	public Timecode getTimecode() {
@@ -97,8 +97,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 
 	@Override
 	public String toString() {
-		return "SubtitleEvent start: " + timecode.getStart() + " duration: "
-				+ timecode.getDuration();
+		return "SubtitleEvent [" + id +"] ";
 	}
 	
 	

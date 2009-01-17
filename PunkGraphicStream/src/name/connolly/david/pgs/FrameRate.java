@@ -51,8 +51,12 @@ public enum FrameRate {
 	 * @param timecode in millisecond
 	 * @return Number of Frame
 	 */
-	public long nearestFrameNumber(double timecode) {	
-		return Math.round((timecode / 1000) * fps);
+	public long startFrame(double timecode) {
+		return (long) Math.floor((timecode / 1000) * fps);
+	}
+
+    public long endFrame(double timecode) {
+		return (long) Math.floor((timecode / 1000) * fps);
 	}
 
 	public long milliseconds() {
