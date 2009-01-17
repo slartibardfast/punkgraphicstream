@@ -53,6 +53,7 @@ public class Timecode implements Comparable<Timecode> {
 
 	public BigInteger getStartTicks(FrameRate fps) {
 		long frameNumber = fps.startFrame(start);
+		
 		BigDecimal startTicks = BigDecimal.valueOf(frameNumber);
 		
 		startTicks = startTicks.multiply(BigDecimal.valueOf(fps.ticks()));
@@ -69,8 +70,6 @@ public class Timecode implements Comparable<Timecode> {
 		BigDecimal endTicks = BigDecimal.valueOf(frameNumber);
 		
 		endTicks = endTicks.multiply(BigDecimal.valueOf(fps.ticks()));
-		
-		endTicks = endTicks.add(BigDecimal.valueOf(fps.ticks() - 1)); //
 		
 		return endTicks.round(MathContext.DECIMAL64).toBigInteger();
 	}

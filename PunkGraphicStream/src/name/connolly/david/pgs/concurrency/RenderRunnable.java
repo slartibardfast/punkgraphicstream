@@ -157,6 +157,8 @@ public class RenderRunnable implements Runnable {
 			// Render loop: render, check for change, split on change
 			while (event != null && !cancelled.get()) {
 				Timecode timecode = event.getTimecode();
+				final long end = timecode.getEnd();
+				
 				SubtitleEvent nextEvent = null;
 				final BufferedImage image = new BufferedImage(x, y,
 						BufferedImage.TYPE_INT_ARGB);
@@ -167,12 +169,14 @@ public class RenderRunnable implements Runnable {
 				renderer.changeDetect(timecode.getStart());
 				// Change Detect Loop
 				while (!ended && !changed) {
-					ended = changeAtMillisecond >= timecode.getEnd() - 1;
+					ended = changeAtMillisecond >= end - 1;
 					changed = renderer.changeDetect(changeAtMillisecond) > 0;
 
 					if (changed) {
-						nextEvent = new SubtitleEvent(new Timecode(changeAtMillisecond, timecode.getEnd()), SubtitleType.SEQUENCE);
 						event.setTimecode(new Timecode(timecode.getStart(), changeAtMillisecond - 1));
+						timecode = new Timecode(changeAtMillisecond, end);
+						nextEvent = new SubtitleEvent(timecode, SubtitleType.SEQUENCE);
+						
 						eventCount++;
 					}
 
