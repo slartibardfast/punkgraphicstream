@@ -57,16 +57,18 @@ public class EncodeRunnable implements Runnable {
 
 	public void run() {
 		OutputStream os = null;
+        
 
-		try {
-			os = new BufferedOutputStream(new FileOutputStream(filename));
-			final SupGenerator packet = new SupGenerator(os, fps);
-			SubtitleEvent event;
+        try {
+            SubtitleEvent event;
+			final SupGenerator packet;
 			long encodeIndex = 0;
 			boolean quantizeThreadsActive = quantizePending
 					.tryAcquire(quantizeThreadCount) == false;
 			boolean encodePending = encodeQueue.size() > 0;
-
+            os = new BufferedOutputStream(new FileOutputStream(filename));
+            packet = new SupGenerator(os, fps);
+            
 			// Continue while at least one quantizeThread is 
 			// running or queue is not empty.
 			while (quantizeThreadsActive || encodePending) {
@@ -109,13 +111,12 @@ public class EncodeRunnable implements Runnable {
 			try {
 				os.close();
 				progress.done();
+                SubtitleEvent.lastEvent();
 			} catch (final IOException ex) {
 				progress.fail(ex.getMessage());
 				Logger.getLogger(EncodeRunnable.class.getName()).log(
 						Level.SEVERE, null, ex);
 			}
 		}
-
-		progress.done();
 	}
 }

@@ -46,9 +46,8 @@ public class RenderRunnable implements Runnable {
 	private final FrameRate fps;
 	private final ProgressSink progress;
 	private final Render renderer = Render.INSTANCE;
-	private final int quantizeThreadCount = Runtime.getRuntime()
-	.availableProcessors();
-	private final int renderAheadCount = quantizeThreadCount * 2 - 1;
+	private final int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
+	private final int renderAheadCount = 16;
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
 	private final BlockingQueue<SubtitleEvent> encodeQueue;
 	private final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
@@ -98,6 +97,8 @@ public class RenderRunnable implements Runnable {
 
 	public void run() {
 		try {
+            renderer.init();
+            
 			renderer.openSubtitle(inputFilename, x, y);
 
 			processTimecodes();

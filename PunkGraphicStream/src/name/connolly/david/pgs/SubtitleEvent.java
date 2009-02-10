@@ -99,8 +99,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 	public String toString() {
 		return "SubtitleEvent [" + id +"] ";
 	}
-	
-	
+
 	public SubtitleType getType() {
 		return type;
 	}
@@ -110,4 +109,8 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		FIRST, // One one SubtitleEvent for Native Event or First in Sequence
 		SEQUENCE;   // Substitute start of subtitle for end of last subtitle + 1
 	}
+
+    public static void lastEvent() {
+        eventCount = 0;
+    }
 }
