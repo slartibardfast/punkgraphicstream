@@ -31,8 +31,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.connolly.david.pgs.concurrency.EncodeRunnable;
-
 /**
  * PunkGraphicStream Note: NeuQuant has been modified to support indexing of
  * 32-Bit RGBA Images for PunkGraphicStream.
@@ -178,7 +176,7 @@ public class NeuQuant {
 		try {
 			pg.grabPixels();
 		} catch (final InterruptedException ex) {
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+			Logger.getLogger(NeuQuant.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 

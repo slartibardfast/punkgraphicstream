@@ -27,11 +27,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.connolly.david.pgs.concurrency.EncodeRunnable;
-
 public class Quantizer {
 	public static BufferedImage indexImage(BufferedImage image) {
 		NeuQuant nq;
+        
 		try {
 			final int x = image.getWidth();
 			final int y = image.getHeight();
@@ -48,7 +47,7 @@ public class Quantizer {
 		} catch (final IOException ex) {
 			// throw new RuntimeException("Quantizer failed" + e.getMessage());
 			// // Should never happen so no RuntimeException
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+			Logger.getLogger(Quantizer.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 
