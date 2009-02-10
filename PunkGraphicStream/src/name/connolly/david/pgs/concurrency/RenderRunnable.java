@@ -46,8 +46,8 @@ public class RenderRunnable implements Runnable {
 	private final FrameRate fps;
 	private final ProgressSink progress;
 	private final Render renderer = Render.INSTANCE;
-	private final int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
-	private final int renderAheadCount = 16;
+	private int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
+	private int renderAheadCount = 4;
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
 	private final BlockingQueue<SubtitleEvent> encodeQueue;
 	private final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
@@ -61,6 +61,12 @@ public class RenderRunnable implements Runnable {
 		this.inputFilename = inputFilename;
 		this.fps = fps;
 		this.progress = progress;
+
+        // Be cautious until can test on quad core system with 256mb heap
+        if (quantizeThreadCount > 2) {
+            quantizeThreadCount = 2;
+        }
+        
 		quantizeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount);
 		encodeQueue = new LinkedBlockingQueue<SubtitleEvent>();
 

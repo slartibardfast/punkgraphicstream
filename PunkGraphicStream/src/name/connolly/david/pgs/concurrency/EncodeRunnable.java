@@ -110,13 +110,15 @@ public class EncodeRunnable implements Runnable {
 		} finally {
 			try {
 				os.close();
-				progress.done();
-                SubtitleEvent.lastEvent();
 			} catch (final IOException ex) {
 				progress.fail(ex.getMessage());
 				Logger.getLogger(EncodeRunnable.class.getName()).log(
 						Level.SEVERE, null, ex);
-			}
+			} finally {
+                SubtitleEvent.lastEvent();
+
+                progress.done();
+            }
 		}
 	}
 }

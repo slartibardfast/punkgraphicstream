@@ -100,7 +100,7 @@ public class SupGenerator {
 		} else {
 			writeBitmapNoPreload(width, height, end, start, bitmap, colorTable);
 		}
-        
+        /*
         Logger.getLogger(SupGenerator.class.getName()).setLevel(Level.INFO);
         
         Logger.getLogger(SupGenerator.class.getName()).log(Level.INFO, event.toString()
@@ -110,6 +110,7 @@ public class SupGenerator {
                 + " End Frame: " +
                 + fps.endFrame(event.getTimecode().getEnd())
                 + " ticks: " + end.toString());
+         */
 	}
 
 	private void writeBitmap(final int width, final int height,
