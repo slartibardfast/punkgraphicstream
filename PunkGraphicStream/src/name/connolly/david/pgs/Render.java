@@ -19,30 +19,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
 
 public enum Render {
-	INSTANCE;
+    INSTANCE;
+    private boolean loaded = false;
 
-	static {
-		System.loadLibrary("ass");
-	}
+    public void init() throws RenderException {
+        if (!loaded) {
+            try {
+                System.loadLibrary("ass"); // Non-Static init OK in a Singleton.
+                loaded = true;
+            } catch (UnsatisfiedLinkError e) {
+                throw new RenderException(e);
+            }
+        }
+    }
 
-	public native void openSubtitle(String filename, int x, int y)
-			throws RenderException;
+    public native void openSubtitle(String filename, int x, int y)
+            throws RenderException;
 
-	public native void closeSubtitle() throws RenderException;
+    public native void closeSubtitle() throws RenderException;
 
-	public native int changeDetect(long timecode) throws RenderException;
+    public native int changeDetect(long timecode) throws RenderException;
 
-	public native int getEventCount() throws RenderException;
+    public native int getEventCount() throws RenderException;
 
-	public native Timecode getEventTimecode(int eventIndex)
-			throws RenderException;
+    public native Timecode getEventTimecode(int eventIndex)
+            throws RenderException;
 
-	public native void render(BufferedImage image, long timecode)
-			throws RenderException;
+    public native void render(BufferedImage image, long timecode)
+            throws RenderException;
 }
