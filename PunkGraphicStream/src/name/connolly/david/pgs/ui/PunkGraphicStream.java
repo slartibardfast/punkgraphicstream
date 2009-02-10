@@ -359,9 +359,14 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         String output = "default.ass";
         EncodeDialog dialog = new EncodeDialog(this, true);
         RenderRunnable renderer;
+
+        // FIXME: Proper Regex Based Validation
         if (input.length() > 5) {
             output = input.substring(0,
                     input.length() - 4) + ".sup";
+        } else {
+            // TODO: Dialog Box
+            return;
         }
 
         renderer = new RenderRunnable(input, output, frameRate, resolution, dialog);
