@@ -29,13 +29,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabelEncode" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jProgressBarEncode" alignment="0" pref="407" max="32767" attributes="0"/>
-                  <Component id="jLabelEncodeMessage" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jProgressBarEncode" alignment="0" pref="402" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="okButton" linkSize="1" min="-2" pref="67" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cancelButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="jLabelEncodeMessage" alignment="0" pref="402" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -50,7 +50,7 @@
               <Component id="jProgressBarEncode" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabelEncodeMessage" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="32767" attributes="0"/>
+              <EmptySpace pref="34" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="okButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -86,9 +86,6 @@
     <Component class="javax.swing.JProgressBar" name="jProgressBarEncode">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelEncodeMessage">
-      <Properties>
-        <Property name="text" type="java.lang.String" value=" "/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

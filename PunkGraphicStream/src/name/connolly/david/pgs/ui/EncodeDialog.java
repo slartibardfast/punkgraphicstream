@@ -87,8 +87,6 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
 
         jLabelEncode.setText("Encode Progress:");
 
-        jLabelEncodeMessage.setText(" ");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,12 +95,12 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelEncode)
-                    .addComponent(jProgressBarEncode, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-                    .addComponent(jLabelEncodeMessage)
+                    .addComponent(jProgressBarEncode, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton)))
+                        .addComponent(cancelButton))
+                    .addComponent(jLabelEncodeMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -117,7 +115,7 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
                 .addComponent(jProgressBarEncode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelEncodeMessage)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -187,6 +185,8 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
 	public void fail(String message) {
 		jProgressBarEncode.setValue(0);
         jLabelEncodeMessage.setText("Encode failed - " + message);
+        
         okButton.setEnabled(true);
+        pack();
 	}
 }
