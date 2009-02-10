@@ -62,10 +62,10 @@ public class SupGenerator {
 			this.fpsCode = 0x40;
 			break;
 		case HD_PAL:
-			this.fpsCode = 0x50;
+			this.fpsCode = 0x60;
 			break;
 		case HD_NTSC:
-			this.fpsCode = 0x60;
+			this.fpsCode = 0x70;
 			break;
 		default:
 			this.fpsCode = 0x20;
