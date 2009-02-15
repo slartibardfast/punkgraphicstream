@@ -80,6 +80,10 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		return result;
 	}
 
+    public void setType(SubtitleType type) {
+        this.type = type;
+    }
+
 	public void setImage(final BufferedImage image) {
 		if (this.image != null)
 			throw new RuntimeException("Image already initialized");
@@ -95,10 +99,11 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 		return image;
 	}
 
-	@Override
-	public String toString() {
-		return "SubtitleEvent [" + id +"] ";
-	}
+    @Override
+    public String toString() {
+        return "SubtitleEvent id: " + id  + " " + timecode.toString();
+    }
+
 
 	public SubtitleType getType() {
 		return type;

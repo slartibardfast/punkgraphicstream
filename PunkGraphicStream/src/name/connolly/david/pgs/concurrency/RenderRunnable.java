@@ -47,7 +47,7 @@ public class RenderRunnable implements Runnable {
 	private final ProgressSink progress;
 	private final Render renderer = Render.INSTANCE;
 	private int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
-	private int renderAheadCount = 4;
+	private int renderAheadCount = 5;
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
 	private final BlockingQueue<SubtitleEvent> encodeQueue;
 	private final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
@@ -68,7 +68,7 @@ public class RenderRunnable implements Runnable {
         }
         
 		quantizeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount);
-		encodeQueue = new LinkedBlockingQueue<SubtitleEvent>();
+		encodeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount + 2);
 
 		for (int cpu = 0; cpu < quantizeThreadCount; cpu++) {
 			new Thread(new QuantizeRunnable(quantizeQueue, encodeQueue,
@@ -96,8 +96,8 @@ public class RenderRunnable implements Runnable {
 		case HD_1080p:
 		default:
 			x = 1920;
-		y = 1080;
-		break;
+            y = 1080;
+            break;
 		}
 	}
 
@@ -169,29 +169,26 @@ public class RenderRunnable implements Runnable {
 				SubtitleEvent nextEvent = null;
 				final BufferedImage image = new BufferedImage(x, y,
 						BufferedImage.TYPE_INT_ARGB);
-				long changeAtMillisecond = timecode.getStart() + fps.milliseconds();
+				long detectTimecode = Math.round(timecode.getStart() + fps.milliseconds());
 				boolean changed = false;
-				boolean ended = changeAtMillisecond >= timecode.getEnd() - 1;
+				boolean nextUnreachable = detectTimecode >= timecode.getEnd();
 				// Prepare for change detect
 				renderer.changeDetect(timecode.getStart());
 				// Change Detect Loop
-				while (!ended && !changed) {
-					ended = changeAtMillisecond >= end - 1;
-					changed = renderer.changeDetect(changeAtMillisecond) > 0;
+				while (!changed && !nextUnreachable) {
+					changed = renderer.changeDetect(detectTimecode) > 0;
+                    nextUnreachable = detectTimecode + fps.milliseconds() > timecode.getEnd();
 
 					if (changed) {
-						event.setTimecode(new Timecode(timecode.getStart(), changeAtMillisecond - 1));
-						timecode = new Timecode(changeAtMillisecond, end);
+                        event.setTimecode(new Timecode(timecode.getStart(), detectTimecode - 1));
+                        event.setType(SubtitleType.SEQUENCE);
+						timecode = new Timecode(detectTimecode, end);
 						nextEvent = new SubtitleEvent(timecode, SubtitleType.SEQUENCE);
-						
-						eventCount++;
-					}
 
-					if (changeAtMillisecond + fps.milliseconds() > timecode.getEnd() - 1) {
-						changeAtMillisecond = timecode.getEnd() - 1;
-					} else {
-						changeAtMillisecond += fps.milliseconds();
-					}
+                        eventCount++;
+                    } else if (!nextUnreachable) {
+                        detectTimecode = detectTimecode + (long) fps.milliseconds();
+                    }
 				}
 
 				renderer.render(image, event.getRenderTimecode());

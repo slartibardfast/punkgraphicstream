@@ -29,6 +29,7 @@ import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.connolly.david.pgs.SubtitleEvent.SubtitleType;
 import name.connolly.david.pgs.color.ColorTable;
 
 public class SupGenerator {
@@ -78,39 +79,19 @@ public class SupGenerator {
 		final BufferedImage image = event.getImage();
 		final int width = image.getWidth();
 		final int height = image.getHeight();
-		final BigInteger end = event.getTimecode().getEndTicks(fps);
-		BigInteger start;
+		final BigInteger start;
+        final BigInteger end;
 		final RleBitmap bitmap = new RleBitmap(image);
 		final ColorTable colorTable = bitmap.encode();
 
-		switch (event.getType()) {
-		case SEQUENCE:
-			start = lastEndTicks.add(BigInteger.ONE);
-			break;
-		case FIRST:
-		default:
-			start = event.getTimecode().getStartTicks(fps);
-		break;
-		}
-
-		lastEndTicks = end;
-
+        start = event.getTimecode().getStartTicks();
+        end = event.getTimecode().getEndTicks();
+                
 		if (start.compareTo(preloadHeader) >= 0) {
 			writeBitmap(width, height, end, start, bitmap, colorTable);
 		} else {
 			writeBitmapNoPreload(width, height, end, start, bitmap, colorTable);
 		}
-        /*
-        Logger.getLogger(SupGenerator.class.getName()).setLevel(Level.INFO);
-        
-        Logger.getLogger(SupGenerator.class.getName()).log(Level.INFO, event.toString()
-                + " Start Frame: "
-                + fps.startFrame(event.getTimecode().getStart())
-                + " ticks: " + start.toString()
-                + " End Frame: " +
-                + fps.endFrame(event.getTimecode().getEnd())
-                + " ticks: " + end.toString());
-         */
 	}
 
 	private void writeBitmap(final int width, final int height,

@@ -30,9 +30,15 @@ public class Timecode implements Comparable<Timecode> {
 	private long start;
 	private long end;
 
+    @Override
 	public int compareTo(Timecode o) {
 		return new Long(start).compareTo(o.start);
 	}
+
+    @Override
+    public String toString() {
+        return "Timecode start: " + start + " end " + end;
+    }
 
 	public long getDuration() {
 		return end - start;
@@ -51,13 +57,19 @@ public class Timecode implements Comparable<Timecode> {
 		this.end = end;
 	}
 
-	public BigInteger getStartTicks(FrameRate fps) {
+    public BigInteger getStartTicks() {
+        BigInteger ticks = BigInteger.valueOf(start);
+        
+        return ticks.multiply(BigInteger.valueOf(90));
+    }
+
+	public BigInteger getSequenceStartTicks(FrameRate fps) {
 		long frameNumber = fps.startFrame(start);
 		
 		BigDecimal startTicks = BigDecimal.valueOf(frameNumber);
 		
 		startTicks = startTicks.multiply(BigDecimal.valueOf(fps.ticks()));
-		
+
 		return startTicks.round(MathContext.DECIMAL64).toBigInteger();
 	}
 
@@ -65,12 +77,18 @@ public class Timecode implements Comparable<Timecode> {
 		return end;
 	}
 
-	public BigInteger getEndTicks(FrameRate fps) {
+    public BigInteger getEndTicks() {
+        BigInteger ticks = BigInteger.valueOf(end);
+
+        return ticks.multiply(BigInteger.valueOf(90));
+    }
+
+	public BigInteger getSequenceEndTicks(FrameRate fps) {
 		long frameNumber = fps.endFrame(end);
 		BigDecimal endTicks = BigDecimal.valueOf(frameNumber);
 		
 		endTicks = endTicks.multiply(BigDecimal.valueOf(fps.ticks()));
-		
+
 		return endTicks.round(MathContext.DECIMAL64).toBigInteger();
 	}
 
