@@ -9,9 +9,9 @@
 <arguments></arguments>
 <currentDirectory>${EXECUTABLEPATH}\bin</currentDirectory>
 <embeddedJar>true</embeddedJar>
-<executableName>PunkGraphicStream</executableName>
+<executableName>PunkGraphicStream.exe</executableName>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>..\..\PunkGraphicStream\dist\pgs.jar</jarLocation>
+<jarLocation>..\..\..\Releases\libs-0.4.1\pgs.jar</jarLocation>
 <javaProperties>
 <name>java.library.path</name>
 <value>${EXECUTABLEPATH}\bin</value>

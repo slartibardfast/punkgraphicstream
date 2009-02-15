@@ -65,6 +65,8 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 	
 	(*env)->ReleaseStringUTFChars(env, filename, subfile);
 	
+	fflush(stdout);
+	
 	return;
 }
 
@@ -81,6 +83,8 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_closeSubtitle
 	} else {
 		throw_render_exception(env, "Error subtitle already Closed or not opened)");
 	}
+	
+	fflush(stdout);
 	
 	return;
 }
@@ -120,17 +124,17 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 	long long end;
 	
 	if (timecodeClass == NULL) {
-		throw_render_exception(env, "Error loading SubtitleEvent class");
+		throw_render_exception(env, "Error loading Timecode class");
 	}
 	
 	cid = (*env)->GetMethodID(env, timecodeClass,
 							  "<init>", "(JJ)V");
 	if (cid == NULL) {
-		throw_render_exception(env, "Error loading SubtitleEvent constructor");
+		throw_render_exception(env, "Error loading Timecode constructor");
 	}
 	
 	if (event >= ass_track->n_events || event < 0) {
-		throw_render_exception(env, "Requested SubtitleEvent does not exist");
+		throw_render_exception(env, "Requested Timecode does not exist");
 	}
 	
 	start = ass_track->events[event].Start;
@@ -200,6 +204,8 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 
 		p_img = p_img->next;
 	}
+	
+	fflush(stdout);
 	
 	(*env)->DeleteLocalRef(env, cls);	
 }
