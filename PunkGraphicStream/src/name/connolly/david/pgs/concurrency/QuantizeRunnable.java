@@ -36,13 +36,13 @@ import name.connolly.david.pgs.util.ProgressSink;
 
 public class QuantizeRunnable implements Runnable {
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
-	private final BlockingQueue<SubtitleEvent> encodeQueue;
+	private final EncodeQueue encodeQueue;
 	private final AtomicBoolean renderPending;
 	private final Semaphore quantizePending;
 	private final ProgressSink progress;
 
 	public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
-			final BlockingQueue<SubtitleEvent> encodeQueue,
+			final EncodeQueue encodeQueue,
 			final AtomicBoolean renderPending, final Semaphore quantizePending,
 			final ProgressSink progress) {
 		this.quantizeQueue = quantizeQueue;
@@ -70,7 +70,13 @@ public class QuantizeRunnable implements Runnable {
 
 				Quantizer.indexImage(image);
 
-				encodeQueue.put(event);
+                synchronized(encodeQueue) {
+                    while (event.getId() != encodeQueue.nextEvent()) {
+                        encodeQueue.wait();
+                    }
+                    
+                    encodeQueue.put(event);
+                }
 			}
 
 			quantizePending.release();

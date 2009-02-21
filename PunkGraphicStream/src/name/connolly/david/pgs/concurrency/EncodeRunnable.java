@@ -25,8 +25,8 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,14 +36,14 @@ import name.connolly.david.pgs.SupGenerator;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class EncodeRunnable implements Runnable {
-	private final BlockingQueue<SubtitleEvent> encodeQueue;
+	private final EncodeQueue encodeQueue;
 	private final String filename;
 	private final FrameRate fps;
 	private final int quantizeThreadCount;
 	private final Semaphore quantizePending;
 	private final ProgressSink progress;
 
-	public EncodeRunnable(final BlockingQueue<SubtitleEvent> encodeQueue,
+	public EncodeRunnable(final EncodeQueue encodeQueue,
 			final String filename, final FrameRate fps,
 			final int quantizeThreadCount, final Semaphore quantizePending,
 			final ProgressSink progress) {
@@ -57,7 +57,6 @@ public class EncodeRunnable implements Runnable {
 
 	public void run() {
 		OutputStream os = null;
-        
 
         try {
             SubtitleEvent event;
@@ -65,31 +64,18 @@ public class EncodeRunnable implements Runnable {
 			long encodeIndex = 0;
 			boolean quantizeThreadsActive = quantizePending
 					.tryAcquire(quantizeThreadCount) == false;
-			boolean encodePending = encodeQueue.size() > 0;
+			
             os = new BufferedOutputStream(new FileOutputStream(filename));
             packet = new SupGenerator(os, fps);
             
 			// Continue while at least one quantizeThread is 
 			// running or queue is not empty.
-			while (quantizeThreadsActive || encodePending) {
+			while (quantizeThreadsActive || encodeQueue.hasPending()) {
 				event = encodeQueue.take();
-
-				// If out of sequence, pause & add to the end of the queue
-				if (event.getId() != encodeIndex) {
-					if (encodeQueue.size() == 0) {
-						Thread.sleep(100);
-					}
-
-					encodeQueue.put(event);
-					continue;
-				}
-
+                
 				packet.addBitmap(event);
 
-				encodePending = encodeQueue.size() > 0;
-
-				quantizeThreadsActive = quantizePending
-						.tryAcquire(quantizeThreadCount) == false;
+				quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
 
 				if (!quantizeThreadsActive) {
 					quantizePending.release(quantizeThreadCount); // For Next Run																 
@@ -110,11 +96,14 @@ public class EncodeRunnable implements Runnable {
 		} finally {
 			try {
 				os.close();
+              
 			} catch (final IOException ex) {
 				progress.fail(ex.getMessage());
 				Logger.getLogger(EncodeRunnable.class.getName()).log(
 						Level.SEVERE, null, ex);
 			} finally {
+                os = null;
+                
                 SubtitleEvent.lastEvent();
 
                 progress.done();

@@ -47,9 +47,9 @@ public class RenderRunnable implements Runnable {
 	private final ProgressSink progress;
 	private final Render renderer = Render.INSTANCE;
 	private int quantizeThreadCount = Runtime.getRuntime().availableProcessors();
-	private int renderAheadCount = 5;
+	private int renderAheadCount = 4;
 	private final BlockingQueue<SubtitleEvent> quantizeQueue;
-	private final BlockingQueue<SubtitleEvent> encodeQueue;
+	private final EncodeQueue encodeQueue;
 	private final TreeSet<Timecode> timecodes = new TreeSet<Timecode>();
 	private final AtomicBoolean renderPending = new AtomicBoolean(true);
 	private final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
@@ -61,14 +61,9 @@ public class RenderRunnable implements Runnable {
 		this.inputFilename = inputFilename;
 		this.fps = fps;
 		this.progress = progress;
-
-        // Be cautious until can test on quad core system with 256mb heap
-        if (quantizeThreadCount > 2) {
-            quantizeThreadCount = 2;
-        }
         
 		quantizeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount);
-		encodeQueue = new LinkedBlockingQueue<SubtitleEvent>(renderAheadCount + 2);
+		encodeQueue = new EncodeQueue(renderAheadCount);
 
 		for (int cpu = 0; cpu < quantizeThreadCount; cpu++) {
 			new Thread(new QuantizeRunnable(quantizeQueue, encodeQueue,
@@ -110,10 +105,6 @@ public class RenderRunnable implements Runnable {
 			processTimecodes();
 
 			renderTimecodes();
-
-			renderPending.set(false);
-
-			renderer.closeSubtitle();
 		} catch (final RenderException ex) {
 			progress.fail(ex.getMessage());
 			Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE,
@@ -122,7 +113,17 @@ public class RenderRunnable implements Runnable {
 			progress.fail(ex.getMessage());
 			Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE,
 					null, ex);
-		}
+		} finally {
+            renderPending.set(false);
+
+            try {
+                renderer.closeSubtitle();
+            } catch (RenderException ex) {
+                Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE,
+					null, ex);
+            }
+
+        }
 	}
 
 	public void cancel() {
@@ -167,8 +168,7 @@ public class RenderRunnable implements Runnable {
 				final long end = timecode.getEnd();
 				
 				SubtitleEvent nextEvent = null;
-				final BufferedImage image = new BufferedImage(x, y,
-						BufferedImage.TYPE_INT_ARGB);
+				final BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
 				long detectTimecode = Math.round(timecode.getStart() + fps.milliseconds());
 				boolean changed = false;
 				boolean nextUnreachable = detectTimecode >= timecode.getEnd();
