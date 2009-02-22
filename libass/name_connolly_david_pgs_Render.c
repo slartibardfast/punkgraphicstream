@@ -26,9 +26,133 @@
 
 int loaded = 0;
 
+// Cache Section
+JavaVM *jvm;
+jclass render_cls;
+jmethodID render_message_id;
+jfieldID render_id;
+jclass timecode_cls;
+jmethodID timecode_constructor;
+jclass buffered_image_cls;
+jmethodID set_rgb_id;
+jmethodID get_rgb_id;
+
 ass_library_t* ass_library = NULL;
 ass_renderer_t* ass_renderer = NULL;
 ass_track_t* ass_track = NULL;
+
+JNIEXPORT jint JNICALL
+JNI_OnLoad(JavaVM *vm, void *reserved)
+{
+	JNIEnv *env;
+	jclass cls;
+	
+	if ((*vm)->GetEnv(vm, (void **)&env, JNI_VERSION_1_2)) {
+		return JNI_ERR;
+	}
+	
+	// Cache section
+	jvm = vm;
+	
+	// Render
+	cls = (*env)->FindClass(env, "name/connolly/david/pgs/Render");
+	if (cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	render_cls = (*env)->NewWeakGlobalRef(env, cls);
+	
+	if (render_cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	render_id = (*env)->GetStaticFieldID(env, render_cls, "INSTANCE", "Lname/connolly/david/pgs/Render;");
+	if (render_id == NULL) {
+		return JNI_ERR;
+	}
+	
+	render_message_id = (*env)->GetMethodID(env, render_cls, "renderMessage", "(Ljava/lang/String;)V");
+	if (render_message_id == NULL) {
+		return JNI_ERR;
+	}
+	
+	(*env)->DeleteLocalRef(env, cls);
+	
+	// Timecode
+	cls = (*env)->FindClass(env, "name/connolly/david/pgs/Timecode");
+	
+	if (cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	timecode_cls = (*env)->NewWeakGlobalRef(env, cls);
+	if (timecode_cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	timecode_constructor = (*env)->GetMethodID(env, timecode_cls,
+											   "<init>", "(JJ)V");
+	if (timecode_constructor == NULL) {
+		return JNI_ERR;
+	}
+	
+	(*env)->DeleteLocalRef(env, cls);
+	
+	// Buffered Image
+	cls = (*env)->FindClass(env, "java/awt/image/BufferedImage");
+	if (cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	buffered_image_cls = (*env)->NewWeakGlobalRef(env, cls);
+	if (buffered_image_cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	get_rgb_id = (*env)->GetMethodID(env, buffered_image_cls, "getRGB", "(II)I");
+	if (get_rgb_id == NULL) {
+		return JNI_ERR;
+	}
+	
+	set_rgb_id = (*env)->GetMethodID(env, buffered_image_cls, "setRGB", "(III)V");
+	if (set_rgb_id == NULL) {
+		return JNI_ERR;
+	}
+	
+	(*env)->DeleteLocalRef(env, cls);
+	
+	return JNI_VERSION_1_2;
+}
+
+JNIEXPORT void JNICALL 
+JNI_OnUnload(JavaVM *jvm, void *reserved)
+{
+	JNIEnv *env;
+	if ((*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_2)) {
+		return;
+	}
+	
+	(*env)->DeleteWeakGlobalRef(env, render_cls);
+	(*env)->DeleteWeakGlobalRef(env, timecode_cls);
+	(*env)->DeleteWeakGlobalRef(env, buffered_image_cls);
+	
+	return;
+}
+
+void sendRenderMessage(char *msg) 
+{
+	JNIEnv *env;
+	
+	(*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_2);
+	
+	if ((*env)->ExceptionCheck(env)) {
+		return;
+	}
+	
+	jobject render = (*env)->GetStaticObjectField(env, render_cls, render_id);
+	
+	(*env)->CallVoidMethod(env, render, render_message_id, (*env)->NewStringUTF(env, msg));
+}
 
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 (JNIEnv * env, jobject obj, jstring filename, jint x, jint y) 
@@ -116,22 +240,10 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
 JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 (JNIEnv * env, jobject obj, jint event)
 {
-	jclass timecodeClass;
-	jmethodID cid;
 	jobject result;
-	timecodeClass = (*env)->FindClass(env, "name/connolly/david/pgs/Timecode");
+	
 	long long start;
 	long long end;
-	
-	if (timecodeClass == NULL) {
-		throw_render_exception(env, "Error loading Timecode class");
-	}
-	
-	cid = (*env)->GetMethodID(env, timecodeClass,
-							  "<init>", "(JJ)V");
-	if (cid == NULL) {
-		throw_render_exception(env, "Error loading Timecode constructor");
-	}
 	
 	if (event >= ass_track->n_events || event < 0) {
 		throw_render_exception(env, "Requested Timecode does not exist");
@@ -139,8 +251,7 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 	
 	start = ass_track->events[event].Start;
 	end = start + ass_track->events[event].Duration;
-	result = (*env)->NewObject(env, timecodeClass, cid, start, end);
-	(*env)->DeleteLocalRef(env, timecodeClass);
+	result = (*env)->NewObject(env, timecode_cls, timecode_constructor, start, end);
 	
 	return result;
 }
@@ -148,23 +259,8 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 (JNIEnv * env, jobject obj, jobject image, jlong timecode)
 {
-	jclass cls = (*env)->GetObjectClass(env, image);
-	jmethodID getRGB = (*env)->GetMethodID(env, cls, "getRGB", "(II)I");
-	jmethodID setRGB = (*env)->GetMethodID(env, cls, "setRGB", "(III)V");
 	int changeDetect;
 	
-	if (cls == NULL) {
-		throw_render_exception(env, "Error getting reference to BufferedImage");
-	}
-	
-	if (getRGB == NULL) {
-		throw_render_exception(env, "Error getting reference to BufferedImage getRGB()");
-	}
-	
-	if (setRGB == NULL) {
-		throw_render_exception(env, "Error getting reference to BufferedImage setRGB()");
-	}
-
 	ass_image_t *p_img = ass_render_frame(ass_renderer,
 										  ass_track, (long long)(timecode), &changeDetect);
 	
@@ -187,7 +283,7 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 				// TYPE_INT_ARGB
 				//const int argb = (an << 24) + rgb;
 				
-				const int old_argb = (*env)->CallIntMethod(env, image, getRGB, x + p_img->dst_x, y + p_img->dst_y);
+				const int old_argb = (*env)->CallIntMethod(env, image, get_rgb_id, x + p_img->dst_x, y + p_img->dst_y);
 				int new_argb = 0;
 				const int old_a = (old_argb >> 24) & 0xFF;
 				const int old_r = (old_argb >> 16) & 0xFF;
@@ -198,7 +294,7 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
                 		new_argb += ((( old_g * (255-an) + g * an ) / 255) & 0xFF) << 8;
                 		new_argb += ((( old_b * (255-an) + b * an ) / 255) & 0xFF);
 				
-				(*env)->CallVoidMethod(env, image, setRGB, x + p_img->dst_x, y + p_img->dst_y, new_argb);
+				(*env)->CallVoidMethod(env, image, set_rgb_id, x + p_img->dst_x, y + p_img->dst_y, new_argb);
 			}
 		}
 
@@ -206,8 +302,6 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 	}
 	
 	fflush(stdout);
-	
-	(*env)->DeleteLocalRef(env, cls);	
 }
 
 void throw_render_exception(JNIEnv *env, const char *msg) {

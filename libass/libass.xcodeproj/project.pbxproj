@@ -271,14 +271,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-I/usr/X11/include/freetype2";
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USER_HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -286,12 +292,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_C_LANGUAGE_STANDARD = c99;
+				ENABLE_OPENMP_SUPPORT = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
-				ONLY_ACTIVE_ARCH = NO;
-				PREBINDING = NO;
+				OTHER_CFLAGS = "-I/usr/X11/include/freetype2";
 				SDKROOT = macosx10.5;
 			};
 			name = Release;

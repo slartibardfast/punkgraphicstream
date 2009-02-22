@@ -12,12 +12,17 @@
 #endif
 
 void my_mp_msg(int lvl, char *lvl_str, char *fmt, ...) {
+	char *msg = calloc(256, sizeof(char));
+	int length;
+
 	va_list va;
 	if(lvl > MSGL_V) return;
-	printf("[ass] **%s**: ", lvl_str);
+	length = sprintf(msg, "[ass] **%s**: ", lvl_str);
 	va_start(va, fmt);
-	vprintf(fmt, va);
+	length += vsprintf(msg + length, fmt, va);
 	va_end(va);
+	
+	sendRenderMessage(msg);
 }
 
 unsigned utf8_get_char(char **str) {
@@ -56,7 +61,7 @@ void blur(
 	int width,
 	int height,
 	int stride,
-	int *m2,
+	unsigned int *m2,
 	int r,
 	int mwidth) {
 
@@ -72,7 +77,7 @@ void blur(
 	    if(src){
 		register unsigned short *dstp= t + x-r;
 		int mx;
-		unsigned *m3= m2 + src*mwidth;
+		unsigned *m3 = m2 + src*mwidth;
 		for(mx=r-x; mx<mwidth; mx++){
 		    dstp[mx]+= m3[mx];
 		}

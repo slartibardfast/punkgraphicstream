@@ -7,6 +7,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     name_connolly_david_pgs_Render
+ * Method:    registerProgressSink
+ * Signature: (Lname/connolly/david/pgs/util/ProgressSink;II)V
+ */
+JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_registerProgressSink
+	(JNIEnv * env, jobject obj, jobject progress);
+	
 /*
  * Class:     name_connolly_david_pgs_Render
  * Method:    openSubtitle
@@ -56,7 +65,8 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
   (JNIEnv *, jobject, jobject, jlong);
 
 void throw_render_exception(JNIEnv *env, const char *msg);
-int is_subtitle_open() ;
+int is_subtitle_open();
+void sendRenderMessage(char *msg);
 	
 #ifdef __cplusplus
 }

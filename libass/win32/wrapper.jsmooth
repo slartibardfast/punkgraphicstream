@@ -11,7 +11,7 @@
 <embeddedJar>true</embeddedJar>
 <executableName>PunkGraphicStream.exe</executableName>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>..\..\..\Releases\libs-0.4.1\pgs.jar</jarLocation>
+<jarLocation>..\..\..\Releases\libs-0.4.2\PunkGraphicStream.jar</jarLocation>
 <javaProperties>
 <name>java.library.path</name>
 <value>${EXECUTABLEPATH}\bin</value>
@@ -23,7 +23,9 @@
 <skeletonName>Windowed Wrapper</skeletonName>
 <skeletonProperties>
 <key>Message</key>
-<value>Java has not been found on your computer. Do you want to download it?</value>
+<value>Java has not been found on your computer. 
+You must use the Windows x86 32-Bit Verison!
+Do you want to download it?</value>
 </skeletonProperties>
 <skeletonProperties>
 <key>URL</key>

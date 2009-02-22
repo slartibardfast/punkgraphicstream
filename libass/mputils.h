@@ -1,6 +1,7 @@
 #ifndef __MPUTILS_H__
 #define __MPUTILS_H__
 
+#include "name_connolly_david_pgs_Render.h"
 #include "help_mp.h"
 
 unsigned utf8_get_char(char **str);
@@ -25,7 +26,7 @@ static void mp_msg(int mod, int level, const char *fmt, ...) {
 #define MSGL_DBG2 7
 
 void blur(unsigned char *buffer, unsigned short *tmp2, int width, int height,
-          int stride, int *m2, int r, int mwidth);
+          int stride, unsigned int *m2, int r, int mwidth);
 
 void* guess_buffer_cp(unsigned char* buffer, int buflen, char *preferred_language, char *fallback);
 
