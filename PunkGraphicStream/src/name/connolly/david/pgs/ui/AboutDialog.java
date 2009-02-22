@@ -53,6 +53,7 @@ public class AboutDialog extends javax.swing.JDialog {
         jScrollPaneLicense = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabelCopyright = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setTitle("About PunkGraphicStream");
         setLocationByPlatform(true);
@@ -72,44 +73,51 @@ public class AboutDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabelApplication.setText("PunkGraphicStream Version 0.4.2");
+        jLabelApplication.setText("PunkGraphicStream Version 0.5");
 
-        jTextArea1.setColumns(20);
         jTextArea1.setEditable(false);
         jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("PunkGraphicStream is free software; \nyou can redistribute it and/or modify it under the\nterms of the GNU General Public License as published by the Free Software Foundation; either version 3 of \nthe License, or (at your option) any later version.");
+        jTextArea1.setText("PunkGraphicStream is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.\n\nPortions of this software contain: \nNeuQuant Neural-Net Quantization Algorithm\nCopyright (c) 1994 Anthony Dekker\nNEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994. See \"Kohonen neural networks for optimal colour quantization\" in \"Network: Computation in Neural Systems\" Vol. 5 (1994) pp 351-367. for a discussion of the algorithm. \n\nSee also: \nhttp://www.acm.org/~dekker/NEUQUANT.HTML");
+        jTextArea1.setWrapStyleWord(true);
         jScrollPaneLicense.setViewportView(jTextArea1);
 
         jLabelCopyright.setText("Copyright © 2009 David Connolly.  All rights Reserved.");
+
+        jLabel1.setText("License & Acknowledgements:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabelApplication, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabelCopyright, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabelApplication, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelCopyright, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addComponent(okButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelApplication)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelCopyright)
-                .addGap(5, 5, 5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(okButton)
                 .addContainerGap())
         );
+
+        jLabel1.getAccessibleContext().setAccessibleName("licenseLabel");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -148,6 +156,7 @@ public class AboutDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelApplication;
     private javax.swing.JLabel jLabelCopyright;
     private javax.swing.JScrollPane jScrollPaneLicense;

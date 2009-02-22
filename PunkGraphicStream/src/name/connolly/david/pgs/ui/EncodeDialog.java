@@ -19,9 +19,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs.ui;
 
+import javax.swing.SwingUtilities;
 import name.connolly.david.pgs.util.ProgressSink;
 
 /**
@@ -29,11 +29,12 @@ import name.connolly.david.pgs.util.ProgressSink;
  * @author slarti
  */
 public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
+
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 5076673874186761150L;
-	/** A return status code - returned if Cancel button has been pressed */
+     *
+     */
+    private static final long serialVersionUID = 5076673874186761150L;
+    /** A return status code - returned if Cancel button has been pressed */
     public static final int RET_CANCEL = 0;
     /** A return status code - returned if OK button has been pressed */
     public static final int RET_OK = 1;
@@ -62,6 +63,8 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
         jLabelEncode = new javax.swing.JLabel();
         jProgressBarEncode = new javax.swing.JProgressBar();
         jLabelEncodeMessage = new javax.swing.JLabel();
+        jScrollPane = new javax.swing.JScrollPane();
+        jLogTextArea = new javax.swing.JTextArea();
 
         setLocationByPlatform(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -87,20 +90,31 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
 
         jLabelEncode.setText("Encode Progress:");
 
+        jLabelEncodeMessage.setText(" ");
+
+        jLogTextArea.setColumns(80);
+        jLogTextArea.setEditable(false);
+        jLogTextArea.setRows(5);
+        jLogTextArea.setTabSize(4);
+        jLogTextArea.setToolTipText("Messages from the Subtitle Render");
+        jLogTextArea.setWrapStyleWord(true);
+        jScrollPane.setViewportView(jLogTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelEncode)
-                    .addComponent(jProgressBarEncode, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addComponent(jLabelEncode, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBarEncode, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cancelButton))
-                    .addComponent(jLabelEncodeMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
+                    .addComponent(jLabelEncodeMessage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -115,7 +129,9 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
                 .addComponent(jProgressBarEncode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelEncodeMessage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -145,13 +161,15 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
     }
 
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 EncodeDialog dialog = new EncodeDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
                     }
@@ -165,28 +183,60 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel jLabelEncode;
     private javax.swing.JLabel jLabelEncodeMessage;
+    private javax.swing.JTextArea jLogTextArea;
     private javax.swing.JProgressBar jProgressBarEncode;
+    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
-
     private int returnStatus = RET_CANCEL;
 
-    public void progress(int percentage, String message) {
-        jProgressBarEncode.setValue(percentage);
-        jLabelEncodeMessage.setText(message);
+    public void progress(final int percentage, final String message) {
+        Runnable updateDisplay = new Runnable() {
+
+            public void run() {
+                jProgressBarEncode.setValue(percentage);
+                jLabelEncodeMessage.setText(message);
+            }
+        };
+
+        SwingUtilities.invokeLater(updateDisplay);
     }
 
     public void done() {
-        jProgressBarEncode.setValue(100);
-        jLabelEncodeMessage.setText("Encode complete");
-        okButton.setEnabled(true);
+        Runnable updateDisplay = new Runnable() {
+
+            public void run() {
+                jProgressBarEncode.setValue(100);
+                jLabelEncodeMessage.setText("Encode complete");
+                okButton.setEnabled(true);
+            }
+        };
+
+        SwingUtilities.invokeLater(updateDisplay);
     }
 
-	public void fail(String message) {
-		jProgressBarEncode.setValue(0);
-        jLabelEncodeMessage.setText("Encode failed - " + message);
-        
-        okButton.setEnabled(true);
-        pack();
-	}
+    public void fail(final String message) {
+        Runnable updateDisplay = new Runnable() {
+
+            public void run() {
+                jProgressBarEncode.setValue(0);
+                jLabelEncodeMessage.setText("Encode failed - " + message);
+                okButton.setEnabled(true);
+                pack();
+            }
+        };
+
+        SwingUtilities.invokeLater(updateDisplay);
+    }
+
+    public void renderMessage(final String message) {
+        Runnable updateDisplay = new Runnable() {
+
+            public void run() {
+                jLogTextArea.append(message);
+            }
+        };
+
+        SwingUtilities.invokeLater(updateDisplay);
+    }
 }

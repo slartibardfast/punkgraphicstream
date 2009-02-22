@@ -98,7 +98,7 @@ public class RenderRunnable implements Runnable {
 
 	public void run() {
 		try {
-            renderer.init();
+            renderer.init(progress);
             
 			renderer.openSubtitle(inputFilename, x, y);
 

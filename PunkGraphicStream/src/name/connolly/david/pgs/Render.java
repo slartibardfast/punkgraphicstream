@@ -22,12 +22,14 @@
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
+import name.connolly.david.pgs.util.ProgressSink;
 
 public enum Render {
     INSTANCE;
     private boolean loaded = false;
+    private ProgressSink progress;
 
-    public void init() throws RenderException {
+    public void init(ProgressSink progress) throws RenderException {
         if (!loaded) {
             try {
                 System.loadLibrary("ass"); // Non-Static init OK in a Singleton.
@@ -36,6 +38,12 @@ public enum Render {
                 throw new RenderException(e);
             }
         }
+        
+        this.progress = progress;
+    }
+    
+    public void renderMessage(String message) {
+        progress.renderMessage(message);
     }
 
     public native void openSubtitle(String filename, int x, int y)
