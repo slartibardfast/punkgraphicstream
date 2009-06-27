@@ -155,9 +155,10 @@ void sendRenderMessage(char *msg)
 }
 
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
-(JNIEnv * env, jobject obj, jstring filename, jint x, jint y) 
+(JNIEnv * env, jobject obj, jstring dirname, jstring filename, jint x, jint y) 
 {
 	jboolean iscopy;
+	char* subdir = (char*) ((*env)->GetStringUTFChars(env, dirname, &iscopy));
 	char* subfile = (char*) ((*env)->GetStringUTFChars(env, filename, &iscopy));
 	
 	if (is_subtitle_open()) {
@@ -170,13 +171,13 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 		throw_render_exception(env, "Error initialising ASS Library");
 	}
 	
+	ass_set_fonts_dir(ass_library, subdir);
 	ass_renderer = ass_renderer_init(ass_library);
 	
 	if (!ass_renderer) {
 		throw_render_exception(env, "Error initialising ASS Renderer");
 	}
-	
-	ass_set_fonts_dir(ass_library, ".");
+
 	ass_set_font_scale(ass_renderer, 1.);
 	ass_set_fonts(ass_renderer, NULL, "Arial");
 	ass_set_frame_size(ass_renderer, x, y);
@@ -187,6 +188,7 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 		throw_render_exception(env, "Error initialising ASS Track");
 	}
 	
+	(*env)->ReleaseStringUTFChars(env, filename, subdir);
 	(*env)->ReleaseStringUTFChars(env, filename, subfile);
 	
 	fflush(stdout);

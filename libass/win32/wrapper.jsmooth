@@ -11,7 +11,7 @@
 <embeddedJar>true</embeddedJar>
 <executableName>PunkGraphicStream.exe</executableName>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>..\..\..\Releases\libs-0.4.2\PunkGraphicStream.jar</jarLocation>
+<jarLocation>..\..\..\Releases\libs-0.5.1\pgs.jar</jarLocation>
 <javaProperties>
 <name>java.library.path</name>
 <value>${EXECUTABLEPATH}\bin</value>

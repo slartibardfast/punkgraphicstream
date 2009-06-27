@@ -1,0 +1,11 @@
+prefix=/home/slarti/Documents/punkgraphicstream/trunk/libass/linux_x86
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Fontconfig
+Description: Font configuration and customization library
+Version: 2.6.0
+Libs: -L${libdir} -lfontconfig
+Libs.private: -L/home/slarti/Documents/punkgraphicstream/trunk/libass/linux_x86/lib -lexpat -L/home/slarti/Documents/punkgraphicstream/trunk/libass/linux_x86/lib -lfreetype
+Cflags: -I${includedir}

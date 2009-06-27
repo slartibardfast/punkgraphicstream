@@ -19,10 +19,10 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_registerProgressSink
 /*
  * Class:     name_connolly_david_pgs_Render
  * Method:    openSubtitle
- * Signature: (Ljava/lang/String;II)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;II)V
  */
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
-  (JNIEnv *, jobject, jstring, jint, jint);
+  (JNIEnv *, jobject, jstring, jstring, jint, jint);
 
 /*
  * Class:     name_connolly_david_pgs_Render
