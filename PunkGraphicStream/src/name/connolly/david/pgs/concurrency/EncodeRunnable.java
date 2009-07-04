@@ -36,78 +36,80 @@ import name.connolly.david.pgs.SupGenerator;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class EncodeRunnable implements Runnable {
-	private final EncodeQueue encodeQueue;
-	private final String filename;
-	private final FrameRate fps;
-	private final int quantizeThreadCount;
-	private final Semaphore quantizePending;
-	private final ProgressSink progress;
 
-	public EncodeRunnable(final EncodeQueue encodeQueue,
-			final String filename, final FrameRate fps,
-			final int quantizeThreadCount, final Semaphore quantizePending,
-			final ProgressSink progress) {
-		this.encodeQueue = encodeQueue;
-		this.filename = filename;
-		this.fps = fps;
-		this.quantizeThreadCount = quantizeThreadCount;
-		this.quantizePending = quantizePending;
-		this.progress = progress;
-	}
+    private final EncodeQueue encodeQueue;
+    private final String filename;
+    private final FrameRate fps;
+    private final int quantizeThreadCount;
+    private final Semaphore quantizePending;
+    private final ProgressSink progress;
 
-	public void run() {
-		OutputStream os = null;
+    public EncodeRunnable(final EncodeQueue encodeQueue,
+            final String filename, final FrameRate fps,
+            final int quantizeThreadCount, final Semaphore quantizePending,
+            final ProgressSink progress) {
+        this.encodeQueue = encodeQueue;
+        this.filename = filename;
+        this.fps = fps;
+        this.quantizeThreadCount = quantizeThreadCount;
+        this.quantizePending = quantizePending;
+        this.progress = progress;
+    }
+
+    @Override
+    public void run() {
+        OutputStream os = null;
 
         try {
             SubtitleEvent event;
-			final SupGenerator packet;
-			long encodeIndex = 0;
-			boolean quantizeThreadsActive = quantizePending
-					.tryAcquire(quantizeThreadCount) == false;
-			
+            final SupGenerator packet;
+            long encodeIndex = 0;
+            boolean quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
+
             os = new BufferedOutputStream(new FileOutputStream(filename));
             packet = new SupGenerator(os, fps);
-            
-			// Continue while at least one quantizeThread is 
-			// running or queue is not empty.
-			while (quantizeThreadsActive || encodeQueue.hasPending()) {
-				event = encodeQueue.take();
-                
-				packet.addBitmap(event);
 
-				quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
+            // Continue while at least one quantizeThread is
+            // running or queue is not empty.
+            while (quantizeThreadsActive || encodeQueue.hasPending()) {
+                event = encodeQueue.poll(200, TimeUnit.MILLISECONDS);
+                quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
 
-				if (!quantizeThreadsActive) {
-					quantizePending.release(quantizeThreadCount); // For Next Run																 
-				}
+                if (!quantizeThreadsActive) {
+                    quantizePending.release(quantizeThreadCount); // For Next Run
+                }
 
-				encodeIndex++;
-			}
+                if (event != null) {
+                    packet.addBitmap(event);
 
-			os.flush();
-		} catch (final IOException ex) {
-			progress.fail(ex.getMessage());
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
-					null, ex);
-		} catch (final InterruptedException ex) {
-			progress.fail(ex.getMessage());
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
-					null, ex);
-		} finally {
-			try {
-				os.close();
-              
-			} catch (final IOException ex) {
-				progress.fail(ex.getMessage());
-				Logger.getLogger(EncodeRunnable.class.getName()).log(
-						Level.SEVERE, null, ex);
-			} finally {
-                os = null;
-                
-                SubtitleEvent.lastEvent();
-
-                progress.done();
+                    encodeIndex++;
+                }
             }
-		}
-	}
+
+            os.flush();
+        } catch (final IOException ex) {
+            progress.fail(ex.getMessage());
+            Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+                    null, ex);
+        } catch (final InterruptedException ex) {
+            progress.fail(ex.getMessage());
+            Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+                    null, ex);
+        } finally {
+            try {
+                os.close();
+
+            } catch (final IOException ex) {
+                progress.fail(ex.getMessage());
+                Logger.getLogger(EncodeRunnable.class.getName()).log(
+                        Level.SEVERE, null, ex);
+            } finally {
+                os = null;
+            }
+        }
+        
+        SubtitleEvent.lastEvent();
+        
+        progress.done();
+    }
 }

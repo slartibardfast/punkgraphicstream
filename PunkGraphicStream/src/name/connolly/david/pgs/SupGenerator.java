@@ -77,6 +77,9 @@ public class SupGenerator {
 	public void addBitmap(SubtitleEvent event) throws IOException,
 			InterruptedException {
 		final BufferedImage image = event.getImage();
+                final int x = event.getOffsetX();
+                final int y = event.getOffsetY();
+                
 		final int width = image.getWidth();
 		final int height = image.getHeight();
 		final BigInteger start;
@@ -88,19 +91,19 @@ public class SupGenerator {
         end = event.getTimecode().getEndTicks();
                 
 		if (start.compareTo(preloadHeader) >= 0) {
-			writeBitmap(width, height, end, start, bitmap, colorTable);
+			writeBitmap(width, height, x, y, end, start, bitmap, colorTable);
 		} else {
-			writeBitmapNoPreload(width, height, end, start, bitmap, colorTable);
+			writeBitmapNoPreload(width, height, x, y, end, start, bitmap, colorTable);
 		}
 	}
 
-	private void writeBitmap(final int width, final int height,
+	private void writeBitmap(final int width, final int height, final int x, final int y,
 			final BigInteger end, BigInteger start, final RleBitmap bitmap,
 			final ColorTable colorTable) throws IOException {
 		timeHeader(start, start.subtract(preloadHeader));
-		subpictureHeader(width, height, 0, 0);
+		subpictureHeader(width, height, x, y);
 		timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
-		bitmapHeader(width, height, 0, 0);
+		bitmapHeader(width, height, x, y);
 		timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
 		colorTable.writeIndex(os);
 		timeHeader(start.subtract(preloadBitmap), start.subtract(preloadHeader));
@@ -110,19 +113,19 @@ public class SupGenerator {
 		timeHeader(end, end.subtract(preloadMs));
 		clearSubpictureHeader(width, height);
 		timeHeader(end, BigInteger.ZERO);
-		bitmapHeader(width, height, 0, 0);
+		bitmapHeader(width, height, x, y);
 		timeHeader(end, BigInteger.ZERO);
 		trailer();
 	}
 
 	// TODO: Test of multiplexed subtitles before 64.8ms
-	private void writeBitmapNoPreload(final int width, final int height,
+	private void writeBitmapNoPreload( final int width, final int height, final int x, final int y,
 			final BigInteger end, BigInteger start, final RleBitmap bitmap,
 			final ColorTable colorTable) throws IOException {
 		timeHeader(start, start);
-		subpictureHeader(width, height, 0, 0);
+		subpictureHeader(width, height, x, y);
 		timeHeader(start, start);
-		bitmapHeader(width, height, 0, 0);
+		bitmapHeader(width, height, x, y);
 		timeHeader(start, BigInteger.ZERO);
 		colorTable.writeIndex(os);
 		timeHeader(start, start);
@@ -132,7 +135,7 @@ public class SupGenerator {
 		timeHeader(end, end);
 		clearSubpictureHeader(width, height);
 		timeHeader(end, BigInteger.ZERO);
-		bitmapHeader(width, height, 0, 0);
+		bitmapHeader(width, height, x, y);
 		timeHeader(end, BigInteger.ZERO);
 		trailer();
 	}

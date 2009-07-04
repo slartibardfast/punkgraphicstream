@@ -46,7 +46,7 @@ public enum Render {
         progress.renderMessage(message);
     }
 
-    public native void openSubtitle(String filename, int x, int y)
+    public native void openSubtitle(String dirname, String filename, int x, int y)
             throws RenderException;
 
     public native void closeSubtitle() throws RenderException;
@@ -58,6 +58,6 @@ public enum Render {
     public native Timecode getEventTimecode(int eventIndex)
             throws RenderException;
 
-    public native void render(BufferedImage image, long timecode)
+    public native void render(SubtitleEvent event, BufferedImage image, long timecode)
             throws RenderException;
 }

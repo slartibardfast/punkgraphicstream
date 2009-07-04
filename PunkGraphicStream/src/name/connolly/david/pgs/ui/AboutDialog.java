@@ -73,7 +73,7 @@ public class AboutDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabelApplication.setText("PunkGraphicStream Version 0.5");
+        jLabelApplication.setText("PunkGraphicStream Version 0.6");
 
         jTextArea1.setEditable(false);
         jTextArea1.setLineWrap(true);

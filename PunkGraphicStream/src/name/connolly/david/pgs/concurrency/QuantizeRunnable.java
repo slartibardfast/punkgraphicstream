@@ -19,7 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs.concurrency;
 
 import java.awt.image.BufferedImage;
@@ -35,55 +34,56 @@ import name.connolly.david.pgs.color.Quantizer;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class QuantizeRunnable implements Runnable {
-	private final BlockingQueue<SubtitleEvent> quantizeQueue;
-	private final EncodeQueue encodeQueue;
-	private final AtomicBoolean renderPending;
-	private final Semaphore quantizePending;
-	private final ProgressSink progress;
 
-	public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
-			final EncodeQueue encodeQueue,
-			final AtomicBoolean renderPending, final Semaphore quantizePending,
-			final ProgressSink progress) {
-		this.quantizeQueue = quantizeQueue;
-		this.encodeQueue = encodeQueue;
-		this.renderPending = renderPending;
-		this.quantizePending = quantizePending;
-		this.progress = progress;
-	}
+    private final BlockingQueue<SubtitleEvent> quantizeQueue;
+    private final EncodeQueue encodeQueue;
+    private final AtomicBoolean renderPending;
+    private final Semaphore quantizePending;
+    private final ProgressSink progress;
 
-	public void run() {
-		try {
-			quantizePending.acquire();
+    public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
+            final EncodeQueue encodeQueue,
+            final AtomicBoolean renderPending, final Semaphore quantizePending,
+            final ProgressSink progress) {
+        this.quantizeQueue = quantizeQueue;
+        this.encodeQueue = encodeQueue;
+        this.renderPending = renderPending;
+        this.quantizePending = quantizePending;
+        this.progress = progress;
+    }
 
-			while (renderPending.get() || quantizeQueue.size() > 0) {
-				final SubtitleEvent event;
-				final BufferedImage image;
+    public void run() {
+        try {
+            quantizePending.acquire();
 
-				event = quantizeQueue.poll(200, TimeUnit.MILLISECONDS);
+            while (renderPending.get() || quantizeQueue.size() > 0) {
+                final SubtitleEvent event;
+                final BufferedImage image;
 
-				if (event == null) {
-					continue;
-				}
+                event = quantizeQueue.poll(200, TimeUnit.MILLISECONDS);
 
-				image = event.getImage();
+                if (event == null) {
+                    continue;
+                }
 
-				Quantizer.indexImage(image);
+                image = event.getImage();
 
-                synchronized(encodeQueue) {
+                Quantizer.indexImage(image);
+
+                synchronized (encodeQueue) {
                     while (event.getId() != encodeQueue.nextEvent()) {
                         encodeQueue.wait();
                     }
-                    
+
                     encodeQueue.put(event);
                 }
-			}
+            }
 
-			quantizePending.release();
-		} catch (final InterruptedException ex) {
-			progress.fail("Quantizer Thread Interupted");
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
-					null, ex);
-		}
-	}
+            quantizePending.release();
+        } catch (final InterruptedException ex) {
+            progress.fail("Quantizer Thread Interupted");
+            Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
+                    null, ex);
+        }
+    }
 }
