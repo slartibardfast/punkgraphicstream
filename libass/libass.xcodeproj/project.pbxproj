@@ -284,7 +284,6 @@
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 				USER_HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -299,6 +298,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-I/usr/X11/include/freetype2";
 				SDKROOT = macosx10.5;
 			};

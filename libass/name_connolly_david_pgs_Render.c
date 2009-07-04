@@ -36,6 +36,8 @@ jmethodID timecode_constructor;
 jclass buffered_image_cls;
 jmethodID set_rgb_id;
 jmethodID get_rgb_id;
+jclass subtitle_event_cls;
+jmethodID set_clip_id;
 
 ass_library_t* ass_library = NULL;
 ass_renderer_t* ass_renderer = NULL;
@@ -121,6 +123,23 @@ JNI_OnLoad(JavaVM *vm, void *reserved)
 	
 	(*env)->DeleteLocalRef(env, cls);
 	
+	cls = (*env)->FindClass(env, "name/connolly/david/pgs/SubtitleEvent");
+	if (cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	subtitle_event_cls = (*env)->NewWeakGlobalRef(env, cls);
+	if (subtitle_event_cls == NULL) {
+		return JNI_ERR;
+	}
+	
+	set_clip_id = (*env)->GetMethodID(env, subtitle_event_cls, "setClip", "(IIII)V");
+	if (set_clip_id == NULL) {
+		return JNI_ERR;
+	}
+	
+	(*env)->DeleteLocalRef(env, cls);
+		
 	return JNI_VERSION_1_2;
 }
 
@@ -135,6 +154,7 @@ JNI_OnUnload(JavaVM *jvm, void *reserved)
 	(*env)->DeleteWeakGlobalRef(env, render_cls);
 	(*env)->DeleteWeakGlobalRef(env, timecode_cls);
 	(*env)->DeleteWeakGlobalRef(env, buffered_image_cls);
+	(*env)->DeleteWeakGlobalRef(env, subtitle_event_cls);
 	
 	return;
 }
@@ -243,7 +263,6 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 (JNIEnv * env, jobject obj, jint event)
 {
 	jobject result;
-	
 	long long start;
 	long long end;
 	
@@ -259,10 +278,13 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 }
 
 JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
-(JNIEnv * env, jobject obj, jobject image, jlong timecode)
+(JNIEnv * env, jobject obj, jobject event, jobject image, jlong timecode)
 {
 	int changeDetect;
-	
+	int minX = 1920; // smallest dst_x // offset x
+	int maxX = 0; // largetest dst_x + x
+	int minY = 1080; // smallest dst_y // offset y
+	int maxY = 0; // largest dst_y + y
 	ass_image_t *p_img = ass_render_frame(ass_renderer,
 										  ass_track, (long long)(timecode), &changeDetect);
 	
@@ -272,6 +294,22 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 		const int g = (p_img->color >> 16)&0xff; 
 		const int b = (p_img->color >>  8)&0xff; 
 		const int a = (p_img->color) & 0xFF;
+		
+		if (p_img->dst_x < minX) {
+			minX = p_img->dst_x;
+		}
+		
+		if ((p_img->dst_x + p_img->w) > maxX) {
+			maxX = (p_img->dst_x + p_img->w);
+		}
+		
+		if (p_img->dst_y < minY) {
+			minY = p_img->dst_y;
+		}
+		
+		if ((p_img->dst_y + p_img->h) > maxY) {
+			maxY = (p_img->dst_y + p_img->h);
+		}
 		
 		int x, y; 
 		
@@ -302,6 +340,8 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 
 		p_img = p_img->next;
 	}
+	
+	(*env)->CallVoidMethod(env, event, set_clip_id, minX, minY, maxX, maxY);
 	
 	fflush(stdout);
 }

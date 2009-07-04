@@ -9,18 +9,18 @@
 <arguments></arguments>
 <currentDirectory>${EXECUTABLEPATH}\bin</currentDirectory>
 <embeddedJar>true</embeddedJar>
-<executableName>PunkGraphicStream.exe</executableName>
+<executableName>cli-pgs.exe</executableName>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>..\..\..\Releases\libs-0.5.1\pgs.jar</jarLocation>
+<jarLocation>..\..\PunkGraphicStream\dist\PunkGraphicStream.jar</jarLocation>
 <javaProperties>
 <name>java.library.path</name>
 <value>${EXECUTABLEPATH}\bin</value>
 </javaProperties>
-<mainClassName>name.connolly.david.pgs.ui.PunkGraphicStream</mainClassName>
+<mainClassName>name.connolly.david.pgs.console.PunkGraphicStream</mainClassName>
 <maximumMemoryHeap>268435456</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
-<skeletonName>Windowed Wrapper</skeletonName>
+<skeletonName>Console Wrapper</skeletonName>
 <skeletonProperties>
 <key>Message</key>
 <value>Java has not been found on your computer. 
@@ -28,19 +28,7 @@ You must use the Windows x86 32-Bit Verison!
 Do you want to download it?</value>
 </skeletonProperties>
 <skeletonProperties>
-<key>URL</key>
-<value>http://www.java.com</value>
-</skeletonProperties>
-<skeletonProperties>
-<key>SingleProcess</key>
-<value>0</value>
-</skeletonProperties>
-<skeletonProperties>
-<key>SingleInstance</key>
-<value>0</value>
-</skeletonProperties>
-<skeletonProperties>
-<key>JniSmooth</key>
+<key>PressKey</key>
 <value>0</value>
 </skeletonProperties>
 <skeletonProperties>

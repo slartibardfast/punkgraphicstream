@@ -56,13 +56,14 @@ JNIEXPORT jint JNICALL Java_name_connolly_david_pgs_Render_getEventCount
 JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
   (JNIEnv *, jobject, jint);
 
-/*
- * Class:     name_connolly_david_pgs_Render
- * Method:    render
- * Signature: (Ljava/awt/image/BufferedImage;J)V
- */
-JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
-  (JNIEnv *, jobject, jobject, jlong);
+	/*
+	 * Class:     name_connolly_david_pgs_Render
+	 * Method:    render
+	 * Signature: (Lname/connolly/david/pgs/SubtitleEvent;Ljava/awt/image/BufferedImage;J)V
+	 */
+	JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
+	(JNIEnv *, jobject, jobject, jobject, jlong);
+	
 
 void throw_render_exception(JNIEnv *env, const char *msg);
 int is_subtitle_open();
