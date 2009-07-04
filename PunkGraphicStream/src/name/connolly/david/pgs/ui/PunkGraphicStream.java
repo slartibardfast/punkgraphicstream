@@ -42,7 +42,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 3301916545310764557L;
     private FrameRate frameRate = FrameRate.FILM;
-    private Resolution resolution = Resolution.HD_1080p;
+    private Resolution resolution = Resolution.HD_1080;
 
     /** Creates new form PunkGraphicStream */
     public PunkGraphicStream() {
@@ -436,19 +436,19 @@ public class PunkGraphicStream extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void jRadioButton480pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton480pActionPerformed
-        resolution = Resolution.NTSC_480p;
+        resolution = Resolution.NTSC_480;
     }//GEN-LAST:event_jRadioButton480pActionPerformed
 
     private void jRadioButton576pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton576pActionPerformed
-        resolution = Resolution.PAL_576p;
+        resolution = Resolution.PAL_576;
     }//GEN-LAST:event_jRadioButton576pActionPerformed
 
     private void jRadioButton720pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton720pActionPerformed
-        resolution = Resolution.HD_720p;
+        resolution = Resolution.HD_720;
     }//GEN-LAST:event_jRadioButton720pActionPerformed
 
     private void jRadioButton1080pActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1080pActionPerformed
-        resolution = Resolution.HD_1080p;
+        resolution = Resolution.HD_1080;
     }//GEN-LAST:event_jRadioButton1080pActionPerformed
 
     /**

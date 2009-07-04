@@ -23,5 +23,5 @@
 package name.connolly.david.pgs;
 
 public enum Resolution {
-	NTSC_480p, PAL_576p, HD_720p, HD_1080p;
+	NTSC_480, PAL_576, HD_720, HD_1080;
 }

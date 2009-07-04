@@ -76,19 +76,19 @@ public class RenderRunnable implements Runnable {
                 quantizeThreadCount, quantizePending, progress), "Encoder").start();
 
         switch (resolution) {
-            case NTSC_480p:
+            case NTSC_480:
                 x = 720;
                 y = 480;
                 break;
-            case PAL_576p:
+            case PAL_576:
                 x = 720;
                 y = 576;
                 break;
-            case HD_720p:
+            case HD_720:
                 x = 1280;
                 y = 720;
                 break;
-            case HD_1080p:
+            case HD_1080:
             default:
                 x = 1920;
                 y = 1080;

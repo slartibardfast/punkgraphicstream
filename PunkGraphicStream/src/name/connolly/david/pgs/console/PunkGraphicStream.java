@@ -28,71 +28,84 @@ import name.connolly.david.pgs.util.ProgressSink;
 
 public class PunkGraphicStream {
 
-	public static void main(final String[] args) {
-		final String input;
-		String output = "default.ass";
-		FrameRate frameRate = FrameRate.FILM;
-		System.setProperty("java.awt.headless", "true");
+    public static void main(final String[] args) {
+        final String input;
+        String output = "default.ass";
+        FrameRate frameRate = FrameRate.FILM;
+        Resolution resolution = Resolution.HD_1080;
+        
+        System.setProperty("java.awt.headless", "true");
 
-		if (args.length != 2) {
-			printUsageAndQuit();
-		}
+        if (args.length != 2) {
+            printUsageAndQuit();
+        }
 
-		input = args[0];
+        input = args[0];
 
-		try {
-			frameRate = FrameRate.valueOf(args[1].toUpperCase());
-		} catch (final IllegalArgumentException e) {
-			printUsageAndQuit();
-		}
+        try {
+            frameRate = FrameRate.valueOf(args[1].toUpperCase());
+        } catch (final IllegalArgumentException e) {
+            printUsageAndQuit();
+        }
 
-		if (input.length() > 5) {
-			output = input.substring(0, input.length() - 4) + ".sup";
-		} else {
-			printUsageAndQuit();
-		}
+        try {
+            resolution = Resolution.valueOf(args[2].toUpperCase());
+        } catch (final IllegalArgumentException e) {
+            printUsageAndQuit();
+        }
 
-		new Thread(new RenderRunnable(input, output, frameRate,
-				Resolution.HD_1080p, new ProgressSink() {
-					public void progress(int percentage, String message) {
-						System.out.println(message);
-					}
+        if (input.length() > 5) {
+            output = input.substring(0, input.length() - 4) + ".sup";
+        } else {
+            printUsageAndQuit();
+        }
 
-					public void done() {
-						System.out.println("Encode of " + input + " Done");
-					}
+        new Thread(new RenderRunnable(input, output, frameRate,
+                resolution, new ProgressSink() {
 
-					public void fail(String message) {
-						System.out.println("Encode of " + input + " Failed - "
-								+ message);
-					}
+            public void progress(int percentage, String message) {
+                System.out.println(message);
+            }
 
-                    public void renderMessage(String message) {
-                        System.out.println(message);
-                    }
-				})).start();
-	}
+            public void done() {
+                System.out.println("Encode of " + input + " Done");
+            }
 
-	private static void printUsageAndQuit() {
-		System.out.println("Usage: ");
-		System.out.println("java -jar PunkGraphicStream.jar filename.ass fps");
-		System.out.println();
-		System.out
-				.println("fps = [film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc]");
+            public void fail(String message) {
+                System.out.println("Encode of " + input + " Failed - " + message);
+            }
 
-		printLicence();
+            public void renderMessage(String message) {
+                System.out.println(message);
+            }
+        })).start();
+    }
 
-		System.exit(0);
-	}
+    private static void printUsageAndQuit() {
+        System.out.println("Usage: ");
+        System.out.println("java -jar PunkGraphicStream.jar filename.ass fps resolution");
+        System.out.println();
+        System.out.println("fps = [film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc]");
+        System.out.println("resolution = [ntsc_480, pal_576, hd_720, hd_1080]");
 
-	private static void printLicence() {
-		System.out.println("PunkGraphicStream 0.2");
-		System.out
-				.println("Copyright 2008 David Connolly. All rights reserved.");
-		System.out.println();
-		System.out
-				.println("This is free software; see sources for copying conditions and credits of dependencies.");
-		System.out
-				.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE");
-	}
+        printLicence();
+
+        System.exit(0);
+    }
+
+    private static void printLicence() {
+        System.out.println("PunkGraphicStream 0.6");
+        System.out.println("Copyright 2009 David Connolly. All rights reserved.");
+        System.out.println();
+        System.out.println("This is free software; see sources for copying conditions and credits of dependencies.");
+        System.out.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE");
+        System.out.println();
+        System.out.println("Portions of this software contain:");
+        System.out.println("NeuQuant Neural-Net Quantization Algorithm");
+        System.out.println("Copyright (c) 1994 Anthony Dekker");
+        System.out.println("NEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994.");
+        System.out.println("See \"Kohonen neural networks for optimal colour quantization\" in \"Network: Computation in Neural Systems\" Vol. 5 (1994) pp 351-367. for a discussion of the algorithm.");
+        System.out.println();
+        System.out.println("See also: http://www.acm.org/~dekker/NEUQUANT.HTML");
+    }
 }
