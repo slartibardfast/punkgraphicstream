@@ -23,6 +23,7 @@ package name.connolly.david.pgs.concurrency;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
@@ -100,13 +101,16 @@ public class RenderRunnable implements Runnable {
         try {
             renderer.init(progress);
 
-            File file = new File(inputFilename);
+            File file = new File(inputFilename).getCanonicalFile();
             
-            renderer.openSubtitle(file.getParent(), inputFilename, x, y);
+            renderer.openSubtitle(file.getParent(), file.getAbsolutePath(), x, y);
 
             processTimecodes();
 
             renderTimecodes();
+        } catch (IOException ex) {
+            progress.fail(ex.getMessage());
+            Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (final RenderException ex) {
             progress.fail(ex.getMessage());
             Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE,

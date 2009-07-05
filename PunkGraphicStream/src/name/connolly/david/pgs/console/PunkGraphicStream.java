@@ -36,7 +36,7 @@ public class PunkGraphicStream {
         
         System.setProperty("java.awt.headless", "true");
 
-        if (args.length != 2) {
+        if (args.length != 3) {
             printUsageAndQuit();
         }
 
