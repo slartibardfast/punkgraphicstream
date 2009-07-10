@@ -19,15 +19,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs.util;
 
 public interface ProgressSink {
-	void progress(int percentage, String message);
+    void progress(int percentage, String message);
 
     void renderMessage(String message);
-    
-	void fail(String message);
 
-	void done();
+    void fail(String message);
+
+    void done();
 }

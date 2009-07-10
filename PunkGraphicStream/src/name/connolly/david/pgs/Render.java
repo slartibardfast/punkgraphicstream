@@ -25,9 +25,11 @@ import java.awt.image.BufferedImage;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public enum Render {
+
     INSTANCE;
     private boolean loaded = false;
     private ProgressSink progress;
+    private boolean abort = false;
 
     public void init(ProgressSink progress) throws RenderException {
         if (!loaded) {
@@ -38,10 +40,15 @@ public enum Render {
                 throw new RenderException(e);
             }
         }
-        
+
         this.progress = progress;
     }
-    
+
+    public static void abort() {
+        Render render = Render.INSTANCE;
+        render.abort = true;
+    }
+
     public void renderMessage(String message) {
         progress.renderMessage(message);
     }
@@ -57,6 +64,10 @@ public enum Render {
 
     public native Timecode getEventTimecode(int eventIndex)
             throws RenderException;
+
+    public boolean isRunning() {
+        return !abort;
+    }
 
     public native void render(SubtitleEvent event, BufferedImage image, long timecode)
             throws RenderException;

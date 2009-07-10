@@ -32,7 +32,6 @@ import name.connolly.david.pgs.color.ColorTable;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class SupGenerator {
-
     final FrameRate fps;
     private int fpsCode;
     private final OutputStream os;
@@ -81,55 +80,25 @@ public class SupGenerator {
 
     public void addEvent(SubtitleEvent event) throws IOException,
             InterruptedException {
-
         final BigInteger start;
         final BigInteger end;
-        LinkedHashSet<BufferedImage> images = new LinkedHashSet<BufferedImage>();
-        LinkedHashSet<RleBitmap> bitmaps = new LinkedHashSet<RleBitmap>();
-        boolean valid = false;
 
-        images.add(event.getImage());
+        BufferedImage image = event.getImage();
+        try {
+            RleBitmap bitmap = new RleBitmap(image);
 
-        while (!valid) {
-            try {
-                int y = event.getOffsetY();
-
-                for (BufferedImage image : images) {
-                    RleBitmap bitmap = new RleBitmap(image);
-                    bitmap.setHeight(image.getHeight());
-                    bitmap.setWidth(image.getWidth());
-                    bitmap.setX(event.getOffsetX());
-                    bitmap.setY(y);
-                    bitmaps.add(bitmap);
-                    y = +bitmap.getHeight();
-                }
+            start = event.getTimecode().getStartTicks();
+            end = event.getTimecode().getEndTicks();
 
 
-                valid = true;
-            } catch (BitmapOversizeException e) {
-                // Split images in two and encode (will fail at one line in height)
-                LinkedHashSet<BufferedImage> splitImages = new LinkedHashSet<BufferedImage>();
-
-                for (BufferedImage image : images) {
-                    progress.renderMessage("[pgs] Spliting image from : " + image.getWidth() + " " + image.getHeight() + "\n");
-                    progress.renderMessage("[pgs] \t\tto: 0 0 " + image.getWidth() + " " + image.getHeight() / 2 + "\n");
-                    progress.renderMessage("[pgs] \t\tand: 0 " + image.getHeight() / 2 + " " + image.getWidth() + " " + (image.getHeight() - image.getHeight() / 2) + "\n");
-                    splitImages.add(image.getSubimage(0, 0, image.getWidth(), image.getHeight() / 2));
-                    splitImages.add(image.getSubimage(0, image.getHeight() / 2, image.getWidth(), (image.getHeight() - image.getHeight() / 2)));
-                }
-
-                images = splitImages;
-                bitmaps.clear();
+            if (start.compareTo(preloadHeader) >= 0) {
+                writeSubpicture(end, start, bitmap);
+            } else {
+                writeNoPreloadSubpicture(end, start, bitmap);
             }
-        }
-        start = event.getTimecode().getStartTicks();
-        end = event.getTimecode().getEndTicks();
+        } catch (BitmapOversizeException e) {
+            progress.fail("Subtitle event too large after compression" + event.toString());
 
-
-        if (start.compareTo(preloadHeader) >= 0) {
-            writeSubpicture(end, start, bitmaps);
-        } else {
-            writeSubpictureNoPreload(end, start, bitmaps);
         }
 
     }
@@ -201,18 +170,15 @@ public class SupGenerator {
         }
     }
 
-    private void writeSubpicture(final BigInteger end, BigInteger start, final LinkedHashSet<RleBitmap> bitmaps) throws IOException {
-        Iterator<RleBitmap> i = bitmaps.iterator();
+    private void writeSubpicture(final BigInteger end, BigInteger start, final RleBitmap bitmap) throws IOException {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int x = bitmap.getX();
+        int y = bitmap.getY();
+        
         timeHeader(start, start.subtract(preloadHeader));
-        subpictureHeader(resolution.getX(), resolution.getY(), 0, 0, bitmaps.size());
-
-        RleBitmap bitmap = i.next();
+        subpictureHeader(resolution.getX(), resolution.getY(), 0, 0);
         ColorTable colorTable = bitmap.getColorTable();
-        int width, height, x, y;
-        width = bitmap.getWidth();
-        height = bitmap.getHeight();
-        x = bitmap.getX();
-        y = bitmap.getY();
         timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
         bitmapHeader(width, height, x, y);
         timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
@@ -229,19 +195,15 @@ public class SupGenerator {
     }
 
     // TODO: Test of multiplexed subtitles before 64.8ms
-    private void writeSubpictureNoPreload(final BigInteger end, BigInteger start, final LinkedHashSet<RleBitmap> bitmaps) throws IOException {
+    private void writeNoPreloadSubpicture(final BigInteger end, BigInteger start, RleBitmap bitmap) throws IOException {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int x = bitmap.getX();
+        int y = bitmap.getY();
+        
         timeHeader(start, start);
-        subpictureHeader(resolution.getX(), resolution.getY(), 0, 0, bitmaps.size());
-        Iterator<RleBitmap> i = bitmaps.iterator();
-
-        RleBitmap bitmap = i.next();
+        subpictureHeader(resolution.getX(), resolution.getY(), 0, 0);
         ColorTable colorTable = bitmap.getColorTable();
-        int width, height, x, y;
-        width = bitmap.getWidth();
-        height = bitmap.getHeight();
-        x = bitmap.getX();
-        y = bitmap.getY();
-
         timeHeader(start, start);
         bitmapHeader(width, height, x, y);
         timeHeader(start, BigInteger.ZERO);
@@ -305,7 +267,7 @@ public class SupGenerator {
     }
 
     private void subpictureHeader(final int width, final int height,
-            final int widthOffset, final int heightOffset, final int numberBitmaps) throws IOException {
+            final int widthOffset, final int heightOffset) throws IOException {
         // width:1920, height:1080 sequenceNumber:0
         // 16 00 13 07 80 04 38 10 00 00 80 00 00 01 00 00 00 00 00 00 00 00
         os.write(0x16);

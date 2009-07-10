@@ -102,7 +102,7 @@ public class RenderRunnable implements Runnable {
             renderer.init(progress);
 
             File file = new File(inputFilename).getCanonicalFile();
-            
+
             renderer.openSubtitle(file.getParent(), file.getAbsolutePath(), x, y);
 
             processTimecodes();
@@ -198,6 +198,12 @@ public class RenderRunnable implements Runnable {
 
                 event.setImage(image);
                 renderer.render(event, image, event.getRenderTimecode());
+
+                if (!renderer.isRunning()) {
+                    // End the thread, no more images will be passed further on.
+                    return;
+                }
+                
                 quantizeQueue.put(event);
                 eventIndex++;
                 event = nextEvent;

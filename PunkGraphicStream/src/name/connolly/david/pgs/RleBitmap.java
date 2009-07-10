@@ -132,6 +132,10 @@ public class RleBitmap {
 
             yIndex++;
         }
+
+        if (size() > 0xFFFFFF) {
+            throw new BitmapOversizeException();
+        }
     }
 
     public ColorTable getColorTable() {

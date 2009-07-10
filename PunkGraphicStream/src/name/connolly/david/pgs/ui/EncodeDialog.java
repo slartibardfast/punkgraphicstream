@@ -22,6 +22,7 @@
 package name.connolly.david.pgs.ui;
 
 import javax.swing.SwingUtilities;
+import name.connolly.david.pgs.Render;
 import name.connolly.david.pgs.util.ProgressSink;
 
 /**
@@ -219,6 +220,7 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
         Runnable updateDisplay = new Runnable() {
 
             public void run() {
+                Render.abort();
                 jProgressBarEncode.setValue(0);
                 jLabelEncodeMessage.setText("Encode failed - " + message);
                 okButton.setEnabled(true);
