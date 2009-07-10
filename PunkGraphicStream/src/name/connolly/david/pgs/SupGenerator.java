@@ -32,6 +32,7 @@ import name.connolly.david.pgs.color.ColorTable;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class SupGenerator {
+
     final FrameRate fps;
     private int fpsCode;
     private final OutputStream os;
@@ -85,7 +86,7 @@ public class SupGenerator {
 
         BufferedImage image = event.getImage();
         try {
-            RleBitmap bitmap = new RleBitmap(image);
+            RleBitmap bitmap = new RleBitmap(image, event.getOffsetX(), event.getOffsetY());
 
             start = event.getTimecode().getStartTicks();
             end = event.getTimecode().getEndTicks();
@@ -115,7 +116,7 @@ public class SupGenerator {
         }
 
         timeHeader(start.subtract(preload), start.subtract(preload));
-        
+
         os.write(0x15);
         os.write(size >> 8 & 0xFF);
         os.write(size & 0xFF);
@@ -173,9 +174,9 @@ public class SupGenerator {
     private void writeSubpicture(final BigInteger end, BigInteger start, final RleBitmap bitmap) throws IOException {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        int x = bitmap.getX();
-        int y = bitmap.getY();
-        
+        int x = bitmap.getOffsetX();
+        int y = bitmap.getOffsetY();
+
         timeHeader(start, start.subtract(preloadHeader));
         subpictureHeader(resolution.getX(), resolution.getY(), 0, 0);
         ColorTable colorTable = bitmap.getColorTable();
@@ -194,13 +195,13 @@ public class SupGenerator {
         trailer();
     }
 
-    // TODO: Test of multiplexed subtitles before 64.8ms
+    // TODO: Test of multiplexed subtitles before 64.8ms, on non-PS3 devices.
     private void writeNoPreloadSubpicture(final BigInteger end, BigInteger start, RleBitmap bitmap) throws IOException {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        int x = bitmap.getX();
-        int y = bitmap.getY();
-        
+        int x = bitmap.getOffsetX();
+        int y = bitmap.getOffsetY();
+
         timeHeader(start, start);
         subpictureHeader(resolution.getX(), resolution.getY(), 0, 0);
         ColorTable colorTable = bitmap.getColorTable();

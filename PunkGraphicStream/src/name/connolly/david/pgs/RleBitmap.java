@@ -30,10 +30,9 @@ public class RleBitmap {
     private ColorTable table;
     private final BufferedImage image;
     private ByteArrayOutputStream rle;
-    private int x;
-    private int y;
-    private int width;
-
+    private int offsetX;
+    private int offsetY;
+    
     public byte[] getRle() {
         return rle.toByteArray();
     }
@@ -43,40 +42,26 @@ public class RleBitmap {
     }
     
     public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+        return image.getHeight();
     }
 
     public int getWidth() {
-        return width;
+        return image.getWidth();
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    public int getOffsetX() {
+        return offsetX;
     }
 
-    public int getX() {
-        return x;
+    public int getOffsetY() {
+        return offsetY;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-    int height;
-
-    public RleBitmap(final BufferedImage image) throws BitmapOversizeException {
+    public RleBitmap(final BufferedImage image, int offsetX, int offsetY) throws BitmapOversizeException {
         this.image = image;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        
         encode();
     }
 
