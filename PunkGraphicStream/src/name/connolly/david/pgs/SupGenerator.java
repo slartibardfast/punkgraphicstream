@@ -104,7 +104,7 @@ public class SupGenerator {
 
     }
 
-    public void bitmapPacket(final RleBitmap bitmap, final BigInteger start, final BigInteger preload) throws IOException {
+    public void bitmapPacket(final RleBitmap bitmap, final BigInteger from, final BigInteger to) throws IOException {
         BufferedImage image = bitmap.getImage();
         byte[] rleBytes = bitmap.getRle();
         int size;
@@ -115,7 +115,7 @@ public class SupGenerator {
             size = bitmap.size();
         }
 
-        timeHeader(start.subtract(preload), start.subtract(preload));
+        timeHeader(from, to);
 
         os.write(0x15);
         os.write(size >> 8 & 0xFF);
@@ -145,7 +145,7 @@ public class SupGenerator {
             biggestWrite = 0xFFFF - 4;
 
             while ((offset + biggestWrite) < rleBytes.length) {
-                timeHeader(start.subtract(preload), start.subtract(preload));
+                timeHeader(from, to);
 
                 os.write(0x15);
                 os.write(0xFF);
@@ -159,7 +159,7 @@ public class SupGenerator {
             }
 
             biggestWrite = rleBytes.length - offset;
-            timeHeader(start.subtract(preload), start.subtract(preload));
+            timeHeader(from, to);
             os.write(0x15);
             os.write(((biggestWrite + 4) >> 8) & 0xFF);
             os.write((biggestWrite + 4) & 0xFF);
@@ -176,21 +176,21 @@ public class SupGenerator {
         int height = bitmap.getHeight();
         int x = bitmap.getOffsetX();
         int y = bitmap.getOffsetY();
-        System.out.println("width: " + width + " height: " + height + " x: " + x + " y: " + y);
+
         timeHeader(start, start.subtract(preloadHeader));
         subpictureHeader(resolution.getX(), resolution.getY(), x, y);
         ColorTable colorTable = bitmap.getColorTable();
         timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
-        windowsHeader(width,height, x, y);
+        windowsHeader(width, height, x, y);
         timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
         colorTable.writeIndex(os);
-        bitmapPacket(bitmap, start, preloadHeader);
+        bitmapPacket(bitmap, start.subtract(preloadBitmap), start.subtract(preloadHeader));
         timeHeader(start.subtract(preloadBitmap), BigInteger.ZERO);
         trailer();
         timeHeader(end, end.subtract(preloadMs));
         clearSubpictureHeader(resolution.getX(), resolution.getY(), x, y);
         timeHeader(end, BigInteger.ZERO);
-        windowsHeader(width,height, x, y);
+        windowsHeader(width, height, x, y);
         timeHeader(end, BigInteger.ZERO);
         trailer();
     }
@@ -241,13 +241,11 @@ public class SupGenerator {
     private void clearSubpictureHeader(final int width, final int height,
             final int x, final int y)
             throws IOException {
-        // width:1920, height:1080 sequenceNumber:1
-        // 16 00 0B 07 80 04 38 10 00 01 00 00 00 00
         os.write(0x16);
 
         // Size of Header
         os.write(0x00);
-        os.write(0x13);
+        os.write(0x0B);
 
         // Size of Picture
         os.write(width >> 8 & 0xFF);
@@ -257,18 +255,10 @@ public class SupGenerator {
         os.write(fpsCode); // ??
         os.write(subpictureCount >> 8 & 0xFF);
         os.write(subpictureCount & 0xFF);
-        os.write(0x80);
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00); // Don't Clear Sub-Picture
         os.write(0x00);
         os.write(0x00);
         os.write(0x00);
         os.write(0x00);
-        os.write(x >> 8 & 0xFF); // TODO: Confirm Works
-        os.write(x & 0xFF); // TODO: Confirm Works
-        os.write(y >> 8 & 0xFF);
-        os.write(y & 0xFF);
 
         subpictureCount++;
     }
@@ -301,8 +291,7 @@ public class SupGenerator {
         os.write(x & 0xFF); // TODO: Confirm Works
         os.write(y >> 8 & 0xFF);
         os.write(y & 0xFF);
-        
-        
+
         subpictureCount++;
     }
 
