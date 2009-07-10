@@ -142,7 +142,7 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
 
         if (width * height < minimumSize) {
             // rare case that would break quantizer
-            // TODO: tweak the size of the clipping upwards, instead of shipping
+            // TODO: tweak the size of the clipping upwards, instead of skipping
             return;
         }
 
