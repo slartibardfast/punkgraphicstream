@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.connolly.david.pgs.FrameRate;
+import name.connolly.david.pgs.Resolution;
 import name.connolly.david.pgs.SubtitleEvent;
 import name.connolly.david.pgs.SupGenerator;
 import name.connolly.david.pgs.util.ProgressSink;
@@ -40,17 +41,19 @@ public class EncodeRunnable implements Runnable {
     private final EncodeQueue encodeQueue;
     private final String filename;
     private final FrameRate fps;
+    private final Resolution resolution;
     private final int quantizeThreadCount;
     private final Semaphore quantizePending;
     private final ProgressSink progress;
 
     public EncodeRunnable(final EncodeQueue encodeQueue,
-            final String filename, final FrameRate fps,
+            final String filename, final FrameRate fps, final Resolution resolution,
             final int quantizeThreadCount, final Semaphore quantizePending,
             final ProgressSink progress) {
         this.encodeQueue = encodeQueue;
         this.filename = filename;
         this.fps = fps;
+        this.resolution = resolution;
         this.quantizeThreadCount = quantizeThreadCount;
         this.quantizePending = quantizePending;
         this.progress = progress;
@@ -67,7 +70,7 @@ public class EncodeRunnable implements Runnable {
             boolean quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
 
             os = new BufferedOutputStream(new FileOutputStream(filename));
-            packet = new SupGenerator(os, fps);
+            packet = new SupGenerator(os, fps, resolution, progress);
 
             // Continue while at least one quantizeThread is
             // running or queue is not empty.
@@ -80,7 +83,7 @@ public class EncodeRunnable implements Runnable {
                 }
 
                 if (event != null) {
-                    packet.addBitmap(event);
+                    packet.addEvent(event);
 
                     encodeIndex++;
                 }

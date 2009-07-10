@@ -19,162 +19,185 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import name.connolly.david.pgs.color.ColorTable;
-import name.connolly.david.pgs.concurrency.EncodeRunnable;
 
 public class RleBitmap {
-	private final BufferedImage image;
-	ByteArrayOutputStream rle;
+    private ColorTable table;
+    private final BufferedImage image;
+    private ByteArrayOutputStream rle;
+    private int x;
+    private int y;
+    private int width;
 
-	public RleBitmap(final BufferedImage image) {
-		this.image = image;
-		rle = new ByteArrayOutputStream();
-	}
+    public byte[] getRle() {
+        return rle.toByteArray();
+    }
 
-	public ColorTable encode() {
-		final ColorTable table = new ColorTable();
-		final int x = image.getWidth();
-		final int y = image.getHeight();
-		int xIndex = 0;
-		int yIndex = 0;
-		int count = 0;
-		int position = 0;
+    public BufferedImage getImage() {
+        return image;
+    }
+    
+    public int getHeight() {
+        return height;
+    }
 
-		Integer pixel = null; // ARGB 32-Bit -> Need null :)
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
-		while (yIndex < y) {
-			xIndex = 0;
+    public int getWidth() {
+        return width;
+    }
 
-			while (xIndex < x) {
-				if (new Integer(image.getRGB(xIndex, yIndex)).equals(pixel)) {
-					count++;
-				} else if (pixel == null) {
-					pixel = image.getRGB(xIndex, yIndex);
-					position = table.getColorPosition(pixel);
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-					if (position == -1) {
-						position = table.addColor(pixel);
-					}
+    public int getX() {
+        return x;
+    }
 
-					count = 1;
-				} else {
-					// write out old pixel
-					writeRleCommand(rle, count, position, yIndex);
+    public void setX(int x) {
+        this.x = x;
+    }
 
-					// new pixel
-					pixel = image.getRGB(xIndex, yIndex);
-					position = table.getColorPosition(pixel);
+    public int getY() {
+        return y;
+    }
 
-					if (position == -1) {
-						position = table.addColor(pixel);
-					}
-					count = 1;
-				}
+    public void setY(int y) {
+        this.y = y;
+    }
+    int height;
 
-				xIndex++;
-			}
+    public RleBitmap(final BufferedImage image) throws BitmapOversizeException {
+        this.image = image;
+        encode();
+    }
 
-			writeRleCommand(rle, count, position, yIndex);
+    private void encode() throws BitmapOversizeException {
+        rle = new ByteArrayOutputStream();
+        table = new ColorTable();
+        final int width = image.getWidth();
+        final int height = image.getHeight();
+        int xIndex = 0;
+        int yIndex = 0;
+        int count = 0;
+        int position = 0;
 
-			pixel = null;
-			rle.write(0x00);
-			rle.write(0x00);
+        Integer pixel = null; // ARGB 32-Bit -> Need null :)
 
-			yIndex++;
-		}
+        while (yIndex < height) {
+            xIndex = 0;
 
-		return table;
-	}
+            while (xIndex < width) {
+                if (new Integer(image.getRGB(xIndex, yIndex)).equals(pixel)) {
+                    count++;
+                } else if (pixel == null) {
+                    pixel = image.getRGB(xIndex, yIndex);
+                    position = table.getColorPosition(pixel);
 
-	public void writeBitmap(final OutputStream baos) throws IOException {
-		int size = rle.size() + 11;
+                    if (position == -1) {
+                        position = table.addColor(pixel);
+                    }
 
-		baos.write(0x15);
-		baos.write(size >> 8 & 0xFF);
-		baos.write((size & 0xFF));
-		baos.write(0x00);
-		baos.write(0x00);
-		baos.write(0x00);
-		baos.write(0xC0);
-		baos.write(0x00);
-		size -= 7;
-		baos.write(size >> 8 & 0xFF);
-		baos.write((size & 0xFF));
-		baos.write(image.getWidth() >> 8 & 0xFF);
-		baos.write(image.getWidth() & 0xFF);
-		baos.write(image.getHeight() >> 8 & 0xFF);
-		baos.write(image.getHeight() & 0xFF);
+                    count = 1;
+                } else {
+                    // write out old pixel
+                    writeRleCommand(rle, count, position, yIndex);
 
-		try {
-			baos.write(rle.toByteArray());
-		} catch (final IOException ex) {
-			Logger.getLogger(EncodeRunnable.class.getName()).log(Level.SEVERE,
-					null, ex);
-		}
-	}
+                    // new pixel
+                    pixel = image.getRGB(xIndex, yIndex);
+                    position = table.getColorPosition(pixel);
 
-	/**
-	 * Format discussed on http://forum.doom9.org/showthread.php?t=124105
-	 */
-	private void writeRleCommand(final ByteArrayOutputStream rle,
-			final int count, final int position, final int y) {
-		final boolean color = position != 0; // if 0 color == 0 or end of line
-		// signal.
-		// else nonzero color
-		final boolean extended = count > 63;
-		// ByteArrayOutputStream rle = new ByteArrayOutputStream();
+                    if (position == -1) {
+                        position = table.addColor(pixel);
+                    }
+                    count = 1;
+                }
 
-		// System.out.println("yIndex: " + yIndex + " color: " + color +
-		// " extended: "
-		// + extended + " pixel count: " + count + " index Position: "
-		// + position);
+                xIndex++;
+            }
 
-		if (count < 3 && position != 0) {
-			for (int i = 0; i < count; i++) {
-				rle.write(position);
-			}
-		} else {
-			rle.write(0);
+            writeRleCommand(rle, count, position, yIndex);
 
-			if (extended) {
-				if (color) {
-					int b = 0xC0;
-					b |= count >> 8 & 0x3F;
-					rle.write(b);
-					b = count & 0xFF;
-					rle.write(b);
-				} else {
-					int b = 0x40;
-					b |= count >> 8 & 0x3F;
-					rle.write(b);
-					b = count & 0xFF;
-					rle.write(b);
-				}
-			} else {
-				if (color) {
-					int b = 0x80;
-					b |= count & 0x3F;
-					rle.write(b);
-				} else {
-					int b = 0;
-					b |= count & 0x3F;
-					rle.write(b);
-				}
-			}
+            pixel = null;
+            rle.write(0x00);
+            rle.write(0x00);
 
-			if (color) {
-				rle.write(position);
-			}
-		}
-	}
+            yIndex++;
+        }
+    }
+
+    public ColorTable getColorTable() {
+        return table;
+    }
+
+    public int size() {
+        return rle.size() + 0xB;
+    }
+
+    public int objectSize() {
+        return rle.size() + 4;
+    }
+
+    /**
+     * Format discussed on http://forum.doom9.org/showthread.php?t=124105
+     */
+    private void writeRleCommand(final ByteArrayOutputStream rle,
+            final int count, final int position, final int y) {
+        final boolean color = position != 0; // if 0 color == 0 or end of line
+        // signal.
+        // else nonzero color
+        final boolean extended = count > 63;
+        // ByteArrayOutputStream rle = new ByteArrayOutputStream();
+
+        // System.out.println("yIndex: " + yIndex + " color: " + color +
+        // " extended: "
+        // + extended + " pixel count: " + count + " index Position: "
+        // + position);
+
+        if (count < 3 && position != 0) {
+            for (int i = 0; i < count; i++) {
+                rle.write(position);
+            }
+        } else {
+            rle.write(0);
+
+            if (extended) {
+                if (color) {
+                    int b = 0xC0;
+                    b |= count >> 8 & 0x3F;
+                    rle.write(b);
+                    b = count & 0xFF;
+                    rle.write(b);
+                } else {
+                    int b = 0x40;
+                    b |= count >> 8 & 0x3F;
+                    rle.write(b);
+                    b = count & 0xFF;
+                    rle.write(b);
+                }
+            } else {
+                if (color) {
+                    int b = 0x80;
+                    b |= count & 0x3F;
+                    rle.write(b);
+                } else {
+                    int b = 0;
+                    b |= count & 0x3F;
+                    rle.write(b);
+                }
+            }
+
+            if (color) {
+                rle.write(position);
+            }
+        }
+    }
 }

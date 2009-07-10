@@ -73,7 +73,7 @@ public class RenderRunnable implements Runnable {
                     renderPending, quantizePending, progress), "Quantizer-" + cpu).start();
         }
 
-        new Thread(new EncodeRunnable(encodeQueue, outputFilename, fps,
+        new Thread(new EncodeRunnable(encodeQueue, outputFilename, fps, resolution,
                 quantizeThreadCount, quantizePending, progress), "Encoder").start();
 
         switch (resolution) {

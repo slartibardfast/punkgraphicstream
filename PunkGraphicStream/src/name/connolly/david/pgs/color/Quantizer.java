@@ -19,7 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs.color;
 
 import java.awt.image.BufferedImage;
@@ -28,29 +27,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Quantizer {
-	public static BufferedImage indexImage(BufferedImage image) {
-		NeuQuant nq;
-        
-		try {
-			final int x = image.getWidth();
-			final int y = image.getHeight();
-			nq = new NeuQuant(image, x, y);
-			nq.init();
-			int argb;
 
-			for (int yIndex = 0; yIndex < y; yIndex++) {
-				for (int xIndex = 0; xIndex < x; xIndex++) {
-					argb = image.getRGB(xIndex, yIndex);
-					image.setRGB(xIndex, yIndex, nq.convert(argb));
-				}
-			}
-		} catch (final IOException ex) {
-			// throw new RuntimeException("Quantizer failed" + e.getMessage());
-			// // Should never happen so no RuntimeException
-			Logger.getLogger(Quantizer.class.getName()).log(Level.SEVERE,
-					null, ex);
-		}
+    public static BufferedImage indexImage(BufferedImage image) {
+        return indexImage(image, 256);
+    }
 
-		return image;
-	}
+    public static BufferedImage indexImage(BufferedImage image, int numColors) {
+        NeuQuant nq;
+
+        try {
+            final int x = image.getWidth();
+            final int y = image.getHeight();
+            nq = new NeuQuant(image, x, y, numColors);
+            nq.init();
+            int argb;
+
+            for (int yIndex = 0; yIndex < y; yIndex++) {
+                for (int xIndex = 0; xIndex < x; xIndex++) {
+                    argb = image.getRGB(xIndex, yIndex);
+                    image.setRGB(xIndex, yIndex, nq.convert(argb));
+                }
+            }
+        } catch (final IOException ex) {
+            // throw new RuntimeException("Quantizer failed" + e.getMessage());
+            // // Should never happen so no RuntimeException
+            Logger.getLogger(Quantizer.class.getName()).log(Level.SEVERE,
+                    null, ex);
+        }
+
+        return image;
+    }
 }

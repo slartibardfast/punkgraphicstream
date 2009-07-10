@@ -41,31 +41,31 @@ public class NeuQuant {
 
     public static final int ncycles = 100;
     // no. of learning cycles
-    public static final int netsize = 256;
+    private int netsize = 256;
     // number of colours used
-    public static final int specials = 3;
+    private final int specials = 3;
     // number of reserved colours used
-    public static final int bgColour = specials - 1;
+    private final int bgColour = specials - 1;
     // reserved background
     // colour
-    public static final int cutnetsize = netsize - specials;
-    public static final int maxnetpos = netsize - 1;
-    public static final int initrad = netsize / 8;
+    private final int cutnetsize = netsize - specials;
+    private final int maxnetpos = netsize - 1;
+    private final int initrad = netsize / 8;
     // for 256 cols, radius
     // starts at 32
-    public static final int radiusbiasshift = 6;
-    public static final int radiusbias = 1 << radiusbiasshift;
-    public static final int initBiasRadius = initrad * radiusbias;
-    public static final int radiusdec = 30;
+    private final int radiusbiasshift = 6;
+    private final int radiusbias = 1 << radiusbiasshift;
+    private final int initBiasRadius = initrad * radiusbias;
+    private final int radiusdec = 30;
     // factor of 1/30 each cycle
-    public static final int alphabiasshift = 10;
+    private final int alphabiasshift = 10;
     // alpha starts at 1
-    public static final int initalpha = 1 << alphabiasshift;
+    private final int initalpha = 1 << alphabiasshift;
     // biased by 10
     // bits
-    public static final double gamma = 1024.0;
-    public static final double beta = 1.0 / 1024.0;
-    public static final double betagamma = beta * gamma;
+    private final double gamma = 1024.0;
+    private final double beta = 1.0 / 1024.0;
+    private final double betagamma = beta * gamma;
     private final double[][] network = new double[netsize][4];
     // the
     // network
@@ -91,12 +91,13 @@ public class NeuQuant {
     protected int[] pixels = null;
     private int samplefac = 0;
 
-    public NeuQuant(Image im, int w, int h) throws IOException {
+    public NeuQuant(Image im, int w, int h, int numColors) throws IOException {
         this(1);
+        netsize = numColors;
         setPixels(im, w, h);
         setUpArrays();
     }
-
+    
     public NeuQuant(int sample, Image im, int w, int h) throws IOException {
         this(sample);
         setPixels(im, w, h);

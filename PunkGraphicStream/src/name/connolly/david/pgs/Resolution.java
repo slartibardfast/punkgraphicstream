@@ -19,9 +19,36 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs;
 
 public enum Resolution {
-	NTSC_480, PAL_576, HD_720, HD_1080;
+
+    NTSC_480, PAL_576, HD_720, HD_1080;
+
+    public int getX() {
+        switch (this) {
+            case NTSC_480:
+            case PAL_576:
+                return 720;
+            case HD_720:
+                return 1280;
+            case HD_1080:
+            default:
+                return 1920;
+        }
+    }
+
+    public int getY() {
+        switch (this) {
+            case NTSC_480:
+                return 480;
+            case PAL_576:
+                return 576;
+            case HD_720:
+                return 720;
+            case HD_1080:
+            default:
+                return 1080;
+        }
+    }
 }
