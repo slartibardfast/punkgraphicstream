@@ -537,6 +537,8 @@ static int process_events_line(ass_track_t* track, char *str)
 		event = track->events + eid;
 
 		process_event_tail(track, event, str, 0);
+	} else if (!strncmp(str, "Comment:", 8)) {
+		mp_msg(MSGT_ASS, MSGL_V, "Comments don't appear on screen: %s  \n", str);
 	} else {
 		mp_msg(MSGT_ASS, MSGL_V, "Not understood: %s  \n", str);
 	}
