@@ -166,7 +166,7 @@ public class RenderRunnable implements Runnable {
         while (i.hasNext()) {
             SubtitleEvent event = new SubtitleEvent(i.next(), SubtitleType.FIRST);
             percentage = Math.round((float) eventIndex / eventCount * 100f);
-            progress.progress(percentage, "Rendering Event " + eventIndex + " of " + eventCount + " (Estimated)");
+            progress.progress(percentage, "Rendering Event (" + eventIndex + " of " + eventCount + " Estimated)");
             // Render loop: render, check for change, split on change
             while (event != null && !cancelled.get()) {
                 Timecode timecode = event.getTimecode();
@@ -176,7 +176,7 @@ public class RenderRunnable implements Runnable {
                 final BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
                 long detectTimecode = Math.round(timecode.getStart() + fps.milliseconds());
                 boolean changed = false;
-                boolean nextUnreachable = detectTimecode >= timecode.getEnd();
+                boolean nextUnreachable = (detectTimecode + fps.milliseconds()) >= timecode.getEnd();
                 // Prepare for change detect
                 renderer.changeDetect(timecode.getStart());
                 // Change Detect Loop
@@ -189,6 +189,7 @@ public class RenderRunnable implements Runnable {
                         event.setType(SubtitleType.SEQUENCE);
                         timecode = new Timecode(detectTimecode, end);
                         nextEvent = new SubtitleEvent(timecode, SubtitleType.SEQUENCE);
+                        progress.progress(percentage, "Rendering Event with Animation (" + eventIndex + " of " + eventCount + " Estimated)");
 
                         eventCount++;
                     } else if (!nextUnreachable) {
@@ -203,7 +204,7 @@ public class RenderRunnable implements Runnable {
                     // End the thread, no more images will be passed further on.
                     return;
                 }
-                
+
                 quantizeQueue.put(event);
                 eventIndex++;
                 event = nextEvent;

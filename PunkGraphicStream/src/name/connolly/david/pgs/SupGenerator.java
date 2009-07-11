@@ -109,10 +109,10 @@ public class SupGenerator {
         byte[] rleBytes = bitmap.getRle();
         int size;
 
-        if (bitmap.size() > 0xFFFF) {
+        if (bitmap.firstSize() > 0xFFFF) {
             size = 0xFFFF;
         } else {
-            size = bitmap.size();
+            size = bitmap.firstSize();
         }
 
         timeHeader(from, to);
@@ -123,7 +123,7 @@ public class SupGenerator {
         os.write(0x00);
         os.write(0x00); // Object ID
         os.write(0x00); // Version number
-        os.write(0xC0);
+        os.write(0x80); // first in sequence
         size = bitmap.objectSize();
         os.write(size >> 16 & 0xFF);
         os.write(size >> 8 & 0xFF);
@@ -138,11 +138,11 @@ public class SupGenerator {
             } else {
             // Larger subtitle
 
-            int biggestWrite = 0xFFFF - 11;
+            int biggestWrite = 0xFFFF - 0xB;
             int offset = 0;
             os.write(rleBytes, offset, biggestWrite);
             offset += biggestWrite;
-            biggestWrite = 0xFFFF - 4;
+            biggestWrite = 0xFFFF - 0x4;
 
             while ((offset + biggestWrite) < rleBytes.length) {
                 timeHeader(from, to);
@@ -166,7 +166,7 @@ public class SupGenerator {
             os.write(0x00); // Object ID
             os.write(0x00); // Object ID
             os.write(0x00); // Version number
-            os.write(0x00); // append switch
+            os.write(0x40); // last in sequence
             os.write(rleBytes, offset, biggestWrite);
         }
     }
@@ -201,7 +201,7 @@ public class SupGenerator {
         int height = bitmap.getHeight();
         int x = bitmap.getOffsetX();
         int y = bitmap.getOffsetY();
-
+        
         timeHeader(start, start);
         subpictureHeader(resolution.getX(), resolution.getY(), 0, 0);
         ColorTable colorTable = bitmap.getColorTable();
@@ -277,11 +277,11 @@ public class SupGenerator {
         os.write(height >> 8 & 0xFF);
         os.write(height & 0xFF);
         os.write(fpsCode);
-        os.write(subpictureCount >> 8 & 0xFF);
+        os.write(subpictureCount >> 8 & 0xFF); // Number
         os.write(subpictureCount & 0xFF);
-        os.write(0x80);
-        os.write(0x00);
-        os.write(0x00);
+        os.write(0x80); // State
+        os.write(0x00); // Pallette Update Flags
+        os.write(0x00); // Pallette Id ref
         os.write(0x01); // Don't Clear Sub-Picture
         os.write(0x00);
         os.write(0x00);

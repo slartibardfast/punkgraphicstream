@@ -135,7 +135,12 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
         eventCount = 0;
     }
 
+    /*
+     * Pending figuring out the format!
+     */
     public void setClip(int minX, int minY, int maxX, int maxY) {
+        //return;
+        
         int width = maxX - minX;
         int height = maxY - minY;
         int minimumSize = 503;

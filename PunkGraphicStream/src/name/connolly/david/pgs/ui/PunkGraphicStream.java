@@ -124,7 +124,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonFilmNtsc);
-        jRadioButtonFilmNtsc.setText("Film (NTSC) ");
+        jRadioButtonFilmNtsc.setText("23.97 (Film/NTSC) ");
         jRadioButtonFilmNtsc.setToolTipText("24 Frames Per Second");
         jRadioButtonFilmNtsc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,7 +134,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
 
         buttonGroupFrameRate.add(jRadioButtonFilm);
         jRadioButtonFilm.setSelected(true);
-        jRadioButtonFilm.setText("Film");
+        jRadioButtonFilm.setText("24 (Film)");
         jRadioButtonFilm.setToolTipText("23.976 Frames Per Second");
         jRadioButtonFilm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,7 +143,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonPal);
-        jRadioButtonPal.setText("PAL");
+        jRadioButtonPal.setText("25 (PAL)");
         jRadioButtonPal.setToolTipText("25 Frames Per Second");
         jRadioButtonPal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,7 +152,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonNtsc);
-        jRadioButtonNtsc.setText("NTSC");
+        jRadioButtonNtsc.setText("29.97 (NTSC)");
         jRadioButtonNtsc.setToolTipText("29.97 Frames Per Second");
         jRadioButtonNtsc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,7 +161,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonPalHd);
-        jRadioButtonPalHd.setText("PAL HD");
+        jRadioButtonPalHd.setText("50 (PAL HD)");
         jRadioButtonPalHd.setToolTipText("50 Frames Per Second");
         jRadioButtonPalHd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,7 +170,7 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonNtscHd);
-        jRadioButtonNtscHd.setText("NTSC HD");
+        jRadioButtonNtscHd.setText("59.94 (NTSC HD)");
         jRadioButtonNtscHd.setToolTipText("59.94 Frames Per Second");
         jRadioButtonNtscHd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,46 +259,40 @@ public class PunkGraphicStream extends javax.swing.JFrame {
                 .addComponent(jButtonBrowse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonEncode)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelSubtitleFile)
+                .addContainerGap(238, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelFrameRate)
+                .addContainerGap(243, Short.MAX_VALUE))
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextFieldSubtitleFile, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(245, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButtonFilmNtsc)
                     .addComponent(jRadioButtonPal)
-                    .addComponent(jRadioButtonPalHd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButtonFilm)
-                    .addComponent(jRadioButtonNtsc)
-                    .addComponent(jRadioButtonNtscHd))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelSubtitleFile)
-                .addContainerGap(153, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelFrameRate)
-                .addContainerGap(158, Short.MAX_VALUE))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextFieldSubtitleFile, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(160, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButtonPalHd)
                     .addComponent(jRadioButton480p)
                     .addComponent(jRadioButton720p))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton1080p)
                     .addComponent(jRadioButton576p)
-                    .addComponent(jRadioButton1080p))
-                .addContainerGap(20, Short.MAX_VALUE))
+                    .addComponent(jRadioButtonFilm)
+                    .addComponent(jRadioButtonNtsc)
+                    .addComponent(jRadioButtonNtscHd))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jRadioButtonFilm, jRadioButtonFilmNtsc, jRadioButtonNtsc, jRadioButtonNtscHd, jRadioButtonPal, jRadioButtonPalHd});
@@ -344,6 +338,8 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         );
 
         jButtonBrowse.getAccessibleContext().setAccessibleName("jButtonBrowse");
+        jRadioButtonFilmNtsc.getAccessibleContext().setAccessibleDescription("23.976 Frames Per Second");
+        jRadioButtonFilm.getAccessibleContext().setAccessibleDescription("24 Frames Per Second");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

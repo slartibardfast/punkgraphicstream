@@ -73,9 +73,10 @@ public class AboutDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabelApplication.setText("PunkGraphicStream Version 0.6");
+        jLabelApplication.setText("PunkGraphicStream Version 0.6.1");
 
         jTextArea1.setEditable(false);
+        jTextArea1.setFont(jTextArea1.getFont().deriveFont(jTextArea1.getFont().getSize()-1f));
         jTextArea1.setLineWrap(true);
         jTextArea1.setText("PunkGraphicStream is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.\n\nPortions of this software contain: \nNeuQuant Neural-Net Quantization Algorithm\nCopyright (c) 1994 Anthony Dekker\nNEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994. See \"Kohonen neural networks for optimal colour quantization\" in \"Network: Computation in Neural Systems\" Vol. 5 (1994) pp 351-367. for a discussion of the algorithm. \n\nSee also: \nhttp://www.acm.org/~dekker/NEUQUANT.HTML");
         jTextArea1.setWrapStyleWord(true);
@@ -91,14 +92,14 @@ public class AboutDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabelApplication, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCopyright, javax.swing.GroupLayout.Alignment.LEADING))
                         .addComponent(okButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -108,10 +109,10 @@ public class AboutDialog extends javax.swing.JDialog {
                 .addComponent(jLabelApplication)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelCopyright)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(okButton)
                 .addContainerGap())

@@ -71,7 +71,28 @@
               <Component id="jButtonBrowse" min="-2" max="-2" attributes="2"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButtonEncode" min="-2" max="-2" attributes="2"/>
-              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <EmptySpace pref="121" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabelSubtitleFile" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="238" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabelFrameRate" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="243" max="32767" attributes="0"/>
+          </Group>
+          <Component id="jSeparator2" alignment="1" pref="322" max="32767" attributes="1"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jTextFieldSubtitleFile" pref="310" max="32767" attributes="1"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="245" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
@@ -79,48 +100,18 @@
                   <Component id="jRadioButtonFilmNtsc" linkSize="1" min="-2" max="-2" attributes="0"/>
                   <Component id="jRadioButtonPal" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jRadioButtonPalHd" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jRadioButtonFilm" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="jRadioButtonNtsc" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jRadioButtonNtscHd" linkSize="1" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabelSubtitleFile" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="153" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabelFrameRate" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="158" max="32767" attributes="0"/>
-          </Group>
-          <Component id="jSeparator2" alignment="1" pref="251" max="32767" attributes="1"/>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTextFieldSubtitleFile" pref="211" max="32767" attributes="1"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="160" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jRadioButton480p" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jRadioButton720p" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jRadioButton1080p" min="-2" max="-2" attributes="0"/>
                   <Component id="jRadioButton576p" min="-2" max="-2" attributes="0"/>
-                  <Component id="jRadioButton1080p" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonFilm" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonNtsc" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonNtscHd" linkSize="1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="20" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -192,9 +183,12 @@
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroupFrameRate"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Film (NTSC) "/>
+        <Property name="text" type="java.lang.String" value="23.97 (Film/NTSC) "/>
         <Property name="toolTipText" type="java.lang.String" value="24 Frames Per Second"/>
       </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="23.976 Frames Per Second"/>
+      </AccessibilityProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonFilmNtscActionPerformed"/>
       </Events>
@@ -205,9 +199,12 @@
           <ComponentRef name="buttonGroupFrameRate"/>
         </Property>
         <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" value="Film"/>
+        <Property name="text" type="java.lang.String" value="24 (Film)"/>
         <Property name="toolTipText" type="java.lang.String" value="23.976 Frames Per Second"/>
       </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="24 Frames Per Second"/>
+      </AccessibilityProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButtonFilmActionPerformed"/>
       </Events>
@@ -217,7 +214,7 @@
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroupFrameRate"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="PAL"/>
+        <Property name="text" type="java.lang.String" value="25 (PAL)"/>
         <Property name="toolTipText" type="java.lang.String" value="25 Frames Per Second"/>
       </Properties>
       <Events>
@@ -229,7 +226,7 @@
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroupFrameRate"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="NTSC"/>
+        <Property name="text" type="java.lang.String" value="29.97 (NTSC)"/>
         <Property name="toolTipText" type="java.lang.String" value="29.97 Frames Per Second"/>
       </Properties>
       <Events>
@@ -241,7 +238,7 @@
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroupFrameRate"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="PAL HD"/>
+        <Property name="text" type="java.lang.String" value="50 (PAL HD)"/>
         <Property name="toolTipText" type="java.lang.String" value="50 Frames Per Second"/>
       </Properties>
       <Events>
@@ -253,7 +250,7 @@
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroupFrameRate"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="NTSC HD"/>
+        <Property name="text" type="java.lang.String" value="59.94 (NTSC HD)"/>
         <Property name="toolTipText" type="java.lang.String" value="59.94 Frames Per Second"/>
       </Properties>
       <Events>
