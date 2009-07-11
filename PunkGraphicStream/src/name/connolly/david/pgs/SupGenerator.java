@@ -96,7 +96,7 @@ public class SupGenerator {
                 for (BufferedImage image : images) {
                     RleBitmap bitmap = new RleBitmap(image, event.getOffsetX(), y);
                     bitmaps.add(bitmap);
-                    y += bitmap.getHeight();
+                    y += (bitmap.getHeight() + 1);
                 }
 
                 valid = true;
@@ -195,7 +195,7 @@ public class SupGenerator {
         }
     }
 
-    private void writeSubpicture(final BigInteger end, BigInteger start, final Set<RleBitmap> bitmaps) throws IOException {
+    private void writeSubpicture(final BigInteger end, BigInteger start, final LinkedHashSet<RleBitmap> bitmaps) throws IOException {
         //int windowId = 0;
         //int paletteId = 0;
 
@@ -207,19 +207,19 @@ public class SupGenerator {
             int y = bitmap.getOffsetY();
 
             timeHeader(start, start.subtract(preloadHeader));
-            subpictureHeader(id, id, id, resolution.getX(), resolution.getY(), x, y);
+            subpictureHeader(0, id, id, resolution.getX(), resolution.getY(), x, y);
             ColorTable colorTable = bitmap.getColorTable();
             timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
-            windowsHeader(id, width, height, x, y);
+            windowsHeader(resolution.getX(), resolution.getY(), 0, 0);
             timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
-            colorTable.writeIndex(0, os);
+            colorTable.writeIndex(id, os);
             bitmapPacket(id, bitmap, start.subtract(preloadBitmap), start.subtract(preloadHeader));
             timeHeader(start.subtract(preloadBitmap), BigInteger.ZERO);
             trailer();
             timeHeader(end, end.subtract(preloadMs));
             clearSubpictureHeader(id, resolution.getX(), resolution.getY());
             timeHeader(end, BigInteger.ZERO);
-            windowsHeader(id, width, height, x, y);
+            windowsHeader( resolution.getX(), resolution.getY(), 0, 0);
             timeHeader(end, BigInteger.ZERO);
             trailer();
             id++;
@@ -227,7 +227,7 @@ public class SupGenerator {
     }
 
     // TODO: Test of multiplexed subtitles before 64.8ms, on non-PS3 devices.
-    private void writeNoPreloadSubpicture(final BigInteger end, BigInteger start, final Set<RleBitmap> bitmaps) throws IOException {
+    private void writeNoPreloadSubpicture(final BigInteger end, BigInteger start, final LinkedHashSet<RleBitmap> bitmaps) throws IOException {
         int id = 0;
 
         for (RleBitmap bitmap : bitmaps) {
@@ -237,10 +237,10 @@ public class SupGenerator {
             int y = bitmap.getOffsetY();
 
             timeHeader(start, start);
-            subpictureHeader(id, id, id, resolution.getX(), resolution.getY(), 0, 0);
+            subpictureHeader(0, id, id, resolution.getX(), resolution.getY(), 0, 0);
             ColorTable colorTable = bitmap.getColorTable();
             timeHeader(start, start);
-            windowsHeader(id, resolution.getX(), resolution.getY(), 0, 0);
+            windowsHeader( resolution.getX(), resolution.getY(), 0, 0);
             timeHeader(start, BigInteger.ZERO);
             colorTable.writeIndex(0, os);
             bitmapPacket(id, bitmap, start, BigInteger.ZERO);
@@ -249,21 +249,21 @@ public class SupGenerator {
             timeHeader(end, end);
             clearSubpictureHeader(0, width, height);
             timeHeader(end, BigInteger.ZERO);
-            windowsHeader(id, resolution.getX(), resolution.getY(), 0, 0);
+            windowsHeader(resolution.getX(), resolution.getY(), 0, 0);
             timeHeader(end, BigInteger.ZERO);
             trailer();
             id++;
         }
     }
 
-    private void windowsHeader(int windowId, final int width, final int height,
+    private void windowsHeader( final int width, final int height,
             final int widthOffset, final int heightOffset) throws IOException {
         // 17 00 0A 01 00 00 00 03 F7 07 80 00 31
         os.write(0x17);
         os.write(0x00);
         os.write(0x0A);
-        os.write(0x01);
-        os.write(windowId & 0xFF); //????
+        os.write(0x01); //????
+        os.write(0x00);
         os.write(widthOffset >> 8 & 0xFF); // TODO: Confirm Works
         os.write(widthOffset & 0xFF); // TODO: Confirm Works
         os.write(heightOffset >> 8 & 0xFF);
@@ -301,6 +301,7 @@ public class SupGenerator {
     private void subpictureHeader(int windowId, int objectId, int paletteId,
             final int width, final int height, final int x, final int y)
             throws IOException {
+        windowId = 0;
         os.write(0x16);
 
         // Size of Header

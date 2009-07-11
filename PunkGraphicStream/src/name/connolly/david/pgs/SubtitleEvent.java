@@ -139,8 +139,8 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
      * Pending figuring out the format!
      */
     public void setClip(int minX, int minY, int maxX, int maxY) {
-        //return;
-        
+        return;
+        /*
         int width = maxX - minX;
         int height = maxY - minY;
         int minimumSize = 503;
@@ -155,5 +155,6 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
         offsetY = minY;
 
         image = image.getSubimage(minX, minY, width, height);
+         */
     }
 }
