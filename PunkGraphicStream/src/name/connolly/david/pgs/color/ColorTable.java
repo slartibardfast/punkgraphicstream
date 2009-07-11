@@ -124,7 +124,7 @@ public class ColorTable {
 		return color.getYCbCr();
 	}
 
-	public void writeIndex(final OutputStream baos) throws IOException {
+	public void writeIndex(int paletteId,final OutputStream baos) throws IOException {
 		final int size = palette.size() * 5 + 2;
 
 		int count = 0;
@@ -132,7 +132,7 @@ public class ColorTable {
 		baos.write(0x14);
 		baos.write(size >> 8 & 0xFF);
 		baos.write((size & 0xFF));
-		baos.write(0x00);
+		baos.write(paletteId & 0xFF);
 		baos.write(0x00);
 
 		for (final ColorEntry entry : palette.values()) {

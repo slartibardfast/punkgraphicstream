@@ -141,7 +141,7 @@ public class RleBitmap {
             yIndex++;
         }
 
-        if (firstSize() > 0xFFFFFF) {
+        if (firstSize() > (0xFFFF - 0xB)) {
             throw new BitmapOversizeException();
         }
     }
