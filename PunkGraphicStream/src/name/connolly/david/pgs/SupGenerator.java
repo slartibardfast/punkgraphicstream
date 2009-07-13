@@ -98,8 +98,7 @@ public class SupGenerator {
                 writeNoPreloadSubpicture(end, start, bitmap);
             }
         } catch (BitmapOversizeException e) {
-            progress.fail("Subtitle image too large. Try to reduce effects or number of characters" + event.toString());
-
+            progress.fail("Subtitle image too large. Try to reduce effects, font size or number of characters.");
         }
 
     }
