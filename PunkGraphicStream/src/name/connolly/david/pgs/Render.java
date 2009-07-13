@@ -65,8 +65,9 @@ public enum Render {
     public native Timecode getEventTimecode(int eventIndex)
             throws RenderException;
 
-    public boolean isRunning() {
-        return !abort;
+    public static boolean isRunning() {
+        Render render = Render.INSTANCE;
+        return !render.abort;
     }
 
     public native void render(SubtitleEvent event, BufferedImage image, long timecode)

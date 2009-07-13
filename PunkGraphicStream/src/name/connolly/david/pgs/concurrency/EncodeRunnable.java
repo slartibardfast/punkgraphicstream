@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.connolly.david.pgs.FrameRate;
+import name.connolly.david.pgs.Render;
 import name.connolly.david.pgs.Resolution;
 import name.connolly.david.pgs.SubtitleEvent;
 import name.connolly.david.pgs.SupGenerator;
@@ -112,7 +113,9 @@ public class EncodeRunnable implements Runnable {
         }
         
         SubtitleEvent.lastEvent();
-        
-        progress.done();
+
+        if (Render.isRunning()) {
+            progress.done();
+        }
     }
 }
