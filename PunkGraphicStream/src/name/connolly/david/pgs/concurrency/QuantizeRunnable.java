@@ -43,7 +43,6 @@ public class QuantizeRunnable implements Runnable {
     private final AtomicBoolean renderPending;
     private final Semaphore quantizePending;
     private final ProgressSink progress;
-    private final boolean DEBUG = true;
     
     public QuantizeRunnable(final BlockingQueue<SubtitleEvent> quantizeQueue,
             final EncodeQueue encodeQueue,
@@ -74,14 +73,6 @@ public class QuantizeRunnable implements Runnable {
 
                 Quantizer.indexImage(image);
 
-                if (DEBUG) {
-                    try {
-                        ImageIO.write(image, "png", new File("Rendered-" + eventIndex + ".png"));
-                    } catch (IOException ex) {
-                        Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                
                 synchronized (encodeQueue) {
                     while (event.getId() != encodeQueue.nextEvent()) {
                         encodeQueue.wait();

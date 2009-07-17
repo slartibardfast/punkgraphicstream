@@ -22,6 +22,7 @@
 #include "ass.h"
 #include "stdlib.h"
 
+#include <stdbool.h>
 #include <string.h>
 
 int loaded = 0;
@@ -281,12 +282,17 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 (JNIEnv * env, jobject obj, jobject event, jobject image, jlong timecode)
 {
 	int changeDetect;
+	bool rendered = false;
 	int minX = 1920; // smallest dst_x // offset x
 	int maxX = 0; // largetest dst_x + x
 	int minY = 1080; // smallest dst_y // offset y
 	int maxY = 0; // largest dst_y + y
 	ass_image_t *p_img = ass_render_frame(ass_renderer,
 										  ass_track, (long long)(timecode), &changeDetect);
+	
+	if (p_img != NULL) {
+		rendered = true;
+	}
 	
 	while (p_img != NULL)
 	{ 
@@ -341,8 +347,10 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 		p_img = p_img->next;
 	}
 	
-	(*env)->CallVoidMethod(env, event, set_clip_id, minX, minY, maxX, maxY);
-	
+	if (rendered) {
+		(*env)->CallVoidMethod(env, event, set_clip_id, minX, minY, maxX, maxY);
+	}
+		
 	fflush(stdout);
 }
 

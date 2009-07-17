@@ -1,4 +1,4 @@
-prefix=/Users/slarti/Development/punkgraphicstream/trunk/libass/win32
+prefix=/Users/slarti/Dropbox/Development/punkgraphicstream/trunk/libass/win32
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
@@ -7,5 +7,5 @@ Name: Fontconfig
 Description: Font configuration and customization library
 Version: 2.6.0
 Libs: -L${libdir} -lfontconfig
-Libs.private: -L/Users/slarti/Development/punkgraphicstream/trunk/libass/win32/lib -lexpat -L/Users/slarti/Development/punkgraphicstream/punkgraphicstream/libass/win32/lib -lfreetype
+Libs.private: -L/Users/slarti/Dropbox/Development/punkgraphicstream/trunk/libass/win32/lib -lexpat -L/Users/slarti/Dropbox/Development/punkgraphicstream/trunk/libass/win32/lib -lfreetype
 Cflags: -I${includedir}
