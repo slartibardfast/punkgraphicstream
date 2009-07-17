@@ -38,6 +38,5 @@ public class ImagePanel extends JPanel {
 	@Override
 	public void paint(final Graphics g) {
 		g.drawImage(image, 0, 0, null);
-
 	}
 }

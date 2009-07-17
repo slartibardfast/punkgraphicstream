@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import name.connolly.david.pgs.FrameRate;
 import name.connolly.david.pgs.Render;
 import name.connolly.david.pgs.RenderException;
@@ -58,7 +59,8 @@ public class RenderRunnable implements Runnable {
     private final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
     private final int x;
     private final int y;
-
+    private final boolean DEBUG = true;
+    
     public RenderRunnable(String inputFilename, String outputFilename,
             FrameRate fps, Resolution resolution, ProgressSink progress) {
         this.inputFilename = inputFilename;
@@ -196,10 +198,18 @@ public class RenderRunnable implements Runnable {
                         detectTimecode = detectTimecode + (long) fps.milliseconds();
                     }
                 }
-
+                
                 event.setImage(image);
                 renderer.render(event, image, event.getRenderTimecode());
 
+                if (DEBUG) {
+                    try {
+                        ImageIO.write(image, "png", new File("Rendered-" + eventIndex + ".png"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(RenderRunnable.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
                 if (!renderer.isRunning()) {
                     // End the thread, no more images will be passed further on.
                     return;
