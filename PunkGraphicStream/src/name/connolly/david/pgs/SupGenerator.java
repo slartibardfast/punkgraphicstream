@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import name.connolly.david.pgs.color.ColorTable;
 import name.connolly.david.pgs.util.ProgressSink;
 
@@ -210,19 +208,19 @@ public class SupGenerator {
         int y = bitmap.getOffsetY();
         
         timeHeader(start, start);
-        subpictureHeader(resolution.getX(), resolution.getY(), 0, 0);
+        subpictureHeader(resolution.getX(), resolution.getY(), x, y);
         ColorTable colorTable = bitmap.getColorTable();
         timeHeader(start, start);
-        windowsHeader(resolution.getX(), resolution.getY(), 0, 0);
+        windowsHeader(width, height, x, y);
         timeHeader(start, BigInteger.ZERO);
         colorTable.writeIndex(os);
         bitmapPacket(bitmap, start, BigInteger.ZERO);
         timeHeader(start, BigInteger.ZERO);
         trailer();
         timeHeader(end, end);
-        clearSubpictureHeader(width, height, x, y);
+        clearSubpictureHeader(resolution.getX(), resolution.getY(), x, y);
         timeHeader(end, BigInteger.ZERO);
-        windowsHeader(resolution.getX(), resolution.getY(), 0, 0);
+        windowsHeader(width, height, x, y);
         timeHeader(end, BigInteger.ZERO);
         trailer();
     }
