@@ -25,13 +25,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import name.connolly.david.pgs.color.ColorTable;
+import name.connolly.david.pgs.debug.SafeByteArrayOutputStream;
 
 public class RleBitmap {
     private final int MAX_PAYLOAD_FIRST = 0xFFFF - 0xB;
     private final int MAX_PAYLOAD = 0xFFFF - 0x4;
     private ColorTable table;
     private final BufferedImage image;
-    private ByteArrayOutputStream rle;
+    private SafeByteArrayOutputStream rle;
     private int offsetX;
     private int offsetY;
     
@@ -89,7 +90,7 @@ public class RleBitmap {
     }
 
     private void encode() throws BitmapOversizeException {
-        rle = new ByteArrayOutputStream();
+        rle = new SafeByteArrayOutputStream();
         table = new ColorTable();
         final int width = image.getWidth();
         final int height = image.getHeight();
@@ -141,7 +142,7 @@ public class RleBitmap {
             yIndex++;
         }
 
-        if (firstSize() > (0xFFFF - 0xB)) {
+        if (firstSize() > (0xFFFFFF - 0x4)) {
             throw new BitmapOversizeException();
         }
     }

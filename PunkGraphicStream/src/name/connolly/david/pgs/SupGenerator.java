@@ -131,10 +131,10 @@ public class SupGenerator {
         os.write(image.getHeight() & 0xFF);
 
 
-        os.write(rleBytes);
+        //os.write(rleBytes);
 
-        /*
-         * Support for oversized bitmaps, something like this. needs more work!
+        
+         // Support for oversized bitmaps, something like this. needs more work!
          if (rleBytes.length <= (0xFFFF - 0xB)) {
             os.write(rleBytes); // Done :)
             } else {
@@ -173,7 +173,6 @@ public class SupGenerator {
             os.write(0x40); // last in sequence
             os.write(rleBytes, offset, biggestWrite);
         }
-         */
     }
 
     private void writeSubpicture(final BigInteger end, BigInteger start, final RleBitmap bitmap) throws IOException {
