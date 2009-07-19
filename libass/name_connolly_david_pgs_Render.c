@@ -200,7 +200,11 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_openSubtitle
 	}
 
 	ass_set_font_scale(ass_renderer, 1.);
-	ass_set_fonts(ass_renderer, NULL, "Arial");
+	ass_set_fonts(ass_renderer, NULL, "Arial", 1, "", 1);
+	/*ass_renderer_t *priv, const char *default_font,
+	const char *default_family, int fc, const char *config,
+	int update*/
+	
 	ass_set_frame_size(ass_renderer, x, y);
 	
 	ass_track = ass_read_file(ass_library, subfile, "UTF-8");

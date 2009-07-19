@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		DA6A782E0F18FA0800715C0C /* name_connolly_david_pgs_Render.h in Headers */ = {isa = PBXBuildFile; fileRef = DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */; };
+		DA764DEC10137F95004C8200 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = DA764DEB10137F95004C8200 /* config.h */; };
+		DA764DF810138001004C8200 /* ass_cache_template.h in Headers */ = {isa = PBXBuildFile; fileRef = DA764DF710138001004C8200 /* ass_cache_template.h */; };
+		DA764DFA1013800D004C8200 /* ass_drawing.h in Headers */ = {isa = PBXBuildFile; fileRef = DA764DF91013800D004C8200 /* ass_drawing.h */; };
+		DA764DFC1013802A004C8200 /* ass_drawing.c in Sources */ = {isa = PBXBuildFile; fileRef = DA764DFB1013802A004C8200 /* ass_drawing.c */; };
 		DA89E4320EAE5EE300CC8DFF /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F120EACF415008EA596 /* libfontconfig.dylib */; };
 		DA89E4330EAE5EE300CC8DFF /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */; };
 		DAEF21C20EAB9E11005CE370 /* ass.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21A80EAB9E11005CE370 /* ass.c */; };
@@ -35,6 +39,10 @@
 /* Begin PBXFileReference section */
 		D2AAC0630554660B00DB518D /* libass.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libass.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = name_connolly_david_pgs_Render.h; sourceTree = SOURCE_ROOT; };
+		DA764DEB10137F95004C8200 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		DA764DF710138001004C8200 /* ass_cache_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_cache_template.h; sourceTree = "<group>"; };
+		DA764DF91013800D004C8200 /* ass_drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_drawing.h; sourceTree = "<group>"; };
+		DA764DFB1013802A004C8200 /* ass_drawing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_drawing.c; sourceTree = "<group>"; };
 		DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		DAB47F120EACF415008EA596 /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /usr/X11/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
 		DAEF21A80EAB9E11005CE370 /* ass.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass.c; sourceTree = "<group>"; };
@@ -88,6 +96,7 @@
 			children = (
 				DAEF21A80EAB9E11005CE370 /* ass.c */,
 				DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */,
+				DA764DFB1013802A004C8200 /* ass_drawing.c */,
 				DAEF21AC0EAB9E11005CE370 /* ass_cache.c */,
 				DAEF21AE0EAB9E11005CE370 /* ass_font.c */,
 				DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */,
@@ -122,8 +131,10 @@
 			children = (
 				DAEF21A90EAB9E11005CE370 /* ass.h */,
 				DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */,
+				DA764DF710138001004C8200 /* ass_cache_template.h */,
 				DAEF21AD0EAB9E11005CE370 /* ass_cache.h */,
 				DAEF21AF0EAB9E11005CE370 /* ass_font.h */,
+				DA764DF91013800D004C8200 /* ass_drawing.h */,
 				DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */,
 				DAEF21B30EAB9E11005CE370 /* ass_library.h */,
 				DAEF21B50EAB9E11005CE370 /* ass_types.h */,
@@ -131,6 +142,7 @@
 				DAEF21B80EAB9E11005CE370 /* help_mp.h */,
 				DAEF21BD0EAB9E11005CE370 /* mputils.h */,
 				DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */,
+				DA764DEB10137F95004C8200 /* config.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -153,6 +165,9 @@
 				DAEF21D20EAB9E11005CE370 /* help_mp.h in Headers */,
 				DAEF21D40EAB9E11005CE370 /* mputils.h in Headers */,
 				DA6A782E0F18FA0800715C0C /* name_connolly_david_pgs_Render.h in Headers */,
+				DA764DEC10137F95004C8200 /* config.h in Headers */,
+				DA764DF810138001004C8200 /* ass_cache_template.h in Headers */,
+				DA764DFA1013800D004C8200 /* ass_drawing.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +223,7 @@
 				DAEF21D00EAB9E11005CE370 /* ass_utils.c in Sources */,
 				DAEF21D30EAB9E11005CE370 /* mputils.c in Sources */,
 				DAEF21FD0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c in Sources */,
+				DA764DFC1013802A004C8200 /* ass_drawing.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,7 +234,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = x86_64;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_EXTENSION = jnilib;
@@ -238,8 +254,9 @@
 					"\"$(SDKROOT)/usr/X11/lib\"",
 					/usr/X11/lib,
 				);
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = libass;
+				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -270,7 +287,6 @@
 		1DEB914F08733D8E0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
@@ -279,10 +295,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
-				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-I/usr/X11/include/freetype2";
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
 				USER_HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
 			};
 			name = Debug;
