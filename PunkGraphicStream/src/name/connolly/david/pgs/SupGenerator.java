@@ -34,7 +34,6 @@ public class SupGenerator {
     final FrameRate fps;
     private int fpsCode;
     private final OutputStream os;
-    private int subpictureCount;
     private BigInteger preloadHeader = BigInteger.valueOf(5832);
     private BigInteger preloadBitmap = BigInteger.valueOf(5652);
     private BigInteger preloadMs = BigInteger.valueOf(90);
@@ -43,8 +42,6 @@ public class SupGenerator {
 
     public SupGenerator(final OutputStream os, final FrameRate fps, final Resolution resolution, final ProgressSink progress) {
         this.os = os;
-
-        subpictureCount = 0;
 
         this.fps = fps;
 
@@ -106,7 +103,7 @@ public class SupGenerator {
         byte[] rleBytes = bitmap.getRle();
         int size;
         int objectId = 0;
-        int biggestWrite = 0xFFE4; // huha?
+        int biggestWrite = 0xFFE4;
         int objectSize = bitmap.objectSize();
         size = bitmap.firstSize();
         
@@ -118,8 +115,8 @@ public class SupGenerator {
         os.write(0x15);
         os.write((size >> 8) & 0xFF);
         os.write(size & 0xFF);
-        os.write(objectId >> 8 & 0xFF);
-        os.write(objectId & 0xFF); // Object ID
+        os.write(0x00);
+        os.write(0x00); // Object ID
         os.write(0x00); // Version number
         os.write(0x80); // first in sequence
         os.write((objectSize >> 16) & 0xFF);
@@ -147,9 +144,9 @@ public class SupGenerator {
                 os.write(0xFF);
                 os.write(0xEF);
                 os.write(0x00);
-                os.write(0x00); // Object ID Ref?
+                os.write(0x00); 
                 os.write(0x00); // Version number
-                os.write(0x40); // append switch?
+                os.write(0x00); // append switch?
                 os.write(rleBytes, offset, biggestWrite);
                 offset += biggestWrite;
                 objectId++;
@@ -258,8 +255,6 @@ public class SupGenerator {
         os.write(0x00);
         os.write(0x00);
         os.write(0x00);
-
-        subpictureCount++;
     }
 
     private void subpictureHeader(final int width, final int height,
@@ -290,8 +285,6 @@ public class SupGenerator {
         os.write(x & 0xFF); // TODO: Confirm Works
         os.write(y >> 8 & 0xFF);
         os.write(y & 0xFF);
-
-        subpictureCount++;
     }
 
     private void timeHeader(final BigInteger from, final BigInteger to)

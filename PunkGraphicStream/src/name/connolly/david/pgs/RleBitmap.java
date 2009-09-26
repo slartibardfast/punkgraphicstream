@@ -78,6 +78,8 @@ public class RleBitmap {
         if (size > 0) {
             count++;
         }
+        
+        System.out.println("object count: " + count);
 
         return count;
     }
