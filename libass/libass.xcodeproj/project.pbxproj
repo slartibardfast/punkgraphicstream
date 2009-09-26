@@ -3,36 +3,36 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		DA6A782E0F18FA0800715C0C /* name_connolly_david_pgs_Render.h in Headers */ = {isa = PBXBuildFile; fileRef = DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */; };
 		DA764DEC10137F95004C8200 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = DA764DEB10137F95004C8200 /* config.h */; };
-		DA764DF810138001004C8200 /* ass_cache_template.h in Headers */ = {isa = PBXBuildFile; fileRef = DA764DF710138001004C8200 /* ass_cache_template.h */; };
-		DA764DFA1013800D004C8200 /* ass_drawing.h in Headers */ = {isa = PBXBuildFile; fileRef = DA764DF91013800D004C8200 /* ass_drawing.h */; };
-		DA764DFC1013802A004C8200 /* ass_drawing.c in Sources */ = {isa = PBXBuildFile; fileRef = DA764DFB1013802A004C8200 /* ass_drawing.c */; };
 		DA89E4320EAE5EE300CC8DFF /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F120EACF415008EA596 /* libfontconfig.dylib */; };
 		DA89E4330EAE5EE300CC8DFF /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */; };
-		DAEF21C20EAB9E11005CE370 /* ass.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21A80EAB9E11005CE370 /* ass.c */; };
-		DAEF21C30EAB9E11005CE370 /* ass.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21A90EAB9E11005CE370 /* ass.h */; };
-		DAEF21C40EAB9E11005CE370 /* ass_bitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */; };
-		DAEF21C50EAB9E11005CE370 /* ass_bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */; };
-		DAEF21C60EAB9E11005CE370 /* ass_cache.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21AC0EAB9E11005CE370 /* ass_cache.c */; };
-		DAEF21C70EAB9E11005CE370 /* ass_cache.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21AD0EAB9E11005CE370 /* ass_cache.h */; };
-		DAEF21C80EAB9E11005CE370 /* ass_font.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21AE0EAB9E11005CE370 /* ass_font.c */; };
-		DAEF21C90EAB9E11005CE370 /* ass_font.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21AF0EAB9E11005CE370 /* ass_font.h */; };
-		DAEF21CA0EAB9E11005CE370 /* ass_fontconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */; };
-		DAEF21CB0EAB9E11005CE370 /* ass_fontconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */; };
-		DAEF21CC0EAB9E11005CE370 /* ass_library.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B20EAB9E11005CE370 /* ass_library.c */; };
-		DAEF21CD0EAB9E11005CE370 /* ass_library.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B30EAB9E11005CE370 /* ass_library.h */; };
-		DAEF21CE0EAB9E11005CE370 /* ass_render.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B40EAB9E11005CE370 /* ass_render.c */; };
-		DAEF21CF0EAB9E11005CE370 /* ass_types.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B50EAB9E11005CE370 /* ass_types.h */; };
-		DAEF21D00EAB9E11005CE370 /* ass_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21B60EAB9E11005CE370 /* ass_utils.c */; };
-		DAEF21D10EAB9E11005CE370 /* ass_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B70EAB9E11005CE370 /* ass_utils.h */; };
-		DAEF21D20EAB9E11005CE370 /* help_mp.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21B80EAB9E11005CE370 /* help_mp.h */; };
-		DAEF21D30EAB9E11005CE370 /* mputils.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21BC0EAB9E11005CE370 /* mputils.c */; };
-		DAEF21D40EAB9E11005CE370 /* mputils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEF21BD0EAB9E11005CE370 /* mputils.h */; };
+		DAC47492106E37050049D8D3 /* ass_bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC47486106E37050049D8D3 /* ass_bitmap.h */; };
+		DAC47493106E37050049D8D3 /* ass_cache_template.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC47487106E37050049D8D3 /* ass_cache_template.h */; };
+		DAC47494106E37050049D8D3 /* ass_cache.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC47488106E37050049D8D3 /* ass_cache.h */; };
+		DAC47495106E37050049D8D3 /* ass_drawing.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC47489106E37050049D8D3 /* ass_drawing.h */; };
+		DAC47496106E37050049D8D3 /* ass_font.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC4748A106E37050049D8D3 /* ass_font.h */; };
+		DAC47497106E37050049D8D3 /* ass_fontconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC4748B106E37050049D8D3 /* ass_fontconfig.h */; };
+		DAC47498106E37050049D8D3 /* ass_library.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC4748C106E37050049D8D3 /* ass_library.h */; };
+		DAC47499106E37050049D8D3 /* ass_parse.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC4748D106E37050049D8D3 /* ass_parse.h */; };
+		DAC4749A106E37050049D8D3 /* ass_render.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC4748E106E37050049D8D3 /* ass_render.h */; };
+		DAC4749B106E37050049D8D3 /* ass_types.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC4748F106E37050049D8D3 /* ass_types.h */; };
+		DAC4749C106E37050049D8D3 /* ass_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC47490106E37050049D8D3 /* ass_utils.h */; };
+		DAC4749D106E37050049D8D3 /* ass.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC47491106E37050049D8D3 /* ass.h */; };
+		DAC474A8106E370E0049D8D3 /* ass_bitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC4749E106E370E0049D8D3 /* ass_bitmap.c */; };
+		DAC474A9106E370E0049D8D3 /* ass_cache.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC4749F106E370E0049D8D3 /* ass_cache.c */; };
+		DAC474AA106E370E0049D8D3 /* ass_drawing.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A0106E370E0049D8D3 /* ass_drawing.c */; };
+		DAC474AB106E370E0049D8D3 /* ass_font.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A1106E370E0049D8D3 /* ass_font.c */; };
+		DAC474AC106E370E0049D8D3 /* ass_fontconfig.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A2106E370E0049D8D3 /* ass_fontconfig.c */; };
+		DAC474AD106E370E0049D8D3 /* ass_library.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A3106E370E0049D8D3 /* ass_library.c */; };
+		DAC474AE106E370E0049D8D3 /* ass_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A4106E370E0049D8D3 /* ass_parse.c */; };
+		DAC474AF106E370E0049D8D3 /* ass_render.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A5106E370E0049D8D3 /* ass_render.c */; };
+		DAC474B0106E370E0049D8D3 /* ass_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A6106E370E0049D8D3 /* ass_utils.c */; };
+		DAC474B1106E370E0049D8D3 /* ass.c in Sources */ = {isa = PBXBuildFile; fileRef = DAC474A7106E370E0049D8D3 /* ass.c */; };
 		DAEF21FD0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c in Sources */ = {isa = PBXBuildFile; fileRef = DAEF21FB0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c */; };
 /* End PBXBuildFile section */
 
@@ -40,30 +40,30 @@
 		D2AAC0630554660B00DB518D /* libass.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libass.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = name_connolly_david_pgs_Render.h; sourceTree = SOURCE_ROOT; };
 		DA764DEB10137F95004C8200 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		DA764DF710138001004C8200 /* ass_cache_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_cache_template.h; sourceTree = "<group>"; };
-		DA764DF91013800D004C8200 /* ass_drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_drawing.h; sourceTree = "<group>"; };
-		DA764DFB1013802A004C8200 /* ass_drawing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_drawing.c; sourceTree = "<group>"; };
 		DAB47F0E0EACF3F9008EA596 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /usr/X11/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		DAB47F120EACF415008EA596 /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /usr/X11/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
-		DAEF21A80EAB9E11005CE370 /* ass.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass.c; sourceTree = "<group>"; };
-		DAEF21A90EAB9E11005CE370 /* ass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass.h; sourceTree = "<group>"; };
-		DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_bitmap.c; sourceTree = "<group>"; };
-		DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_bitmap.h; sourceTree = "<group>"; };
-		DAEF21AC0EAB9E11005CE370 /* ass_cache.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_cache.c; sourceTree = "<group>"; };
-		DAEF21AD0EAB9E11005CE370 /* ass_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_cache.h; sourceTree = "<group>"; };
-		DAEF21AE0EAB9E11005CE370 /* ass_font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_font.c; sourceTree = "<group>"; };
-		DAEF21AF0EAB9E11005CE370 /* ass_font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_font.h; sourceTree = "<group>"; };
-		DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_fontconfig.c; sourceTree = "<group>"; };
-		DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_fontconfig.h; sourceTree = "<group>"; };
-		DAEF21B20EAB9E11005CE370 /* ass_library.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_library.c; sourceTree = "<group>"; };
-		DAEF21B30EAB9E11005CE370 /* ass_library.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_library.h; sourceTree = "<group>"; };
-		DAEF21B40EAB9E11005CE370 /* ass_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_render.c; sourceTree = "<group>"; };
-		DAEF21B50EAB9E11005CE370 /* ass_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_types.h; sourceTree = "<group>"; };
-		DAEF21B60EAB9E11005CE370 /* ass_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_utils.c; sourceTree = "<group>"; };
-		DAEF21B70EAB9E11005CE370 /* ass_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_utils.h; sourceTree = "<group>"; };
-		DAEF21B80EAB9E11005CE370 /* help_mp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = help_mp.h; sourceTree = "<group>"; };
-		DAEF21BC0EAB9E11005CE370 /* mputils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mputils.c; sourceTree = "<group>"; };
-		DAEF21BD0EAB9E11005CE370 /* mputils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mputils.h; sourceTree = "<group>"; };
+		DAC47486106E37050049D8D3 /* ass_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_bitmap.h; sourceTree = "<group>"; };
+		DAC47487106E37050049D8D3 /* ass_cache_template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_cache_template.h; sourceTree = "<group>"; };
+		DAC47488106E37050049D8D3 /* ass_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_cache.h; sourceTree = "<group>"; };
+		DAC47489106E37050049D8D3 /* ass_drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_drawing.h; sourceTree = "<group>"; };
+		DAC4748A106E37050049D8D3 /* ass_font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_font.h; sourceTree = "<group>"; };
+		DAC4748B106E37050049D8D3 /* ass_fontconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_fontconfig.h; sourceTree = "<group>"; };
+		DAC4748C106E37050049D8D3 /* ass_library.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_library.h; sourceTree = "<group>"; };
+		DAC4748D106E37050049D8D3 /* ass_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_parse.h; sourceTree = "<group>"; };
+		DAC4748E106E37050049D8D3 /* ass_render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_render.h; sourceTree = "<group>"; };
+		DAC4748F106E37050049D8D3 /* ass_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_types.h; sourceTree = "<group>"; };
+		DAC47490106E37050049D8D3 /* ass_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass_utils.h; sourceTree = "<group>"; };
+		DAC47491106E37050049D8D3 /* ass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ass.h; sourceTree = "<group>"; };
+		DAC4749E106E370E0049D8D3 /* ass_bitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_bitmap.c; sourceTree = "<group>"; };
+		DAC4749F106E370E0049D8D3 /* ass_cache.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_cache.c; sourceTree = "<group>"; };
+		DAC474A0106E370E0049D8D3 /* ass_drawing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_drawing.c; sourceTree = "<group>"; };
+		DAC474A1106E370E0049D8D3 /* ass_font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_font.c; sourceTree = "<group>"; };
+		DAC474A2106E370E0049D8D3 /* ass_fontconfig.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_fontconfig.c; sourceTree = "<group>"; };
+		DAC474A3106E370E0049D8D3 /* ass_library.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_library.c; sourceTree = "<group>"; };
+		DAC474A4106E370E0049D8D3 /* ass_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_parse.c; sourceTree = "<group>"; };
+		DAC474A5106E370E0049D8D3 /* ass_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_render.c; sourceTree = "<group>"; };
+		DAC474A6106E370E0049D8D3 /* ass_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass_utils.c; sourceTree = "<group>"; };
+		DAC474A7106E370E0049D8D3 /* ass.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ass.c; sourceTree = "<group>"; };
 		DAEF21FB0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = name_connolly_david_pgs_Render.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,16 +94,16 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DAEF21A80EAB9E11005CE370 /* ass.c */,
-				DAEF21AA0EAB9E11005CE370 /* ass_bitmap.c */,
-				DA764DFB1013802A004C8200 /* ass_drawing.c */,
-				DAEF21AC0EAB9E11005CE370 /* ass_cache.c */,
-				DAEF21AE0EAB9E11005CE370 /* ass_font.c */,
-				DAEF21B00EAB9E11005CE370 /* ass_fontconfig.c */,
-				DAEF21B20EAB9E11005CE370 /* ass_library.c */,
-				DAEF21B40EAB9E11005CE370 /* ass_render.c */,
-				DAEF21B60EAB9E11005CE370 /* ass_utils.c */,
-				DAEF21BC0EAB9E11005CE370 /* mputils.c */,
+				DAC4749E106E370E0049D8D3 /* ass_bitmap.c */,
+				DAC4749F106E370E0049D8D3 /* ass_cache.c */,
+				DAC474A0106E370E0049D8D3 /* ass_drawing.c */,
+				DAC474A1106E370E0049D8D3 /* ass_font.c */,
+				DAC474A2106E370E0049D8D3 /* ass_fontconfig.c */,
+				DAC474A3106E370E0049D8D3 /* ass_library.c */,
+				DAC474A4106E370E0049D8D3 /* ass_parse.c */,
+				DAC474A5106E370E0049D8D3 /* ass_render.c */,
+				DAC474A6106E370E0049D8D3 /* ass_utils.c */,
+				DAC474A7106E370E0049D8D3 /* ass.c */,
 				DAEF21FB0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c */,
 			);
 			name = Source;
@@ -129,18 +129,18 @@
 		DAF6CC510EACD50D007F004E /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				DAEF21A90EAB9E11005CE370 /* ass.h */,
-				DAEF21AB0EAB9E11005CE370 /* ass_bitmap.h */,
-				DA764DF710138001004C8200 /* ass_cache_template.h */,
-				DAEF21AD0EAB9E11005CE370 /* ass_cache.h */,
-				DAEF21AF0EAB9E11005CE370 /* ass_font.h */,
-				DA764DF91013800D004C8200 /* ass_drawing.h */,
-				DAEF21B10EAB9E11005CE370 /* ass_fontconfig.h */,
-				DAEF21B30EAB9E11005CE370 /* ass_library.h */,
-				DAEF21B50EAB9E11005CE370 /* ass_types.h */,
-				DAEF21B70EAB9E11005CE370 /* ass_utils.h */,
-				DAEF21B80EAB9E11005CE370 /* help_mp.h */,
-				DAEF21BD0EAB9E11005CE370 /* mputils.h */,
+				DAC47486106E37050049D8D3 /* ass_bitmap.h */,
+				DAC47487106E37050049D8D3 /* ass_cache_template.h */,
+				DAC47488106E37050049D8D3 /* ass_cache.h */,
+				DAC47489106E37050049D8D3 /* ass_drawing.h */,
+				DAC4748A106E37050049D8D3 /* ass_font.h */,
+				DAC4748B106E37050049D8D3 /* ass_fontconfig.h */,
+				DAC4748C106E37050049D8D3 /* ass_library.h */,
+				DAC4748D106E37050049D8D3 /* ass_parse.h */,
+				DAC4748E106E37050049D8D3 /* ass_render.h */,
+				DAC4748F106E37050049D8D3 /* ass_types.h */,
+				DAC47490106E37050049D8D3 /* ass_utils.h */,
+				DAC47491106E37050049D8D3 /* ass.h */,
 				DA6A782D0F18FA0800715C0C /* name_connolly_david_pgs_Render.h */,
 				DA764DEB10137F95004C8200 /* config.h */,
 			);
@@ -154,20 +154,20 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAEF21C30EAB9E11005CE370 /* ass.h in Headers */,
-				DAEF21C50EAB9E11005CE370 /* ass_bitmap.h in Headers */,
-				DAEF21C70EAB9E11005CE370 /* ass_cache.h in Headers */,
-				DAEF21C90EAB9E11005CE370 /* ass_font.h in Headers */,
-				DAEF21CB0EAB9E11005CE370 /* ass_fontconfig.h in Headers */,
-				DAEF21CD0EAB9E11005CE370 /* ass_library.h in Headers */,
-				DAEF21CF0EAB9E11005CE370 /* ass_types.h in Headers */,
-				DAEF21D10EAB9E11005CE370 /* ass_utils.h in Headers */,
-				DAEF21D20EAB9E11005CE370 /* help_mp.h in Headers */,
-				DAEF21D40EAB9E11005CE370 /* mputils.h in Headers */,
 				DA6A782E0F18FA0800715C0C /* name_connolly_david_pgs_Render.h in Headers */,
 				DA764DEC10137F95004C8200 /* config.h in Headers */,
-				DA764DF810138001004C8200 /* ass_cache_template.h in Headers */,
-				DA764DFA1013800D004C8200 /* ass_drawing.h in Headers */,
+				DAC47492106E37050049D8D3 /* ass_bitmap.h in Headers */,
+				DAC47493106E37050049D8D3 /* ass_cache_template.h in Headers */,
+				DAC47494106E37050049D8D3 /* ass_cache.h in Headers */,
+				DAC47495106E37050049D8D3 /* ass_drawing.h in Headers */,
+				DAC47496106E37050049D8D3 /* ass_font.h in Headers */,
+				DAC47497106E37050049D8D3 /* ass_fontconfig.h in Headers */,
+				DAC47498106E37050049D8D3 /* ass_library.h in Headers */,
+				DAC47499106E37050049D8D3 /* ass_parse.h in Headers */,
+				DAC4749A106E37050049D8D3 /* ass_render.h in Headers */,
+				DAC4749B106E37050049D8D3 /* ass_types.h in Headers */,
+				DAC4749C106E37050049D8D3 /* ass_utils.h in Headers */,
+				DAC4749D106E37050049D8D3 /* ass.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,7 +197,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "libass" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* ass */;
 			projectDirPath = "";
@@ -213,17 +213,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAEF21C20EAB9E11005CE370 /* ass.c in Sources */,
-				DAEF21C40EAB9E11005CE370 /* ass_bitmap.c in Sources */,
-				DAEF21C60EAB9E11005CE370 /* ass_cache.c in Sources */,
-				DAEF21C80EAB9E11005CE370 /* ass_font.c in Sources */,
-				DAEF21CA0EAB9E11005CE370 /* ass_fontconfig.c in Sources */,
-				DAEF21CC0EAB9E11005CE370 /* ass_library.c in Sources */,
-				DAEF21CE0EAB9E11005CE370 /* ass_render.c in Sources */,
-				DAEF21D00EAB9E11005CE370 /* ass_utils.c in Sources */,
-				DAEF21D30EAB9E11005CE370 /* mputils.c in Sources */,
 				DAEF21FD0EAB9FBE005CE370 /* name_connolly_david_pgs_Render.c in Sources */,
-				DA764DFC1013802A004C8200 /* ass_drawing.c in Sources */,
+				DAC474A8106E370E0049D8D3 /* ass_bitmap.c in Sources */,
+				DAC474A9106E370E0049D8D3 /* ass_cache.c in Sources */,
+				DAC474AA106E370E0049D8D3 /* ass_drawing.c in Sources */,
+				DAC474AB106E370E0049D8D3 /* ass_font.c in Sources */,
+				DAC474AC106E370E0049D8D3 /* ass_fontconfig.c in Sources */,
+				DAC474AD106E370E0049D8D3 /* ass_library.c in Sources */,
+				DAC474AE106E370E0049D8D3 /* ass_parse.c in Sources */,
+				DAC474AF106E370E0049D8D3 /* ass_render.c in Sources */,
+				DAC474B0106E370E0049D8D3 /* ass_utils.c in Sources */,
+				DAC474B1106E370E0049D8D3 /* ass.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,13 +308,15 @@
 				ENABLE_OPENMP_SUPPORT = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "/Developer/SDKs/MacOSX10.5.sdk/usr/X11/include/**";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-I/usr/X11/include/freetype2";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx10.5;
 			};
 			name = Release;

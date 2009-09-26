@@ -40,9 +40,9 @@ jmethodID get_rgb_id;
 jclass subtitle_event_cls;
 jmethodID set_clip_id;
 
-ass_library_t* ass_library = NULL;
-ass_renderer_t* ass_renderer = NULL;
-ass_track_t* ass_track = NULL;
+ASS_Library* ass_library = NULL;
+ASS_Renderer* ass_renderer = NULL;
+ASS_Track* ass_track = NULL;
 
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved)
@@ -277,6 +277,8 @@ JNIEXPORT jobject JNICALL Java_name_connolly_david_pgs_Render_getEventTimecode
 	
 	start = ass_track->events[event].Start;
 	end = start + ass_track->events[event].Duration;
+	printf("start: %lld duration: %lld \n", ass_track->events[event].Start, ass_track->events[event].Duration);
+	
 	result = (*env)->NewObject(env, timecode_cls, timecode_constructor, start, end);
 	
 	return result;
@@ -291,7 +293,7 @@ JNIEXPORT void JNICALL Java_name_connolly_david_pgs_Render_render
 	int maxX = 0; // largetest dst_x + x
 	int minY = 1080; // smallest dst_y // offset y
 	int maxY = 0; // largest dst_y + y
-	ass_image_t *p_img = ass_render_frame(ass_renderer,
+	ASS_Image *p_img = ass_render_frame(ass_renderer,
 										  ass_track, (long long)(timecode), &changeDetect);
 	
 	if (p_img != NULL) {
