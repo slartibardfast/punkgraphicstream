@@ -140,6 +140,7 @@ public class SupGenerator {
             os.write(rleBytes, offset, biggestWrite);
             offset += biggestWrite;
 
+            objectId++;
             biggestWrite = 0xFFEB;
             while ((offset + biggestWrite) <= rleBytes.length) {
                 timeHeader(from, to);
@@ -147,13 +148,13 @@ public class SupGenerator {
                 os.write(0x15);
                 os.write(0xFF);
                 os.write(0xEF);
-                os.write(objectId >> 8 & 0xFF);
-                os.write(objectId & 0xFF); // Object ID
+                os.write(0x00);
+                os.write(0x00); // Object ID Ref?
                 os.write(0x00); // Version number
                 os.write(0x40); // append switch?
                 os.write(rleBytes, offset, biggestWrite);
                 offset += biggestWrite;
-                //objectId++;
+                objectId++;
             }
 
             biggestWrite = rleBytes.length - offset;
@@ -162,8 +163,8 @@ public class SupGenerator {
             os.write(0x15);
             os.write(((biggestWrite + 0x4) >> 8) & 0xFF);
             os.write((biggestWrite + 0x4) & 0xFF);
-            os.write(objectId >> 8 & 0xFF);
-            os.write(objectId & 0xFF); // Object ID
+            os.write(0x0);
+            os.write(0x0); // Object ID Ref?
             os.write(0x00); // Version number
             os.write(0x40); // last in sequence?
             os.write(rleBytes, offset, biggestWrite);
@@ -265,10 +266,6 @@ public class SupGenerator {
 
     private void subpictureHeader(final int width, final int height,
             final int x, final int y, final int objectCount) throws IOException {
-        if (objectCount > 0xFF) {
-            throw new RuntimeException("Too many objects");
-        }
-        
         os.write(0x16);
 
         // Size of Header
@@ -281,12 +278,12 @@ public class SupGenerator {
         os.write(height >> 8 & 0xFF);
         os.write(height & 0xFF);
         os.write(fpsCode);
-        os.write(subpictureCount >> 8 & 0xFF); // Number
-        os.write(subpictureCount & 0xFF);
+        os.write(objectCount >> 8 & 0xFF); // Number
+        os.write(objectCount & 0xFF);
         os.write(0x80); // State
         os.write(0x00); // Pallette Update Flags
         os.write(0x00); // Pallette Id ref
-        os.write(objectCount & 0xFF); // Number of Objects?
+        os.write(0x01); // Number?
         os.write(0x00);
         os.write(0x00);
         os.write(0x00);
