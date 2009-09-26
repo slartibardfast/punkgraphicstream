@@ -136,7 +136,7 @@ void ass_msg(ASS_Library *priv, int lvl, char *fmt, ...)
 	va_start(va, fmt);
 	length += vsprintf(msg + length, fmt, va);
 	va_end(va);
-	length = sprintf(msg + length, "\n");
+	sprintf(msg + length, "\n");
 	sendRenderMessage(msg);
 }
 
