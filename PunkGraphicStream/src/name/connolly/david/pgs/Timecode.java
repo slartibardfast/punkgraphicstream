@@ -19,63 +19,49 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.MathContext;
 
 public class Timecode implements Comparable<Timecode> {
-	private long start;
-	private long end;
+    private long start;
+    private long end;
 
     @Override
-	public int compareTo(Timecode o) {
-		return new Long(start).compareTo(o.start);
-	}
+    public int compareTo(Timecode o) {
+        return new Long(start).compareTo(o.start);
+    }
 
     @Override
     public String toString() {
         return "Timecode start: " + start + " end " + end;
     }
 
-	public long getDuration() {
-		return end - start;
-	}
+    public long getDuration() {
+        return end - start;
+    }
 
-	public long getStart() {
-		return start;
-	}
+    public long getStart() {
+        return start;
+    }
 
-	private Timecode() {
+    private Timecode() {
+    }
 
-	}
-
-	public Timecode(long start, long end) {
-		this.start = start;
-		this.end = end;
-	}
+    public Timecode(long start, long end) {
+        this.start = start;
+        this.end = end;
+    }
 
     public BigInteger getStartTicks() {
         BigInteger ticks = BigInteger.valueOf(start);
-        
+
         return ticks.multiply(BigInteger.valueOf(90));
     }
 
-	public BigInteger getSequenceStartTicks(FrameRate fps) {
-		long frameNumber = fps.startFrame(start);
-		
-		BigDecimal startTicks = BigDecimal.valueOf(frameNumber);
-		
-		startTicks = startTicks.multiply(BigDecimal.valueOf(fps.ticks()));
-
-		return startTicks.round(MathContext.DECIMAL64).toBigInteger();
-	}
-
-	public long getEnd() {
-		return end;
-	}
+    public long getEnd() {
+        return end;
+    }
 
     public BigInteger getEndTicks() {
         BigInteger ticks = BigInteger.valueOf(end);
@@ -83,70 +69,67 @@ public class Timecode implements Comparable<Timecode> {
         return ticks.multiply(BigInteger.valueOf(90));
     }
 
-	public BigInteger getSequenceEndTicks(FrameRate fps) {
-		long frameNumber = fps.endFrame(end);
-		BigDecimal endTicks = BigDecimal.valueOf(frameNumber);
-		
-		endTicks = endTicks.multiply(BigDecimal.valueOf(fps.ticks()));
+    public Timecode merge(Timecode other) {
+        if (other == null) {
+            throw new IllegalArgumentException(
+                    "Timecode other must not be null");
+        }
+        final Timecode merged = new Timecode();
 
-		return endTicks.round(MathContext.DECIMAL64).toBigInteger();
-	}
+        // First occuring Start
+        if (start <= other.start) {
+            merged.start = start;
+        } else {
+            merged.start = other.start;
+        }
 
-	public Timecode merge(Timecode other) {
-		if (other == null)
-			throw new IllegalArgumentException(
-					"Timecode other must not be null");
-		final Timecode merged = new Timecode();
+        // Last occuring End
+        if (end >= other.end) {
+            merged.end = end;
+        } else {
+            merged.end = other.end;
+        }
 
-		// First occuring Start
-		if (start <= other.start) {
-			merged.start = start;
-		} else {
-			merged.start = other.start;
-		}
+        return merged;
+    }
 
-		// Last occuring End
-		if (end >= other.end) {
-			merged.end = end;
-		} else {
-			merged.end = other.end;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
 
-		return merged;
-	}
+        final Timecode other = (Timecode) obj;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+        if (start != other.start) {
+            return false;
+        }
+        return true;
+    }
 
-		final Timecode other = (Timecode) obj;
+    @Override
+    public int hashCode() {
+        return new Long(start).hashCode();
+    }
 
-		if (start != other.start)
-			return false;
-		return true;
-	}
+    public boolean overlaps(Timecode other) {
+        if (other == null) {
+            throw new IllegalArgumentException(
+                    "Timecode other must not be null");
+        }
 
-	@Override
-	public int hashCode() {
-		return new Long(start).hashCode();
-	}
-
-	public boolean overlaps(Timecode other) {
-		if (other == null)
-			throw new IllegalArgumentException(
-					"Timecode other must not be null");
-
-		if (other.start >= start && other.start <= end)
-			return true;
-		else if (other.end >= start && other.end <= end)
-			return true;
-		else if (start >= other.start && start <= other.end)
-			return true;
-		else if (end >= other.start && end <= other.end)
-			return true;
-		return false;
-	}
+        if (other.start >= start && other.start <= end) {
+            return true;
+        } else if (other.end >= start && other.end <= end) {
+            return true;
+        } else if (start >= other.start && start <= other.end) {
+            return true;
+        } else if (end >= other.start && end <= other.end) {
+            return true;
+        }
+        return false;
+    }
 }

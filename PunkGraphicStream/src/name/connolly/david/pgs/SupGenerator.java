@@ -85,7 +85,7 @@ public class SupGenerator {
 
             start = event.getTimecode().getStartTicks();
             end = event.getTimecode().getEndTicks();
-
+            System.out.println("start:" + start + " end: " + end);
 
             if (start.compareTo(preloadHeader) >= 0) {
                 writeSubpicture(end, start, bitmap);

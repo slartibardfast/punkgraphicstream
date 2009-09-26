@@ -27,9 +27,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ColorTable {
+    private int colorMissingCount = 0;
+    // Key: RGB Color Value: ColorEntry
+    private final Map<Integer, ColorEntry> palette = new LinkedHashMap<Integer, ColorEntry>();
 
     private class ColorEntry {
-
         private final int position;
         private final int ycbcr;
 
@@ -84,9 +86,6 @@ public class ColorTable {
             return result;
         }
     }
-    private int colorMissingCount = 0;
-    // Key: RGB Color Value: ColorEntry
-    private final Map<Integer, ColorEntry> palette = new LinkedHashMap<Integer, ColorEntry>();
 
     public ColorTable() {
     }
@@ -100,10 +99,6 @@ public class ColorTable {
 
     public int addColor(final int rgbColor) {
         int position = palette.size();
-
-        if (palette.size() >= 0x47) {
-            position++;
-        }
 
         palette.put(rgbColor, new ColorEntry(position, rgbColor));
 
@@ -133,37 +128,20 @@ public class ColorTable {
     }
 
     public void writeIndex(final OutputStream baos) throws IOException {
-        final int size = (palette.size() + 1) * 5 + 2;
-
         int count = 0;
+        final int size;
+        size = (palette.size() * 5) + 2;
+        
         // 15 3C DC 00 00 00 C0 00 3C D5
         baos.write(0x14);
         baos.write(size >> 8 & 0xFF);
-        baos.write((size & 0xFF));
+        baos.write(size & 0xFF);
         baos.write(0x00);
         baos.write(0x00);
 
         for (final ColorEntry entry : palette.values()) {
             final int color = entry.getYCbCr();
-
-            if (count == 0x47) {
-                int dummyColor = 0;
-                baos.write(count);
-
-                // Y
-                baos.write(dummyColor >> 24 & 0xFF);
-                // Cb
-                baos.write(dummyColor >> 16 & 0xFF);
-                // Cr
-                baos.write(dummyColor >> 8 & 0xFF);
-                // A
-                baos.write(dummyColor & 0xFF);
-
-                count++;
-            }
-
             baos.write(count);
-
             // Y
             baos.write(color >> 24 & 0xFF);
             // Cb
@@ -171,7 +149,12 @@ public class ColorTable {
             // Cr
             baos.write(color >> 8 & 0xFF);
             // A
-            baos.write(color & 0xFF);
+            if (count == 0x46 && (color & 0xFF) == 0x50) {
+                // the next number would be 0x47 and it would fail, so fudge A
+                baos.write(0x51);
+            } else {
+                baos.write(color & 0xFF);
+            }
 
             count++;
         }
