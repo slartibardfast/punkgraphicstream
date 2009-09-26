@@ -122,7 +122,6 @@ public class SupGenerator {
         os.write(objectId & 0xFF); // Object ID
         os.write(0x00); // Version number
         os.write(0x80); // first in sequence
-        
         os.write((objectSize >> 16) & 0xFF);
         os.write((objectSize >> 8) & 0xFF);
         os.write(objectSize & 0xFF);
@@ -144,7 +143,6 @@ public class SupGenerator {
             biggestWrite = 0xFFEB;
             while ((offset + biggestWrite) <= rleBytes.length) {
                 timeHeader(from, to);
-
                 os.write(0x15);
                 os.write(0xFF);
                 os.write(0xEF);
@@ -163,8 +161,8 @@ public class SupGenerator {
             os.write(0x15);
             os.write(((biggestWrite + 0x4) >> 8) & 0xFF);
             os.write((biggestWrite + 0x4) & 0xFF);
-            os.write(0x0);
-            os.write(0x0); // Object ID Ref?
+            os.write(0x00);
+            os.write(0x00); // Object ID Ref?
             os.write(0x00); // Version number
             os.write(0x40); // last in sequence?
             os.write(rleBytes, offset, biggestWrite);
@@ -254,8 +252,8 @@ public class SupGenerator {
         os.write(height >> 8 & 0xFF);
         os.write(height & 0xFF);
         os.write(fpsCode); // ??
-        os.write(subpictureCount >> 8 & 0xFF);
-        os.write(subpictureCount & 0xFF);
+        os.write(0x00);
+        os.write(0x00);
         os.write(0x00);
         os.write(0x00);
         os.write(0x00);
