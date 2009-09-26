@@ -104,11 +104,6 @@
           <Properties>
             <Property name="columns" type="int" value="80"/>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-              <FontInfo relative="true">
-                <Font component="jLogTextArea" property="font" relativeSize="true" size="-2"/>
-              </FontInfo>
-            </Property>
             <Property name="rows" type="int" value="5"/>
             <Property name="tabSize" type="int" value="4"/>
             <Property name="toolTipText" type="java.lang.String" value="Messages from the Subtitle Render"/>

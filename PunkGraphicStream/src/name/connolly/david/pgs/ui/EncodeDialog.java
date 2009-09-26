@@ -95,7 +95,6 @@ public class EncodeDialog extends javax.swing.JDialog implements ProgressSink {
 
         jLogTextArea.setColumns(80);
         jLogTextArea.setEditable(false);
-        jLogTextArea.setFont(jLogTextArea.getFont().deriveFont(jLogTextArea.getFont().getSize()-2f));
         jLogTextArea.setRows(5);
         jLogTextArea.setTabSize(4);
         jLogTextArea.setToolTipText("Messages from the Subtitle Render");
