@@ -106,72 +106,68 @@ public class SupGenerator {
         byte[] rleBytes = bitmap.getRle();
         int size;
         int objectId = 0;
-        if (bitmap.firstSize() > 0xFFFF) {
-            size = 0xFFFF;
-        } else {
-            size = bitmap.firstSize();
+        int biggestWrite = 0xFFE4; // huha?
+        int objectSize = bitmap.objectSize();
+        size = bitmap.firstSize();
+        
+        if (size >= 0xFFEF) {
+            size = 0xFFEF;
         }
 
         timeHeader(from, to);
-
         os.write(0x15);
-        os.write(size >> 8 & 0xFF);
+        os.write((size >> 8) & 0xFF);
         os.write(size & 0xFF);
         os.write(objectId >> 8 & 0xFF);
         os.write(objectId & 0xFF); // Object ID
         os.write(0x00); // Version number
         os.write(0x80); // first in sequence
-        size = bitmap.objectSize();
-        os.write(size >> 16 & 0xFF);
-        os.write(size >> 8 & 0xFF);
-        os.write(size & 0xFF);
-        os.write(image.getWidth() >> 8 & 0xFF);
+        
+        os.write((objectSize >> 16) & 0xFF);
+        os.write((objectSize >> 8) & 0xFF);
+        os.write(objectSize & 0xFF);
+        os.write((image.getWidth() >> 8) & 0xFF);
         os.write(image.getWidth() & 0xFF);
-        os.write(image.getHeight() >> 8 & 0xFF);
+        os.write((image.getHeight() >> 8) & 0xFF);
         os.write(image.getHeight() & 0xFF);
 
-
-        //os.write(rleBytes);
-
-        
-         // Support for oversized bitmaps, something like this. needs more work!
-         if (rleBytes.length <= (0xFFFF - 0xB)) {
+        // Support for oversized bitmaps, something like this. needs more work!
+        if (rleBytes.length <= (biggestWrite)) {
             os.write(rleBytes); // Done :)
-            } else {
+        } else {
             // Larger subtitle
-
-            int biggestWrite = 0xFFFF - 0xB;
             int offset = 0;
             os.write(rleBytes, offset, biggestWrite);
-            objectId++;
             offset += biggestWrite;
-            biggestWrite = 0xFFFF - 0x4;
 
-            while ((offset + biggestWrite) < rleBytes.length) {
+            biggestWrite = 0xFFEB;
+            while ((offset + biggestWrite) <= rleBytes.length) {
                 timeHeader(from, to);
 
                 os.write(0x15);
                 os.write(0xFF);
-                os.write(0xFF);
-                os.write(0x00);
-                os.write(0x00); // Object ID
+                os.write(0xEF);
+                os.write(objectId >> 8 & 0xFF);
+                os.write(objectId & 0xFF); // Object ID
                 os.write(0x00); // Version number
-                os.write(0x00); // append switch
+                os.write(0x40); // append switch?
                 os.write(rleBytes, offset, biggestWrite);
                 offset += biggestWrite;
-                objectId++;
+                //objectId++;
             }
 
             biggestWrite = rleBytes.length - offset;
+            if (biggestWrite > 0) {
             timeHeader(from, to);
             os.write(0x15);
-            os.write(((biggestWrite + 4) >> 8) & 0xFF);
-            os.write((biggestWrite + 4) & 0xFF);
-            os.write(0x00);
-            os.write(0x00); // Object ID
+            os.write(((biggestWrite + 0x4) >> 8) & 0xFF);
+            os.write((biggestWrite + 0x4) & 0xFF);
+            os.write(objectId >> 8 & 0xFF);
+            os.write(objectId & 0xFF); // Object ID
             os.write(0x00); // Version number
-            os.write(0x40); // last in sequence
+            os.write(0x40); // last in sequence?
             os.write(rleBytes, offset, biggestWrite);
+            }
         }
     }
 
@@ -180,9 +176,9 @@ public class SupGenerator {
         int height = bitmap.getHeight();
         int x = bitmap.getOffsetX();
         int y = bitmap.getOffsetY();
-
+        
         timeHeader(start, start.subtract(preloadHeader));
-        subpictureHeader(resolution.getX(), resolution.getY(), x, y);
+        subpictureHeader(resolution.getX(), resolution.getY(), x, y, bitmap.getObjectCount());
         ColorTable colorTable = bitmap.getColorTable();
         timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
         windowsHeader(width, height, x, y);
@@ -205,9 +201,9 @@ public class SupGenerator {
         int height = bitmap.getHeight();
         int x = bitmap.getOffsetX();
         int y = bitmap.getOffsetY();
-        
+
         timeHeader(start, start);
-        subpictureHeader(resolution.getX(), resolution.getY(), x, y);
+        subpictureHeader(resolution.getX(), resolution.getY(), x, y, bitmap.getObjectCount());
         ColorTable colorTable = bitmap.getColorTable();
         timeHeader(start, start);
         windowsHeader(width, height, x, y);
@@ -268,7 +264,11 @@ public class SupGenerator {
     }
 
     private void subpictureHeader(final int width, final int height,
-            final int x, final int y) throws IOException {
+            final int x, final int y, final int objectCount) throws IOException {
+        if (objectCount > 0xFF) {
+            throw new RuntimeException("Too many objects");
+        }
+        
         os.write(0x16);
 
         // Size of Header
@@ -286,7 +286,7 @@ public class SupGenerator {
         os.write(0x80); // State
         os.write(0x00); // Pallette Update Flags
         os.write(0x00); // Pallette Id ref
-        os.write(0x01); // Don't Clear Sub-Picture
+        os.write(objectCount & 0xFF); // Number of Objects?
         os.write(0x00);
         os.write(0x00);
         os.write(0x00);

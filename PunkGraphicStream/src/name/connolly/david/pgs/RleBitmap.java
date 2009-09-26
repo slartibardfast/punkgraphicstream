@@ -25,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import name.connolly.david.pgs.color.ColorTable;
+import name.connolly.david.pgs.debug.InvalidBitmapException;
 import name.connolly.david.pgs.debug.SafeByteArrayOutputStream;
 
 public class RleBitmap {
@@ -118,7 +119,13 @@ public class RleBitmap {
                     count = 1;
                 } else {
                     // write out old pixel
-                    writeRleCommand(rle, count, position, yIndex);
+                    if (!(count < 3 && position == 0x47)) {
+                        writeRleCommand(rle, count, position, yIndex);
+                    } else {
+                        // One transparent pixel in this case.
+                        writeRleCommand(rle, count, 0, yIndex);
+                    }
+                   
 
                     // new pixel
                     pixel = image.getRGB(xIndex, yIndex);
@@ -162,55 +169,59 @@ public class RleBitmap {
     /**
      * Format discussed on http://forum.doom9.org/showthread.php?t=124105
      */
-    private void writeRleCommand(final ByteArrayOutputStream rle,
+    private void writeRleCommand(final SafeByteArrayOutputStream rle,
             final int count, final int position, final int y) {
         final boolean color = position != 0; // if 0 color == 0 or end of line
         // signal.
         // else nonzero color
         final boolean extended = count > 63;
+        
         // ByteArrayOutputStream rle = new ByteArrayOutputStream();
 
         // System.out.println("yIndex: " + yIndex + " color: " + color +
         // " extended: "
         // + extended + " pixel count: " + count + " index Position: "
         // + position);
-
+        try {
         if (count < 3 && position != 0) {
             for (int i = 0; i < count; i++) {
-                rle.write(position);
+                rle.safeWrite(position);
             }
         } else {
-            rle.write(0);
+            rle.safeWrite(0);
 
             if (extended) {
                 if (color) {
                     int b = 0xC0;
                     b |= count >> 8 & 0x3F;
-                    rle.write(b);
+                    rle.safeWrite(b);
                     b = count & 0xFF;
-                    rle.write(b);
+                    rle.safeWrite(b);
                 } else {
                     int b = 0x40;
                     b |= count >> 8 & 0x3F;
-                    rle.write(b);
+                    rle.safeWrite(b);
                     b = count & 0xFF;
-                    rle.write(b);
+                    rle.safeWrite(b);
                 }
             } else {
                 if (color) {
                     int b = 0x80;
                     b |= count & 0x3F;
-                    rle.write(b);
+                    rle.safeWrite(b);
                 } else {
                     int b = 0;
                     b |= count & 0x3F;
-                    rle.write(b);
+                    rle.safeWrite(b);
                 }
             }
 
             if (color) {
-                rle.write(position);
+                rle.safeWrite(position);
             }
+        }
+        } catch (InvalidBitmapException e) {
+            System.out.println(e);
         }
     }
 }

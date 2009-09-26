@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 public class Quantizer {
 
     public static BufferedImage indexImage(BufferedImage image) {
-        return indexImage(image, 256);
+        return indexImage(image, 255);
     }
 
     public static BufferedImage indexImage(BufferedImage image, int numColors) {

@@ -19,7 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
 package name.connolly.david.pgs.color;
 
 import java.io.IOException;
@@ -28,128 +27,153 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ColorTable {
-	private class ColorEntry {
-		private final int position;
-		private final int ycbcr;
 
-		public ColorEntry(final int position, final int rgb) {
-			this.position = position;
-			ycbcr = YCrCbRec709_ColorSpace.fromRGB(rgb);
-		}
+    private class ColorEntry {
 
-		@Override
-		public boolean equals(final Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			final ColorEntry other = (ColorEntry) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (position != other.position)
-				return false;
-			if (ycbcr != other.ycbcr)
-				return false;
-			return true;
-		}
+        private final int position;
+        private final int ycbcr;
 
-		private ColorTable getOuterType() {
-			return ColorTable.this;
-		}
+        public ColorEntry(final int position, final int rgb) {
+            this.position = position;
+            ycbcr = YCrCbRec709_ColorSpace.fromRGB(rgb);
+        }
 
-		public int getPosition() {
-			return position;
-		}
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ColorEntry other = (ColorEntry) obj;
+            if (!getOuterType().equals(other.getOuterType())) {
+                return false;
+            }
+            if (position != other.position) {
+                return false;
+            }
+            if (ycbcr != other.ycbcr) {
+                return false;
+            }
+            return true;
+        }
 
-		public int getYCbCr() {
-			return ycbcr;
-		}
+        private ColorTable getOuterType() {
+            return ColorTable.this;
+        }
 
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + position;
-			result = prime * result + ycbcr;
-			return result;
-		}
-	}
+        public int getPosition() {
+            return position;
+        }
 
-	private int colorMissingCount = 0;
+        public int getYCbCr() {
+            return ycbcr;
+        }
 
-	// Key: RGB Color Value: ColorEntry
-	private final Map<Integer, ColorEntry> palette = new LinkedHashMap<Integer, ColorEntry>();
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + getOuterType().hashCode();
+            result = prime * result + position;
+            result = prime * result + ycbcr;
+            return result;
+        }
+    }
+    private int colorMissingCount = 0;
+    // Key: RGB Color Value: ColorEntry
+    private final Map<Integer, ColorEntry> palette = new LinkedHashMap<Integer, ColorEntry>();
 
-	public ColorTable() {
+    public ColorTable() {
+    }
 
-	}
+    public ColorTable(final int[] rgbPalette) {
+        for (final int rgbColor : rgbPalette) {
+            addColor(rgbColor);
+            //palette.put(rgbColor, new ColorEntry(palette.size(), rgbColor));
+        }
+    }
 
-	public ColorTable(final int[] rgbPalette) {
-		for (final int rgbColor : rgbPalette) {
-			palette.put(rgbColor, new ColorEntry(palette.size(), rgbColor));
-		}
-	}
+    public int addColor(final int rgbColor) {
+        int position = palette.size();
 
-	public int addColor(final int rgbColor) {
-		final int position = palette.size();
+        if (palette.size() >= 0x47) {
+            position++;
+        }
 
-		palette.put(rgbColor, new ColorEntry(position, rgbColor));
+        palette.put(rgbColor, new ColorEntry(position, rgbColor));
 
-		return position;
-	}
+        return position;
+    }
 
-	public int getColorPosition(final int rgbColor) {
-		final ColorEntry color = palette.get(rgbColor);
+    public int getColorPosition(final int rgbColor) {
+        final ColorEntry color = palette.get(rgbColor);
 
-		if (color == null)
-			return -1;
+        if (color == null) {
+            return -1;
+        }
 
-		return color.getPosition();
-	}
+        return color.getPosition();
+    }
 
-	public int getYCbCrColor(final int rgbColor) {
-		final ColorEntry color = palette.get(rgbColor);
+    public int getYCbCrColor(final int rgbColor) {
+        final ColorEntry color = palette.get(rgbColor);
 
-		if (color == null) {
-			++colorMissingCount;
-			System.err
-					.println("Must never enquire about a color outside of table: "
-							+ colorMissingCount);
-			throw new RuntimeException("Color not found!");
-		}
+        if (color == null) {
+            ++colorMissingCount;
+            System.err.println("Must never enquire about a color outside of table: " + colorMissingCount);
+            throw new RuntimeException("Color not found!");
+        }
 
-		return color.getYCbCr();
-	}
+        return color.getYCbCr();
+    }
 
-	public void writeIndex(final OutputStream baos) throws IOException {
-		final int size = palette.size() * 5 + 2;
+    public void writeIndex(final OutputStream baos) throws IOException {
+        final int size = (palette.size() + 1) * 5 + 2;
 
-		int count = 0;
-		// 15 3C DC 00 00 00 C0 00 3C D5
-		baos.write(0x14);
-		baos.write(size >> 8 & 0xFF);
-		baos.write((size & 0xFF));
-		baos.write(0x00);
-		baos.write(0x00);
+        int count = 0;
+        // 15 3C DC 00 00 00 C0 00 3C D5
+        baos.write(0x14);
+        baos.write(size >> 8 & 0xFF);
+        baos.write((size & 0xFF));
+        baos.write(0x00);
+        baos.write(0x00);
 
-		for (final ColorEntry entry : palette.values()) {
-			final int color = entry.getYCbCr();
+        for (final ColorEntry entry : palette.values()) {
+            final int color = entry.getYCbCr();
 
-			baos.write(count);
+            if (count == 0x47) {
+                int dummyColor = 0;
+                baos.write(count);
 
-			// Y
-			baos.write(color >> 24 & 0xFF);
-			// Cb
-			baos.write(color >> 16 & 0xFF);
-			// Cr
-			baos.write(color >> 8 & 0xFF);
-			// A
-			baos.write(color & 0xFF);
+                // Y
+                baos.write(dummyColor >> 24 & 0xFF);
+                // Cb
+                baos.write(dummyColor >> 16 & 0xFF);
+                // Cr
+                baos.write(dummyColor >> 8 & 0xFF);
+                // A
+                baos.write(dummyColor & 0xFF);
 
-			count++;
-		}
-	}
+                count++;
+            }
+
+            baos.write(count);
+
+            // Y
+            baos.write(color >> 24 & 0xFF);
+            // Cb
+            baos.write(color >> 16 & 0xFF);
+            // Cr
+            baos.write(color >> 8 & 0xFF);
+            // A
+            baos.write(color & 0xFF);
+
+            count++;
+        }
+    }
 }

@@ -15,13 +15,13 @@ import java.io.IOException;
 public class SafeByteArrayOutputStream extends ByteArrayOutputStream {
     private int lastWrite = -1;
     
-    @Override
-    public synchronized void write(int b) {
+    public synchronized void safeWrite(int b) throws InvalidBitmapException {
         if (lastWrite == 0x50 && b == 0x47) {
             //throw new RuntimeException("Invalid bitmap output.");
-            System.out.println("Transparent output instead of invalid output.");
-            super.write(0);
-            return;
+            //System.out.println("Transparent output instead of invalid output.");
+            //super.write(0);
+            throw new InvalidBitmapException();
+            //return;
         }
 
         super.write(b);
