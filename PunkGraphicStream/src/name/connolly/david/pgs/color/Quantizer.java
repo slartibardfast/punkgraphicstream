@@ -49,8 +49,6 @@ public class Quantizer {
                 }
             }
         } catch (final IOException ex) {
-            // throw new RuntimeException("Quantizer failed" + e.getMessage());
-            // // Should never happen so no RuntimeException
             Logger.getLogger(Quantizer.class.getName()).log(Level.SEVERE,
                     null, ex);
         }

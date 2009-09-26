@@ -22,8 +22,6 @@
 package name.connolly.david.pgs.concurrency;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +29,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
 import name.connolly.david.pgs.SubtitleEvent;
 import name.connolly.david.pgs.color.Quantizer;
 import name.connolly.david.pgs.util.ProgressSink;
