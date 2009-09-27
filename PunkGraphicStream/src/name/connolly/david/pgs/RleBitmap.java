@@ -79,7 +79,7 @@ public class RleBitmap {
             count++;
         }
         
-        System.out.println("object count: " + count);
+        //System.out.println("object count: " + count);
 
         return count;
     }
