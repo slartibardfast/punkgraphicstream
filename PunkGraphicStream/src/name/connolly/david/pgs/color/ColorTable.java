@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import name.connolly.david.pgs.debug.SupOutputStream;
 
 public class ColorTable {
     private int colorMissingCount = 0;
@@ -131,52 +132,74 @@ public class ColorTable {
         return color.getYCbCr();
     }
 
-    public void writeIndex(final OutputStream baos) throws IOException {
+    // TODO: Create a state chart approach that avoids 5047. Land of a million corners!
+    public void writeIndex(final SupOutputStream out) throws IOException {
         int count = 0;
         final int size;
+
         if (palette.size() >= 0x47) {
-            size = (palette.size() + 1) * 5 + 2; // account for the dummy
+            size = ((palette.size() + 1) * 5) + 2; // account for the dummy
         } else {
             size = (palette.size() * 5) + 2;
         }
         
         // 15 3C DC 00 00 00 C0 00 3C D5
-        baos.write(0x14);
-        baos.write(size >> 8 & 0xFF);
-        baos.write(size & 0xFF);
-        baos.write(0x00);
-        baos.write(0x00);
+        out.write(0x14);
+        out.write(size >> 8 & 0xFF);
+        out.write(size & 0xFF);
+        out.write(0x00);
+        out.write(0x00);
 
         for (final ColorEntry entry : palette.values()) {
             final int color = entry.getYCbCr();
 
             if (count == 0x47) {
-                int dummyColor = 0;
-                baos.write(count);
-
+                int dummyColor = 0; // don't use color 0x47, to avoid 5047 in file
+                out.write(count);
                 // Y
-                baos.write(dummyColor >> 24 & 0xFF);
+                out.write(dummyColor >> 24 & 0xFF);
                 // Cb
-                baos.write(dummyColor >> 16 & 0xFF);
+                out.write(dummyColor >> 16 & 0xFF);
                 // Cr
-                baos.write(dummyColor >> 8 & 0xFF);
+                out.write(dummyColor >> 8 & 0xFF);
                 // A
-                baos.write(dummyColor & 0xFF);
+                out.write(dummyColor & 0xFF);
 
                 count++;
             }
 
-            baos.write(count);
+            out.write(count);
 
             // Y
-            baos.write(color >> 24 & 0xFF);
-            // Cb
-            baos.write(color >> 16 & 0xFF);
-            // Cr
-            baos.write(color >> 8 & 0xFF);
-            // A
-            baos.write(color & 0xFF);
+            if (out.isUnsafeWrite(color >> 24 & 0xFF)) {
+                out.write(0x48); // fudge from 0x47
+            } else {
+                out.write(color >> 24 & 0xFF);
+            }
 
+            // Cb
+            if (out.isUnsafeWrite(color >> 16 & 0xFF)) {
+                out.write(0x48); // fudge from 0x47
+            } else {
+                out.write(color >> 16 & 0xFF);
+            }
+
+            // Cr
+            if (out.isUnsafeWrite(color >> 8 & 0xFF)) {
+                out.write(0x48); // fudge from 0x47
+            } else {
+                out.write(color >> 8 & 0xFF);
+            }
+
+            // A
+            if ((color & 0xFF) == 0x50 && count == 0x46) {
+               out.write(0x51); // fudge transparancy to avoid 5047 in file
+            } else if (out.isUnsafeWrite(color & 0xFF)) {
+                out.write(0x48);
+            } else {
+                out.write(color & 0xFF);
+            }
+            
             count++;
         }
     }

@@ -27,21 +27,22 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 
 import name.connolly.david.pgs.color.ColorTable;
+import name.connolly.david.pgs.debug.SupOutputStream;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class SupGenerator {
 
     final FrameRate fps;
     private int fpsCode;
-    private final OutputStream os;
+    private final SupOutputStream out;
     private BigInteger preloadHeader = BigInteger.valueOf(5832);
     private BigInteger preloadBitmap = BigInteger.valueOf(5652);
     private BigInteger preloadMs = BigInteger.valueOf(90);
     private final ProgressSink progress;
     private final Resolution resolution;
 
-    public SupGenerator(final OutputStream os, final FrameRate fps, final Resolution resolution, final ProgressSink progress) {
-        this.os = os;
+    public SupGenerator(final OutputStream out, final FrameRate fps, final Resolution resolution, final ProgressSink progress) {
+        this.out = new SupOutputStream(out);
 
         this.fps = fps;
 
@@ -112,42 +113,42 @@ public class SupGenerator {
         }
 
         timeHeader(from, to);
-        os.write(0x15);
-        os.write((size >> 8) & 0xFF);
-        os.write(size & 0xFF);
-        os.write(0x00);
-        os.write(0x00); // Object ID
-        os.write(0x00); // Version number
-        os.write(0x80); // first in sequence
-        os.write((objectSize >> 16) & 0xFF);
-        os.write((objectSize >> 8) & 0xFF);
-        os.write(objectSize & 0xFF);
-        os.write((image.getWidth() >> 8) & 0xFF);
-        os.write(image.getWidth() & 0xFF);
-        os.write((image.getHeight() >> 8) & 0xFF);
-        os.write(image.getHeight() & 0xFF);
+        out.write(0x15);
+        out.write((size >> 8) & 0xFF);
+        out.write(size & 0xFF);
+        out.write(0x00);
+        out.write(0x00); // Object ID
+        out.write(0x00); // Version number
+        out.write(0x80); // first in sequence
+        out.write((objectSize >> 16) & 0xFF);
+        out.write((objectSize >> 8) & 0xFF);
+        out.write(objectSize & 0xFF);
+        out.write((image.getWidth() >> 8) & 0xFF);
+        out.write(image.getWidth() & 0xFF);
+        out.write((image.getHeight() >> 8) & 0xFF);
+        out.write(image.getHeight() & 0xFF);
 
         // Support for oversized bitmaps, something like this. needs more work!
         if (rleBytes.length <= (biggestWrite)) {
-            os.write(rleBytes); // Done :)
+            out.write(rleBytes); // Done :)
         } else {
             // Larger subtitle
             int offset = 0;
-            os.write(rleBytes, offset, biggestWrite);
+            out.write(rleBytes, offset, biggestWrite);
             offset += biggestWrite;
 
             objectId++;
             biggestWrite = 0xFFEB;
             while ((offset + biggestWrite) <= rleBytes.length) {
                 timeHeader(from, to);
-                os.write(0x15);
-                os.write(0xFF);
-                os.write(0xEF);
-                os.write(0x00);
-                os.write(0x00); 
-                os.write(0x00); // Version number
-                os.write(0x00); // append switch?
-                os.write(rleBytes, offset, biggestWrite);
+                out.write(0x15);
+                out.write(0xFF);
+                out.write(0xEF);
+                out.write(0x00);
+                out.write(0x00);
+                out.write(0x00); // Version number
+                out.write(0x00); // append switch?
+                out.write(rleBytes, offset, biggestWrite);
                 offset += biggestWrite;
                 objectId++;
             }
@@ -155,14 +156,14 @@ public class SupGenerator {
             biggestWrite = rleBytes.length - offset;
             if (biggestWrite > 0) {
             timeHeader(from, to);
-            os.write(0x15);
-            os.write(((biggestWrite + 0x4) >> 8) & 0xFF);
-            os.write((biggestWrite + 0x4) & 0xFF);
-            os.write(0x00);
-            os.write(0x00); // Object ID Ref?
-            os.write(0x00); // Version number
-            os.write(0x40); // last in sequence?
-            os.write(rleBytes, offset, biggestWrite);
+            out.write(0x15);
+            out.write(((biggestWrite + 0x4) >> 8) & 0xFF);
+            out.write((biggestWrite + 0x4) & 0xFF);
+            out.write(0x00);
+            out.write(0x00); // Object ID Ref?
+            out.write(0x00); // Version number
+            out.write(0x40); // last in sequence?
+            out.write(rleBytes, offset, biggestWrite);
             }
         }
     }
@@ -179,7 +180,7 @@ public class SupGenerator {
         timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
         windowsHeader(width, height, x, y);
         timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
-        colorTable.writeIndex(os);
+        colorTable.writeIndex(out);
         bitmapPacket(bitmap, start.subtract(preloadBitmap), start.subtract(preloadHeader));
         timeHeader(start.subtract(preloadBitmap), BigInteger.ZERO);
         trailer();
@@ -204,7 +205,7 @@ public class SupGenerator {
         timeHeader(start, start);
         windowsHeader(width, height, x, y);
         timeHeader(start, BigInteger.ZERO);
-        colorTable.writeIndex(os);
+        colorTable.writeIndex(out);
         bitmapPacket(bitmap, start, BigInteger.ZERO);
         timeHeader(start, BigInteger.ZERO);
         trailer();
@@ -219,72 +220,72 @@ public class SupGenerator {
     private void windowsHeader(final int width, final int height,
             final int widthOffset, final int heightOffset) throws IOException {
         // 17 00 0A 01 00 00 00 03 F7 07 80 00 31
-        os.write(0x17);
-        os.write(0x00);
-        os.write(0x0A);
-        os.write(0x01);
-        os.write(0x00);
-        os.write(widthOffset >> 8 & 0xFF); // TODO: Confirm Works
-        os.write(widthOffset & 0xFF); // TODO: Confirm Works
-        os.write(heightOffset >> 8 & 0xFF);
-        os.write(heightOffset & 0xFF);
-        os.write(width >> 8 & 0xFF);
-        os.write(width & 0xFF);
-        os.write(height >> 8 & 0xFF);
-        os.write(height & 0xFF);
+        out.write(0x17);
+        out.write(0x00);
+        out.write(0x0A);
+        out.write(0x01);
+        out.write(0x00);
+        out.write(widthOffset >> 8 & 0xFF); // TODO: Confirm Works
+        out.write(widthOffset & 0xFF); // TODO: Confirm Works
+        out.write(heightOffset >> 8 & 0xFF);
+        out.write(heightOffset & 0xFF);
+        out.write(width >> 8 & 0xFF);
+        out.write(width & 0xFF);
+        out.write(height >> 8 & 0xFF);
+        out.write(height & 0xFF);
     }
 
     private void clearSubpictureHeader(final int width, final int height,
             final int x, final int y)
             throws IOException {
-        os.write(0x16);
+        out.write(0x16);
 
         // Size of Header
-        os.write(0x00);
-        os.write(0x0B);
+        out.write(0x00);
+        out.write(0x0B);
 
         // Size of Picture
-        os.write(width >> 8 & 0xFF);
-        os.write(width & 0xFF);
-        os.write(height >> 8 & 0xFF);
-        os.write(height & 0xFF);
-        os.write(fpsCode); // ??
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00);
+        out.write(width >> 8 & 0xFF);
+        out.write(width & 0xFF);
+        out.write(height >> 8 & 0xFF);
+        out.write(height & 0xFF);
+        out.write(fpsCode); // ??
+        out.write(0x00);
+        out.write(0x00);
+        out.write(0x00);
+        out.write(0x00);
+        out.write(0x00);
+        out.write(0x00);
     }
 
     private void subpictureHeader(final int width, final int height,
             final int x, final int y, final int objectCount) throws IOException {
-        os.write(0x16);
+        out.write(0x16);
 
         // Size of Header
-        os.write(0x00);
-        os.write(0x13);
+        out.write(0x00);
+        out.write(0x13);
 
         // Size of Picture
-        os.write(width >> 8 & 0xFF);
-        os.write(width & 0xFF);
-        os.write(height >> 8 & 0xFF);
-        os.write(height & 0xFF);
-        os.write(fpsCode);
-        os.write(objectCount >> 8 & 0xFF); // Number
-        os.write(objectCount & 0xFF);
-        os.write(0x80); // State
-        os.write(0x00); // Pallette Update Flags
-        os.write(0x00); // Pallette Id ref
-        os.write(0x01); // Number?
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00);
-        os.write(0x00); // item cropped =  =| 0x80 , item forced |= 0x40
-        os.write(x >> 8 & 0xFF); // TODO: Confirm Works
-        os.write(x & 0xFF); // TODO: Confirm Works
-        os.write(y >> 8 & 0xFF);
-        os.write(y & 0xFF);
+        out.write(width >> 8 & 0xFF);
+        out.write(width & 0xFF);
+        out.write(height >> 8 & 0xFF);
+        out.write(height & 0xFF);
+        out.write(fpsCode);
+        out.write(objectCount >> 8 & 0xFF); // Number
+        out.write(objectCount & 0xFF);
+        out.write(0x80); // State
+        out.write(0x00); // Pallette Update Flags
+        out.write(0x00); // Pallette Id ref
+        out.write(0x01); // Number?
+        out.write(0x00);
+        out.write(0x00);
+        out.write(0x00);
+        out.write(0x00); // item cropped =  =| 0x80 , item forced |= 0x40
+        out.write(x >> 8 & 0xFF); // TODO: Confirm Works
+        out.write(x & 0xFF); // TODO: Confirm Works
+        out.write(y >> 8 & 0xFF);
+        out.write(y & 0xFF);
     }
 
     private void timeHeader(final BigInteger from, final BigInteger to)
@@ -309,21 +310,20 @@ public class SupGenerator {
             toBytes = "0" + toBytes;
         }
 
-        os.write(0x50);
-        os.write(0x47);
+        out.writeSupHeader();
 
         for (int i = 0; i < 8; i = i + 2) {
-            os.write(Integer.parseInt(fromBytes.substring(i, i + 2), 16));
+            out.write(Integer.parseInt(fromBytes.substring(i, i + 2), 16));
         }
 
         for (int i = 0; i < 8; i = i + 2) {
-            os.write(Integer.parseInt(toBytes.substring(i, i + 2), 16));
+            out.write(Integer.parseInt(toBytes.substring(i, i + 2), 16));
         }
     }
 
     private void trailer() throws IOException {
-        os.write(0x80);
-        os.write(0);
-        os.write(0);
+        out.write(0x80);
+        out.write(0);
+        out.write(0);
     }
 }

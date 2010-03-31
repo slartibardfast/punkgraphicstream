@@ -5,11 +5,13 @@
 
 package name.connolly.david.pgs.debug;
 
+import java.io.IOException;
+
 /**
  *
  * @author slarti
  */
-public class InvalidBitmapException extends Exception {
+public class InvalidBitmapException extends IOException {
 
     public InvalidBitmapException(Throwable cause) {
         super(cause);
