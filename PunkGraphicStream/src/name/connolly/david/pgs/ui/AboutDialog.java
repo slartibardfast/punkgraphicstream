@@ -73,7 +73,7 @@ public class AboutDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabelApplication.setText("PunkGraphicStream Version 0.7");
+        jLabelApplication.setText("PunkGraphicStream Version 0.7.1");
 
         jTextArea1.setEditable(false);
         jTextArea1.setFont(jTextArea1.getFont().deriveFont(jTextArea1.getFont().getSize()-1f));
@@ -82,7 +82,7 @@ public class AboutDialog extends javax.swing.JDialog {
         jTextArea1.setWrapStyleWord(true);
         jScrollPaneLicense.setViewportView(jTextArea1);
 
-        jLabelCopyright.setText("Copyright © 2009 David Connolly.  All rights Reserved.");
+        jLabelCopyright.setText("Copyright © 2009-2010 David Connolly.  All rights Reserved.");
 
         jLabel1.setText("License & Acknowledgements:");
 
@@ -93,7 +93,7 @@ public class AboutDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                    .addComponent(jScrollPaneLicense, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabelApplication, javax.swing.GroupLayout.Alignment.LEADING)
