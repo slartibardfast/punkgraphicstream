@@ -40,7 +40,7 @@ public class SupOutputStream extends OutputStream {
 
     @Override
     public synchronized void write(byte[] buffer, int off, int len) throws IOException {
-        for (int i = off; i < len; i++) {
+        for (int i = off; i < (len + off); i++) {
             write(buffer[i]);
         }
     }
