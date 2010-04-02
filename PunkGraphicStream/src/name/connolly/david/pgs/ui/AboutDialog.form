@@ -32,7 +32,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jScrollPaneLicense" alignment="0" pref="347" max="32767" attributes="0"/>
+                  <Component id="jScrollPaneLicense" alignment="0" max="32767" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="1" groupAlignment="1" attributes="0">
                           <Component id="jLabelApplication" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -75,7 +75,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelApplication">
       <Properties>
-        <Property name="text" type="java.lang.String" value="PunkGraphicStream Version 0.7"/>
+        <Property name="text" type="java.lang.String" value="PunkGraphicStream Version 0.7.1"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPaneLicense">
@@ -102,7 +102,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabelCopyright">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Copyright &#xa9; 2009 David Connolly.  All rights Reserved."/>
+        <Property name="text" type="java.lang.String" value="Copyright &#xa9; 2009-2010 David Connolly.  All rights Reserved."/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">

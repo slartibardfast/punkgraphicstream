@@ -124,6 +124,7 @@ public class RleBitmap {
                         writeRleCommand(rle, count, position, yIndex);
                     } else {
                         // One transparent pixel in this case.
+                        // Hmm is this still possible?
                         writeRleCommand(rle, count, 0, yIndex);
                     }
                    
