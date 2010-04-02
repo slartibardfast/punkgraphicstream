@@ -124,8 +124,9 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonFilmNtsc);
+        jRadioButtonFilmNtsc.setSelected(true);
         jRadioButtonFilmNtsc.setText("23.97 (Film/NTSC) ");
-        jRadioButtonFilmNtsc.setToolTipText("24 Frames Per Second");
+        jRadioButtonFilmNtsc.setToolTipText("23.97 Frames Per Second");
         jRadioButtonFilmNtsc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonFilmNtscActionPerformed(evt);
@@ -133,9 +134,8 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         });
 
         buttonGroupFrameRate.add(jRadioButtonFilm);
-        jRadioButtonFilm.setSelected(true);
         jRadioButtonFilm.setText("24 (Film)");
-        jRadioButtonFilm.setToolTipText("23.976 Frames Per Second");
+        jRadioButtonFilm.setToolTipText("24 Frames Per Second");
         jRadioButtonFilm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonFilmActionPerformed(evt);
