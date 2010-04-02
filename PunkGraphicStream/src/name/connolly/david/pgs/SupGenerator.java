@@ -173,10 +173,10 @@ public class SupGenerator {
         int height = bitmap.getHeight();
         int x = bitmap.getOffsetX();
         int y = bitmap.getOffsetY();
+        ColorTable colorTable = bitmap.getColorTable();
         
         timeHeader(start, start.subtract(preloadHeader));
         subpictureHeader(resolution.getX(), resolution.getY(), x, y, bitmap.getObjectCount());
-        ColorTable colorTable = bitmap.getColorTable();
         timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
         windowsHeader(width, height, x, y);
         timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
