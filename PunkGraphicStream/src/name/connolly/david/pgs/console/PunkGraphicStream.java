@@ -83,9 +83,9 @@ public class PunkGraphicStream {
 
     private static void printUsageAndQuit() {
         System.out.println("Usage: ");
-        System.out.println("java -jar PunkGraphicStream.jar filename.ass fps resolution");
+        System.out.println("cli-pgs filename.ass fps resolution");
         System.out.println();
-        System.out.println("fps = [film, film_ntsc, pal, ntsc, hd_pal, hd_ntsc]");
+        System.out.println("fps = [film, film_ntsc, tv_pal, tv_ntsc, hd_pal, hd_ntsc]");
         System.out.println("resolution = [ntsc_480, pal_576, hd_720, hd_1080]");
 
         printLicence();
@@ -94,8 +94,8 @@ public class PunkGraphicStream {
     }
 
     private static void printLicence() {
-        System.out.println("PunkGraphicStream 0.6");
-        System.out.println("Copyright 2009 David Connolly. All rights reserved.");
+        System.out.println("PunkGraphicStream 0.7.2");
+        System.out.println("Copyright 2009-2010 David Connolly. All rights reserved.");
         System.out.println();
         System.out.println("This is free software; see sources for copying conditions and credits of dependencies.");
         System.out.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE");
