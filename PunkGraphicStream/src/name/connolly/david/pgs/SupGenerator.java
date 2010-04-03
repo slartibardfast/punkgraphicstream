@@ -301,7 +301,7 @@ public class SupGenerator {
             throw new RuntimeException("Timecode too big");
         }
 
-        // FIXME: A non String version; When its not 2am!
+        // TODO: A non String version; When its not 2am!
         while (fromBytes.length() < 8) {
             fromBytes = "0" + fromBytes;
         }
@@ -310,15 +310,7 @@ public class SupGenerator {
             toBytes = "0" + toBytes;
         }
 
-        out.writeSupHeader();
-
-        for (int i = 0; i < 8; i = i + 2) {
-            out.write(Integer.parseInt(fromBytes.substring(i, i + 2), 16));
-        }
-
-        for (int i = 0; i < 8; i = i + 2) {
-            out.write(Integer.parseInt(toBytes.substring(i, i + 2), 16));
-        }
+        out.writeSupHeader(fromBytes, toBytes);
     }
 
     private void trailer() throws IOException {

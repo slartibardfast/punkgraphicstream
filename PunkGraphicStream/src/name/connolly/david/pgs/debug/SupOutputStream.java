@@ -60,10 +60,19 @@ public class SupOutputStream extends OutputStream {
         out.flush();
     }
     
-    public void writeSupHeader() throws IOException {
+    public void writeSupHeader(String fromBytes, String toBytes) throws IOException {
         synchronized (out) {
             out.write(0x50);
             out.write(0x47);
+
+            for (int i = 0; i < 8; i = i + 2) {
+                out.write(Integer.parseInt(fromBytes.substring(i, i + 2), 16));
+            }
+
+            for (int i = 0; i < 8; i = i + 2) {
+                out.write(Integer.parseInt(toBytes.substring(i, i + 2), 16));
+            }
+            
             lastWrite = -1;
         }
     }
