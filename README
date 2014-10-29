@@ -1,4 +1,4 @@
-PunkGraphicStream Version 0.1
+PunkGraphicStream Version 0.7.2
 
 To run this program please ensure you have both the jar 
 and native library "libass" in the same directory.
@@ -9,3 +9,6 @@ java -jar PunkGraphicStream.jar input.ass fps
 Where 
 input.ass: input subtitle file 
 fps: is one of film, film_ntsc, pal, ntsc, hd_pal or hd_ntsc
+
+N.B. This is the initial import to GitHub of an old program 
+build instructions for the native library will follow soon.
