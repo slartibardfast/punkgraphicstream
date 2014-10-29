@@ -1,4 +1,4 @@
-/*
+w/*
  * AboutDialog.java
  *
  * Copyright 2008 David Connolly. All rights reserved.
