@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
 import name.connolly.david.pgs.FrameRate;
 import name.connolly.david.pgs.Render;
 import name.connolly.david.pgs.RenderException;

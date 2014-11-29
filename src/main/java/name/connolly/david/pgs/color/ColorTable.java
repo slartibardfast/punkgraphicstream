@@ -22,7 +22,6 @@
 package name.connolly.david.pgs.color;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import name.connolly.david.pgs.debug.SupOutputStream;

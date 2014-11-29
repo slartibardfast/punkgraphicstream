@@ -13,7 +13,12 @@ import java.io.IOException;
  */
 public class InvalidBitmapException extends IOException {
 
-    public InvalidBitmapException(Throwable cause) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4871336978208275660L;
+
+	public InvalidBitmapException(Throwable cause) {
         super(cause);
     }
 

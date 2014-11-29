@@ -35,7 +35,6 @@ import name.connolly.david.pgs.Render;
 import name.connolly.david.pgs.Resolution;
 import name.connolly.david.pgs.SubtitleEvent;
 import name.connolly.david.pgs.SupGenerator;
-import name.connolly.david.pgs.debug.SupOutputStream;
 import name.connolly.david.pgs.util.ProgressSink;
 
 public class EncodeRunnable implements Runnable {

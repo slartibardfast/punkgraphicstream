@@ -38,14 +38,12 @@ public enum Application {
 	INSTANCE;
 	AtomicBoolean initalized = new AtomicBoolean(false);
 	Object application;
-	@SuppressWarnings("unchecked")
-	Class listenerClass;
+	Class<?> listenerClass;
 	Method addApplicationListener;
 
-	@SuppressWarnings("unchecked")
 	private void init() {
 		try {
-			final Class applicationClass = Class
+			final Class<?> applicationClass = Class
 					.forName("com.apple.eawt.Application");
 			final Method applicationSingleton = applicationClass
 					.getDeclaredMethod("getApplication", (Class[]) null);

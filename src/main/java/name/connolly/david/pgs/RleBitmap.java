@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import name.connolly.david.pgs.color.ColorTable;
-import name.connolly.david.pgs.debug.InvalidBitmapException;
 
 public class RleBitmap {
     private final int MAX_PAYLOAD_FIRST = 0xFFFF - 0xB;
@@ -111,13 +110,16 @@ public class RleBitmap {
                     count++;
                 } else if (pixel == null) {
                     pixel = image.getRGB(xIndex, yIndex);
-                    position = table.getColorPosition(pixel);
+                    
+                    if (pixel != null) {
+	                    position = table.getColorPosition(pixel);
+	
+	                    if (position == -1) {
+	                        position = table.addColor(pixel);
+	                    }
 
-                    if (position == -1) {
-                        position = table.addColor(pixel);
+	                    count = 1;
                     }
-
-                    count = 1;
                 } else {
                     // write out old pixel
                     if (!(count < 3 && position == 0x47)) {

@@ -11,7 +11,12 @@ package name.connolly.david.pgs;
  */
 public class BitmapOversizeException extends Exception {
 
-    public BitmapOversizeException(Throwable cause) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2345166805725683515L;
+
+	public BitmapOversizeException(Throwable cause) {
         super(cause);
     }
 
