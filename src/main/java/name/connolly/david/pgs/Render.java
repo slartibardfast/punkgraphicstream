@@ -34,7 +34,7 @@ public enum Render {
     public void init(ProgressSink progress) throws RenderException {
         if (!loaded) {
             try {
-                System.loadLibrary("ass"); // Non-Static init OK in a Singleton.
+                System.loadLibrary("pgs-jni"); // Non-Static init OK in a Singleton.
                 loaded = true;
             } catch (UnsatisfiedLinkError e) {
                 throw new RenderException(e);
