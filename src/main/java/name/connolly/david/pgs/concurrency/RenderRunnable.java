@@ -58,7 +58,7 @@ public class RenderRunnable implements Runnable {
     private final Semaphore quantizePending = new Semaphore(quantizeThreadCount);
     private final int x;
     private final int y;
-    
+
     public RenderRunnable(String inputFilename, String outputFilename,
             FrameRate fps, Resolution resolution, ProgressSink progress) {
         this.inputFilename = inputFilename;
@@ -196,11 +196,11 @@ public class RenderRunnable implements Runnable {
                         detectTimecode = detectTimecode + (long) fps.milliseconds();
                     }
                 }
-                
+
                 event.setImage(image);
                 renderer.render(event, image, event.getRenderTimecode());
 
-                if (!renderer.isRunning()) {
+                if (!Render.isRunning()) {
                     // End the thread, no more images will be passed further on.
                     return;
                 }
