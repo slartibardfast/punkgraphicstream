@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 public enum Application {
 
 	INSTANCE;
-	AtomicBoolean initalized = new AtomicBoolean(false);
+	public AtomicBoolean initalized = new AtomicBoolean(false);
 	Object application;
 	Class<?> listenerClass;
 	Method addApplicationListener;
@@ -52,6 +52,7 @@ public enum Application {
 			listenerClass = Class.forName("com.apple.eawt.ApplicationListener");
 			addApplicationListener = applicationClass.getDeclaredMethod(
 					"addApplicationListener", listenerClass);
+			initalized.set(true);
 		} catch (final IllegalAccessException ex) {
 			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
 					null, ex);
@@ -71,8 +72,6 @@ public enum Application {
 			Logger.getLogger(Application.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
-
-		initalized.set(true);
 	}
 
 	public void addListener(ApplicationHandler listener) {

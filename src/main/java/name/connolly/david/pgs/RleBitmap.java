@@ -106,19 +106,19 @@ public class RleBitmap {
             xIndex = 0;
 
             while (xIndex < width) {
-                if (new Integer(image.getRGB(xIndex, yIndex)).equals(pixel)) {
+                if (Integer.valueOf(image.getRGB(xIndex, yIndex)).equals(pixel)) {
                     count++;
                 } else if (pixel == null) {
                     pixel = image.getRGB(xIndex, yIndex);
-                    
-                    if (pixel != null) {
-	                    position = table.getColorPosition(pixel);
-	
-	                    if (position == -1) {
-	                        position = table.addColor(pixel);
-	                    }
 
-	                    count = 1;
+                    if (pixel != null) {
+                        position = table.getColorPosition(pixel);
+
+                        if (position == -1) {
+                            position = table.addColor(pixel);
+                        }
+
+                        count = 1;
                     }
                 } else {
                     // write out old pixel

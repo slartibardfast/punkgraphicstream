@@ -55,25 +55,27 @@ public class PunkGraphicStream extends javax.swing.JFrame {
         if (MAC_OS_X) {
             Application application = Application.INSTANCE;
 
-            menuBar.setVisible(false);
+            if (application.initalized.get()) {
+                menuBar.setVisible(false);
 
-            application.addListener(new ApplicationHandler("handleAbout") {
+                application.addListener(new ApplicationHandler("handleAbout") {
 
-                @Override
-                public void handle(ApplicationEvent event) {
-                    event.setHandled(true);
-                    new AboutDialog(parent, true).setVisible(true);
-                }
-            });
+                    @Override
+                    public void handle(ApplicationEvent event) {
+                        event.setHandled(true);
+                        new AboutDialog(parent, true).setVisible(true);
+                    }
+                });
 
-            application.addListener(new ApplicationHandler("handleQuit") {
+                application.addListener(new ApplicationHandler("handleQuit") {
 
-                @Override
-                public void handle(ApplicationEvent event) {
-                    event.setHandled(true);
-                    System.exit(0);
-                }
-            });
+                    @Override
+                    public void handle(ApplicationEvent event) {
+                        event.setHandled(true);
+                        System.exit(0);
+                    }
+                });
+            }
         }
     }
 

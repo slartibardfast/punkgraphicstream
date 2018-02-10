@@ -70,6 +70,6 @@ public enum Render {
         return !render.abort;
     }
 
-    public native void render(SubtitleEvent event, BufferedImage image, long timecode)
+    public native boolean render(SubtitleEvent event, BufferedImage image, long timecode)
             throws RenderException;
 }

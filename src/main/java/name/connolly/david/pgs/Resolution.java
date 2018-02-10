@@ -25,7 +25,7 @@ public enum Resolution {
 
     NTSC_480, PAL_576, HD_720, HD_1080;
 
-    public int getX() {
+    public int getWidth() {
         switch (this) {
             case NTSC_480:
             case PAL_576:
@@ -38,7 +38,7 @@ public enum Resolution {
         }
     }
 
-    public int getY() {
+    public int getHeight() {
         switch (this) {
             case NTSC_480:
                 return 480;

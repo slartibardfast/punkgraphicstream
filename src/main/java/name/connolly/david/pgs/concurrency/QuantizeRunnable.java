@@ -65,11 +65,11 @@ public class QuantizeRunnable implements Runnable {
                 if (event == null) {
                     continue;
                 }
+                if (event.rendered) {
+                    image = event.getImage();
 
-                image = event.getImage();
-
-                Quantizer.indexImage(image);
-
+                    Quantizer.indexImage(image);
+                }
                 synchronized (encodeQueue) {
                     while (event.getId() != encodeQueue.nextEvent()) {
                         encodeQueue.wait();

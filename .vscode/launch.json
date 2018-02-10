@@ -1,0 +1,81 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch)-PunkGraphicStream<pgs>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "name.connolly.david.pgs.console.PunkGraphicStream",
+            "projectName": "pgs",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AboutDialog<pgs>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "name.connolly.david.pgs.ui.AboutDialog",
+            "projectName": "pgs",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-EncodeDialog<pgs>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "name.connolly.david.pgs.ui.EncodeDialog",
+            "projectName": "pgs",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-PunkGraphicStream<pgs>(1)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "name.connolly.david.pgs.ui.PunkGraphicStream",
+            "projectName": "pgs",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-SupReporter<pgs>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "name.connolly.david.pgs.util.SupReporter",
+            "projectName": "pgs",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TsReporter<pgs>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "name.connolly.david.pgs.util.TsReporter",
+            "projectName": "pgs",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 0
+        }
+    ]
+}

@@ -29,7 +29,7 @@ public class Timecode implements Comparable<Timecode> {
 
     @Override
     public int compareTo(Timecode o) {
-        return new Long(start).compareTo(o.start);
+        return Long.valueOf(start).compareTo(o.start);
     }
 
     @Override
@@ -93,6 +93,11 @@ public class Timecode implements Comparable<Timecode> {
         return merged;
     }
 
+    public Timecode getClamped(FrameRate fps) {
+        Timecode t = new Timecode(fps.clampMs(this.getStart()), this.getEnd());
+        return t;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -112,7 +117,7 @@ public class Timecode implements Comparable<Timecode> {
 
     @Override
     public int hashCode() {
-        return new Long(start).hashCode();
+        return Long.valueOf(start).hashCode();
     }
 
     public boolean overlaps(Timecode other) {

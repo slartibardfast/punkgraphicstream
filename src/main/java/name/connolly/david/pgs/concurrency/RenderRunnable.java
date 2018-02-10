@@ -150,7 +150,7 @@ public class RenderRunnable implements Runnable {
                     timecode = timecode.merge(other);
                 }
             }
-            timecodes.add(timecode);
+            timecodes.add(timecode.getClamped(fps));
         }
 
         return timecodes;
@@ -171,34 +171,41 @@ public class RenderRunnable implements Runnable {
             while (event != null && !cancelled.get()) {
                 Timecode timecode = event.getTimecode();
                 final long end = timecode.getEnd();
-
+                long renderTimecode;
                 SubtitleEvent nextEvent = null;
                 final BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
                 long detectTimecode = Math.round(timecode.getStart() + fps.milliseconds());
                 boolean changed = false;
                 boolean nextUnreachable = (detectTimecode + fps.milliseconds()) >= timecode.getEnd();
                 // Prepare for change detect
-                renderer.changeDetect(timecode.getStart());
+                renderTimecode = detectTimecode - 1;
+                renderer.changeDetect(renderTimecode);
+                
                 // Change Detect Loop
                 while (!changed && !nextUnreachable) {
-                    changed = renderer.changeDetect(detectTimecode) > 0;
+                    int changeDetectVal = renderer.changeDetect(detectTimecode);
+
+                    changed = changeDetectVal > 0;
+                    
                     nextUnreachable = detectTimecode + fps.milliseconds() > timecode.getEnd();
 
                     if (changed) {
-                        event.setTimecode(new Timecode(timecode.getStart(), detectTimecode - 1));
+                        renderTimecode = detectTimecode - 1;
+                        event.setTimecode(new Timecode(timecode.getStart(), renderTimecode));
                         event.setType(SubtitleType.SEQUENCE);
                         timecode = new Timecode(detectTimecode, end);
                         nextEvent = new SubtitleEvent(timecode, SubtitleType.SEQUENCE);
-                        progress.progress(percentage, "Rendering Event with Animation (" + eventIndex + " of " + eventCount + " Estimated)");
+                        progress.progress(percentage, "Rendering Event with Animation (" + eventIndex + " of " + eventCount + " Estimated as ChangeDetect:"+ changeDetectVal +")");
 
                         eventCount++;
                     } else if (!nextUnreachable) {
-                        detectTimecode = detectTimecode + (long) fps.milliseconds();
+                        detectTimecode = Math.round(detectTimecode + fps.milliseconds());
                     }
                 }
 
                 event.setImage(image);
-                renderer.render(event, image, event.getRenderTimecode());
+                event.rendered = renderer.render(event, image, renderTimecode);
+                event.walkClips();
 
                 if (!Render.isRunning()) {
                     // End the thread, no more images will be passed further on.

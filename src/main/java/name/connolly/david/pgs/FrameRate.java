@@ -21,6 +21,10 @@
  */
 package name.connolly.david.pgs;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
 public enum FrameRate {
     FILM(23.976023976024, 41.708333333333329, 3750),
     FILM_NTSC(24, 41.666666666666664, 3753.75),
@@ -29,8 +33,8 @@ public enum FrameRate {
     HD_PAL(50, 20, 1800),
     HD_NTSC(59.9400599400599, 16.683333333333334, 1501.5),
     ANIMATED(100, 10, 900);
-    private final double milliseconds;
-    private final double ticks;
+    private final BigDecimal milliseconds;
+    private final BigDecimal ticks;
     private final double fps;
 
     /**
@@ -40,30 +44,33 @@ public enum FrameRate {
      * @param ticks Duration in sup ticks
      */
     FrameRate(double fps, double milliseconds, double ticks) {
-        this.milliseconds = milliseconds;
-        this.ticks = ticks;
+        this.milliseconds = BigDecimal.valueOf(milliseconds);
+        this.ticks = BigDecimal.valueOf(ticks);
         this.fps = fps;
     }
 
-    /**
-     *
-     * @param timecode in millisecond
-     * @return Number of Frame
-     */
-    public long startFrame(double start) {
-        return (long) Math.round(start / milliseconds);
-    }
-
-    public long endFrame(double end) {
-        return (long) Math.round(end / milliseconds);
-    }
-
     public double milliseconds() {
-        return milliseconds;
+        return milliseconds.doubleValue();
     }
 
     public double ticks() {
-        return ticks;
+        return ticks.doubleValue();
+    }
+     
+    public long clampMs(long ms) {
+    	BigDecimal clamped = BigDecimal.valueOf(ms);
+    	
+    	clamped = clamped.divide(this.milliseconds, RoundingMode.FLOOR).multiply(this.milliseconds);
+    	
+    	return clamped.longValue();
+    }
+
+    public BigInteger clampTicks(long ms) {
+    	BigDecimal clamped = BigDecimal.valueOf(ms).multiply(BigDecimal.valueOf(90));
+    	
+    	clamped = clamped.divide(this.ticks, RoundingMode.FLOOR).multiply(this.ticks);
+    	
+    	return clamped.toBigInteger();
     }
 
     public double fps() {

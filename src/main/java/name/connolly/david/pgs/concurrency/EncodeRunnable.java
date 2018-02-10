@@ -67,7 +67,6 @@ public class EncodeRunnable implements Runnable {
         try {
             SubtitleEvent event;
             final SupGenerator packet;
-            long encodeIndex = 0;
             boolean quantizeThreadsActive = quantizePending.tryAcquire(quantizeThreadCount) == false;
 
             os = new BufferedOutputStream(new FileOutputStream(filename));
@@ -83,10 +82,8 @@ public class EncodeRunnable implements Runnable {
                     quantizePending.release(quantizeThreadCount); // For Next Run
                 }
 
-                if (event != null) {
+                if (event != null && event.rendered) {
                     packet.addEvent(event);
-
-                    encodeIndex++;
                 }
             }
 
