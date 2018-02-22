@@ -24,7 +24,6 @@ package name.connolly.david.pgs;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigInteger;
 
 import name.connolly.david.pgs.color.ColorTable;
 import name.connolly.david.pgs.debug.SupOutputStream;
@@ -35,9 +34,10 @@ public class SupGenerator {
     final FrameRate fps;
     private int fpsCode;
     private final SupOutputStream out;
-    private BigInteger preloadHeader = BigInteger.valueOf(5832);
-    private BigInteger preloadBitmap = BigInteger.valueOf(5652);
-    private BigInteger preloadMs = BigInteger.valueOf(90);
+    // all in ticks
+    private long preloadHeader = 5832;
+    private long preloadBitmap = 5652;
+    private long preloadMs = 90;
     private final ProgressSink progress;
     private final Resolution resolution;
 
@@ -77,18 +77,8 @@ public class SupGenerator {
 
     public void addEvent(SubtitleEvent event) throws IOException,
             InterruptedException {
-        final BigInteger start;
-        final BigInteger end;
-
         try {
-            start = this.fps.clampTicks(event.getTimecode().getStart());
-            end =  this.fps.clampTicks(event.getTimecode().getEnd());
-
-            // if (start.compareTo(preloadHeader) >= 0) {
-                writeEvent(end, start, event);
-            // } else {
-            //     writeEventNoPreload(end, start, event);
-            // }
+            writeEvent(event);
         } catch (BitmapOversizeException e) {
             progress.fail("Subtitle image too large. Try to reduce effects, font size or number of characters.");
         } catch (IOException e) {
@@ -102,7 +92,7 @@ public class SupGenerator {
 
     }
 
-    public void bitmapPacket(int objectId, final RleBitmap bitmap, final BigInteger from, final BigInteger to) throws IOException {
+    public void bitmapPacket(int objectId, final RleBitmap bitmap, final long from, final long to) throws IOException {
         BufferedImage image = bitmap.getImage();
         byte[] rleBytes = bitmap.getRle();
         int size;
@@ -167,63 +157,38 @@ public class SupGenerator {
         }
     }
 
-    private void writeEvent(final BigInteger end, BigInteger start, final SubtitleEvent event) throws Exception {
+    private void writeEvent(final SubtitleEvent event) throws Exception {
+        Timecode timecode = event.getTimecode();
+        long start = timecode.getStartTicks();
+        long end = timecode.getEndTicks();
         BufferedImage image = event.getImage();
         RleBitmap bitmap = new RleBitmap(image, 0, 0);
         ColorTable colorTable = bitmap.getColorTable();
 
-        timeHeader(start, start.subtract(preloadHeader));
+        timeHeader(start, start - preloadHeader > 0 ? start - preloadHeader: start);
         subpictureHeader(event);
-        timeHeader(start.subtract(preloadMs), start.subtract(preloadHeader));
+        timeHeader(start - preloadMs, start - preloadHeader);
         windowsHeader(this.resolution.getWidth(), this.resolution.getHeight(), 0, 0);
-        timeHeader(start.subtract(preloadHeader), BigInteger.ZERO);
+        timeHeader(start - preloadHeader, 0);
         colorTable.writeIndex(out);
         // TODO: Non - shared palette
         if (event.subimages.size() >= 1) {
             RleBitmap bitmap0 = new RleBitmap(event.subimages.get(0),event.subimages_x.get(0), event.subimages_y.get(0));
-            bitmapPacket(0, bitmap0, start.subtract(preloadBitmap), start.subtract(preloadHeader));
+            bitmapPacket(0, bitmap0, start - preloadBitmap, start -preloadHeader);
         }
         if (event.subimages.size() >= 2) {
             RleBitmap bitmap1 = new RleBitmap(event.subimages.get(1),event.subimages_x.get(1), event.subimages_y.get(1));
-            bitmapPacket(1, bitmap1, start.subtract(preloadBitmap), start.subtract(preloadHeader));
+            bitmapPacket(1, bitmap1, start - preloadBitmap, start - preloadHeader);
         }
-        timeHeader(start.subtract(preloadBitmap), BigInteger.ZERO);
+        timeHeader(start - preloadBitmap, 0);
         trailer();
-        timeHeader(end, end.subtract(preloadMs));
+        timeHeader(end, end - preloadMs);
         subpictureHeader(null);
-        timeHeader(end, BigInteger.ZERO);
+        timeHeader(end, 0);
         windowsHeader(this.resolution.getWidth(), this.resolution.getHeight(), 0, 0);
-        timeHeader(end, BigInteger.ZERO);
+        timeHeader(end, 0);
         trailer();
     }
-
-    // TODO: Test of multiplexed subtitles before 64.8ms, on non-PS3 devices.
-    // private void writeEventNoPreload(final BigInteger end, BigInteger start, SubtitleEvent event) throws Exception {
-    //     BufferedImage image = event.getImage();
-    //     RleBitmap bitmap = new RleBitmap(image, event.getOffsetX(), event.getOffsetY());
-
-    //     int width = bitmap.getWidth();
-    //     int height = bitmap.getHeight();
-    //     int x = bitmap.getOffsetX();
-    //     int y = bitmap.getOffsetY();
-
-    //     timeHeader(start, start);
-    //     subpictureHeader(resolution.getWidth(), resolution.getHeight(), x, y, 1);
-    //     ColorTable colorTable = bitmap.getColorTable();
-    //     timeHeader(start, start);
-    //     windowsHeader(width, height, x, y);
-    //     timeHeader(start, BigInteger.ZERO);
-    //     colorTable.writeIndex(out);
-    //     bitmapPacket(0, bitmap, start, BigInteger.ZERO);
-    //     timeHeader(start, BigInteger.ZERO);
-    //     trailer();
-    //     timeHeader(end, end);
-    //     subpictureHeader(resolution.getWidth(), resolution.getHeight(), x, y, 0);
-    //     timeHeader(end, BigInteger.ZERO);
-    //     windowsHeader(width, height, x, y);
-    //     timeHeader(end, BigInteger.ZERO);
-    //     trailer();
-    // }
 
     private void windowsHeader(final int width, final int height,
             final int widthOffset, final int heightOffset) throws IOException {
@@ -264,11 +229,13 @@ public class SupGenerator {
         out.write(resolution.getHeight() >> 8 & 0xFF);
         out.write(resolution.getHeight() & 0xFF);
         out.write(fpsCode);
-        out.write(0x00); // presentation id
-        out.write(0x00); // presenttion id
         if (event == null) {
+            out.write(0x00); // presentation id
+            out.write(0x01); // presentation id
             out.write(0x00); // State
         } else {
+            out.write(0x00); // presentation id
+            out.write(0x00); // presentation id
             out.write(0x80); // State
         }
         out.write(0x00); // Pallette Update Flags
@@ -303,17 +270,17 @@ public class SupGenerator {
         }
     }
 
-    private void timeHeader(final BigInteger from, final BigInteger to)
+    private void timeHeader(final long from, final long to)
             throws IOException {
         String fromBytes;
         String toBytes;
 
         // one ninetieth of a millisecond
-        fromBytes = from.toString(16);
-        toBytes = to.toString(16);
+        fromBytes = Long.toHexString(from);
+        toBytes = Long.toHexString(to);
 
         if (fromBytes.length() > 8 || toBytes.length() > 8) {
-            throw new RuntimeException("Timecode too big");
+            throw new RuntimeException("Timecode is too big");
         }
 
         // TODO: A non String version; When its not 2am!

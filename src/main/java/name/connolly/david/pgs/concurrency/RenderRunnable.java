@@ -140,7 +140,7 @@ public class RenderRunnable implements Runnable {
         final int eventCount = renderer.getEventCount();
 
         for (int eventIndex = 0; eventIndex < eventCount; eventIndex++) {
-            Timecode timecode = renderer.getEventTimecode(eventIndex);
+            Timecode timecode = fps.clamp(renderer.getEventTimecode(eventIndex));
             final Iterator<Timecode> i = timecodes.iterator();
 
             while (i.hasNext()) {
@@ -150,7 +150,7 @@ public class RenderRunnable implements Runnable {
                     timecode = timecode.merge(other);
                 }
             }
-            timecodes.add(timecode.getClamped(fps));
+            timecodes.add(fps.clamp(timecode));
         }
 
         return timecodes;
@@ -160,11 +160,14 @@ public class RenderRunnable implements Runnable {
         int percentage;
         int eventCount = timecodes.size();
         int eventIndex = 0;
+        int frameSequenceCount = 0;
+
         final Iterator<Timecode> i = timecodes.iterator();
 
         // Timecode loop: build subtitle event for timecode
         while (i.hasNext()) {
             SubtitleEvent event = new SubtitleEvent(i.next(), SubtitleType.FIRST);
+            frameSequenceCount = 0;
             percentage = Math.round((float) eventIndex / eventCount * 100f);
             progress.progress(percentage, "Rendering Event (" + eventIndex + " of " + eventCount + " Estimated)");
             // Render loop: render, check for change, split on change
@@ -174,9 +177,9 @@ public class RenderRunnable implements Runnable {
                 long renderTimecode;
                 SubtitleEvent nextEvent = null;
                 final BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
-                long detectTimecode = Math.round(timecode.getStart() + fps.milliseconds());
+                long detectTimecode = timecode.getStart() + fps.flicks();
                 boolean changed = false;
-                boolean nextUnreachable = (detectTimecode + fps.milliseconds()) >= timecode.getEnd();
+                boolean nextUnreachable = (detectTimecode + fps.flicks()) >= timecode.getEnd();
                 // Prepare for change detect
                 renderTimecode = detectTimecode - 1;
                 renderer.changeDetect(renderTimecode);
@@ -190,21 +193,23 @@ public class RenderRunnable implements Runnable {
                     nextUnreachable = detectTimecode + fps.milliseconds() > timecode.getEnd();
 
                     if (changed) {
-                        renderTimecode = detectTimecode - 1;
-                        event.setTimecode(new Timecode(timecode.getStart(), renderTimecode));
+                        // rendering 1ms before end of animate frame gives nice results
+                        renderTimecode = detectTimecode - 7840;
+                        // mark end of animated frame with it's real end time rather than rendering time
+                        event.setTimecode(Timecode.fromFlicks(timecode.getStart(), detectTimecode));
                         event.setType(SubtitleType.SEQUENCE);
-                        timecode = new Timecode(detectTimecode, end);
+                        timecode = Timecode.fromFlicks(detectTimecode, end);
                         nextEvent = new SubtitleEvent(timecode, SubtitleType.SEQUENCE);
-                        progress.progress(percentage, "Rendering Event with Animation (" + eventIndex + " of " + eventCount + " Estimated as ChangeDetect:"+ changeDetectVal +")");
 
-                        eventCount++;
+                        progress.progress(percentage, "Rendering Event Animated Frame #" + frameSequenceCount + 
+                            " (" + eventIndex + " of " + eventCount + ")");
                     } else if (!nextUnreachable) {
-                        detectTimecode = Math.round(detectTimecode + fps.milliseconds());
+                        detectTimecode = detectTimecode + fps.flicks();;
                     }
                 }
 
                 event.setImage(image);
-                event.rendered = renderer.render(event, image, renderTimecode);
+                event.rendered = renderer.render(event, image, fps.flicksToMilliseconds(renderTimecode));
                 event.walkClips();
 
                 if (!Render.isRunning()) {

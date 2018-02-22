@@ -91,10 +91,6 @@ public class SubtitleEvent implements Comparable<SubtitleEvent> {
         return id;
     }
 
-    public long getRenderTimecode() {
-        return timecode.getStart();
-    }
-
     public Timecode getTimecode() {
         return timecode;
     }

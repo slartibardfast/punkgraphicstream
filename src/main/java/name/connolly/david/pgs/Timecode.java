@@ -21,8 +21,6 @@
  */
 package name.connolly.david.pgs;
 
-import java.math.BigInteger;
-
 public class Timecode implements Comparable<Timecode> {
     private long start;
     private long end;
@@ -37,6 +35,19 @@ public class Timecode implements Comparable<Timecode> {
         return "Timecode start: " + start + " end " + end;
     }
 
+    public static Timecode fromFlicks(long start, long end) {
+        Timecode t = new Timecode();
+        t.start = start;
+        t.end = end;
+        return t;
+    }
+
+    public static Timecode fromMilliseconds(long start, long end) {
+        Timecode t = new Timecode(start, end);
+        return t;
+    }
+
+
     public long getDuration() {
         return end - start;
     }
@@ -45,30 +56,27 @@ public class Timecode implements Comparable<Timecode> {
         return start;
     }
 
+    public long getStartTicks() {
+        return start / 7840;
+    }
+
     private Timecode() {
     }
 
-    public Timecode(long start, long end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    public BigInteger getStartTicks() {
-        BigInteger ticks = BigInteger.valueOf(start);
-
-        return ticks.multiply(BigInteger.valueOf(90));
+    public Timecode(long startMs, long endMs) {
+        /* libpgs-jni works in ms only */
+        this.start = startMs * 705600;
+        this.end = endMs * 705600;
     }
 
     public long getEnd() {
         return end;
     }
 
-    public BigInteger getEndTicks() {
-        BigInteger ticks = BigInteger.valueOf(end);
-
-        return ticks.multiply(BigInteger.valueOf(90));
+    public long getEndTicks() {
+        return start / 7840;
     }
-
+    
     public Timecode merge(Timecode other) {
         if (other == null) {
             throw new IllegalArgumentException(
@@ -91,11 +99,6 @@ public class Timecode implements Comparable<Timecode> {
         }
 
         return merged;
-    }
-
-    public Timecode getClamped(FrameRate fps) {
-        Timecode t = new Timecode(fps.clampMs(this.getStart()), this.getEnd());
-        return t;
     }
 
     @Override
