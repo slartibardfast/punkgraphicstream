@@ -11,7 +11,7 @@
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopOnEntry": false,
-            "mainClass": "name.connolly.david.pgs.console.PunkGraphicStream",
+            "mainClass": "name.connolly.david.pgs.ui.PunkGraphicStream",
             "projectName": "pgs",
             "args": ""
         },
@@ -22,40 +22,7 @@
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopOnEntry": false,
-            "mainClass": "name.connolly.david.pgs.ui.AboutDialog",
-            "projectName": "pgs",
-            "args": ""
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-EncodeDialog<pgs>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "name.connolly.david.pgs.ui.EncodeDialog",
-            "projectName": "pgs",
-            "args": ""
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-PunkGraphicStream<pgs>(1)",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
             "mainClass": "name.connolly.david.pgs.ui.PunkGraphicStream",
-            "projectName": "pgs",
-            "args": ""
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-SupReporter<pgs>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "name.connolly.david.pgs.util.SupReporter",
             "projectName": "pgs",
             "args": ""
         },
