@@ -182,11 +182,11 @@ public class RenderRunnable implements Runnable {
                 boolean nextUnreachable = (detectTimecode + fps.flicks()) >= timecode.getEnd();
                 // Prepare for change detect
                 renderTimecode = detectTimecode - 1;
-                renderer.changeDetect(renderTimecode);
+                renderer.changeDetect(fps.flicksToMilliseconds(renderTimecode));
                 
                 // Change Detect Loop
                 while (!changed && !nextUnreachable) {
-                    int changeDetectVal = renderer.changeDetect(detectTimecode);
+                    int changeDetectVal = renderer.changeDetect(fps.flicksToMilliseconds(detectTimecode));
 
                     changed = changeDetectVal > 0;
                     
