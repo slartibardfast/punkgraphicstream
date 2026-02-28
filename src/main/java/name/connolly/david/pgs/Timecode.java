@@ -74,7 +74,7 @@ public class Timecode implements Comparable<Timecode> {
     }
 
     public long getEndTicks() {
-        return start / 7840;
+        return end / 7840;
     }
     
     public Timecode merge(Timecode other) {
